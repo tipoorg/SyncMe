@@ -31,11 +31,10 @@
                 HorizontalOptions="Center" />
 
             <Button 
-                Text="Click me"
+                Text="Set Alarm"
                 FontAttributes="Bold"
                 Grid.Row="3"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
+                Clicked="OnSetAlarmClicked"
                 HorizontalOptions="Center" />
 
             <Image Grid.Row="4"
