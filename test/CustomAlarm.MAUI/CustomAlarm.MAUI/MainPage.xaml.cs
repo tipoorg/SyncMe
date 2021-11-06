@@ -1,19 +1,20 @@
 ﻿using System;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Essentials;
 
 namespace CustomAlarm.MAUI
 {
-	public partial class MainPage : ContentPage
-	{
-		public MainPage()
-		{
-			InitializeComponent();
-		}
+    public partial class MainPage : ContentPage
+    {
+        public static event EventHandler OnSetAlarmClickedEvent;
 
-		private void OnSetAlarmClicked(object seder, EventArgs e)
+        public MainPage()
         {
-			const int numbers = 5;
+            InitializeComponent();
         }
-	}
+
+        private void OnSetAlarmClicked(object sender, EventArgs e)
+        {
+            OnSetAlarmClickedEvent(sender, e);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using Android.App;
 using Android.Content;
@@ -16,13 +17,16 @@ namespace CustomAlarm.MAUI
 	[Activity(Theme = "@style/Maui.SplashTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
 	public class MainActivity : MauiAppCompatActivity
 	{
+        private IDisposable _subscription;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             Platform.Init(this, savedInstanceState);
-            System.Console.WriteLine("OnCreate");
 
-            SetAlarm(2);
+            _subscription = Observable
+                .FromEventPattern(h => MainPage.OnSetAlarmClickedEvent += h, h => MainPage.OnSetAlarmClickedEvent -= h)
+                .Subscribe(x => SetAlarm(1));
         }
 
         private void SetAlarm(int number)
@@ -31,7 +35,7 @@ namespace CustomAlarm.MAUI
             var am = GetSystemService(AlarmService) as AlarmManager;
             var calendar = Calendar.Instance;
             var calendarList = Enumerable.Range(1, number).Select(x => calendar).ToList();
-            var textTimer = new StringBuilder("Alarm has been set");
+            var textTimer = new StringBuilder("Alarm has been set").AppendLine();
             foreach (var calendarItem in calendarList)
             {
                 calendarItem.Add(CalendarField.Second, 10);
@@ -59,7 +63,7 @@ namespace CustomAlarm.MAUI
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
-            System.Console.WriteLine("OnRequestPermissionResult");
+            _subscription?.Dispose();
             Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }

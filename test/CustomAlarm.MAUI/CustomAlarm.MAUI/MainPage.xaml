@@ -35,6 +35,7 @@
                 FontAttributes="Bold"
                 Grid.Row="3"
                 Clicked="OnSetAlarmClicked"
+                x:Name="SetAlarmButton"
                 HorizontalOptions="Center" />
 
             <Image Grid.Row="4"
