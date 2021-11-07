@@ -1,18 +1,18 @@
 ﻿using System;
-using CustomAlarm.Application;
+using System.Reactive;
+using System.Reactive.Linq;
+using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 
 namespace CustomAlarm.MAUI;
 
 public partial class MainPage : ContentPage
 {
-    private readonly IGeneralEventsController _generalEventsController;
+    public IObservable<EventPattern<object>> SetAlarmClicks { get; }
 
-    public MainPage(IGeneralEventsController generalEventsController)
+    public MainPage()
     {
         InitializeComponent();
-        _generalEventsController = generalEventsController;
+        SetAlarmClicks = Observable.FromEventPattern(SetAlarmButton, nameof(IButton.Clicked));
     }
-
-    private void OnSetAlarmClicked(object sender, EventArgs e) => _generalEventsController.OnSetAlarmClicked(sender, e);
 }

@@ -8,20 +8,19 @@ namespace CustomAlarm.MAUI;
 
 public partial class App : MaUIApplication
 {
-    public static IServiceProvider ServiceProvider { get; private set; }
+    private static readonly IServiceProvider _serviceProvider = CreateServices();
+ 
+    public static T GetRequiredService<T>() => _serviceProvider.GetRequiredService<T>();
 
     public App()
     {
-        ServiceProvider = CreateServices();
-
         InitializeComponent();
 
-
-        MainPage = ServiceProvider.GetService<MainPage>();
+        MainPage = _serviceProvider.GetService<MainPage>();
     }
 
 
-    private IServiceProvider CreateServices()
+    private static IServiceProvider CreateServices()
     {
         var serviceCollection = new ServiceCollection()
             .AddMaui()

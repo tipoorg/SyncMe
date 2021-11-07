@@ -16,7 +16,7 @@ internal class MyAlarmReceiver : BroadcastReceiver
 
     private static void PlayRingtone(Context context)
     {
-        var soundUri = RingtoneManager.GetDefaultUri(RingtoneType.Alarm);
+        var soundUri = RingtoneManager.GetDefaultUri(RingtoneType.Notification);
         var ringtone = RingtoneManager.GetRingtone(context, soundUri);
         ringtone.Play();
     }

@@ -8,8 +8,6 @@ using Android.Icu.Text;
 using Android.Icu.Util;
 using Android.OS;
 using Android.Widget;
-using CustomAlarm.Application;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;
 
 namespace CustomAlarm.MAUI;
@@ -17,15 +15,12 @@ namespace CustomAlarm.MAUI;
 [Activity(Theme = "@style/Maui.SplashTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
 public class MainActivity : MauiAppCompatActivity
 {
-    private readonly IGeneralEventsController _generalEventsController;
-    private readonly IDisposable _onSetAlarmSubscription;
+    private readonly IDisposable _setAlarmSubscription;
 
     public MainActivity()
     {
-        _generalEventsController = App.ServiceProvider.GetService<IGeneralEventsController>();
-        _onSetAlarmSubscription = Observable
-          .FromEventPattern(_generalEventsController, nameof(IGeneralEventsController.OnSetAlarmClickedEvent))
-          .Subscribe(x => SetAlarm());
+        var setAlarmClicks = App.GetRequiredService<MainPage>().SetAlarmClicks;
+        _setAlarmSubscription = setAlarmClicks.Subscribe(x => SetAlarm());
     }
 
     private void SetAlarm()
@@ -74,7 +69,7 @@ public class MainActivity : MauiAppCompatActivity
     protected override void Dispose(bool disposing)
     {
         if (disposing)
-            _onSetAlarmSubscription.Dispose();
+            _setAlarmSubscription.Dispose();
 
         base.Dispose(disposing);
     }
