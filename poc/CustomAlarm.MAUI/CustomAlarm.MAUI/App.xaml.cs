@@ -1,33 +1,32 @@
 ﻿using System;
+using CustomAlarm.Application;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;
-using Application = Microsoft.Maui.Controls.Application;
+using MaUIApplication = Microsoft.Maui.Controls.Application;
 
-namespace CustomAlarm.MAUI
+namespace CustomAlarm.MAUI;
+
+public partial class App : MaUIApplication
 {
-    public partial class App : Application
+    public static IServiceProvider ServiceProvider { get; private set; }
+
+    public App()
     {
-        public static IServiceProvider ServiceProvider;
+        ServiceProvider = CreateServices();
 
-        public App()
-        {
-            ServiceProvider = CreateServices();
-
-            InitializeComponent();
+        InitializeComponent();
 
 
-            MainPage = ServiceProvider.GetService<MainPage>();
-        }
+        MainPage = ServiceProvider.GetService<MainPage>();
+    }
 
 
-        private IServiceProvider CreateServices()
-        {
-            var serviceCollection = new ServiceCollection();
+    private IServiceProvider CreateServices()
+    {
+        var serviceCollection = new ServiceCollection()
+            .AddMaui()
+            .AddApplication();
 
-            serviceCollection.AddSingleton<MainPage>();
-            serviceCollection.AddSingleton<IGeneralEventsController, GeneralEventsController>();
-
-            return serviceCollection.BuildServiceProvider();
-        }
+        return serviceCollection.BuildServiceProvider();
     }
 }
