@@ -9,24 +9,23 @@ using Android.Icu.Text;
 using Android.Icu.Util;
 using Android.OS;
 using Android.Widget;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;
-using Microsoft.Maui.Essentials;
 
 namespace CustomAlarm.MAUI
 {
 	[Activity(Theme = "@style/Maui.SplashTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
 	public class MainActivity : MauiAppCompatActivity
 	{
-        private IDisposable _subscription;
+        private readonly IGeneralEventsController _generalEventsController;
+        private readonly IDisposable _onSetAlarmSubscription;
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        public MainActivity()
         {
-            base.OnCreate(savedInstanceState);
-            Platform.Init(this, savedInstanceState);
-
-            _subscription = Observable
-                .FromEventPattern(h => MainPage.OnSetAlarmClickedEvent += h, h => MainPage.OnSetAlarmClickedEvent -= h)
-                .Subscribe(x => SetAlarm(1));
+            _generalEventsController = App.ServiceProvider.GetService<IGeneralEventsController>();
+            _onSetAlarmSubscription = Observable
+              .FromEventPattern(_generalEventsController, nameof(IGeneralEventsController.OnSetAlarmClickedEvent))
+              .Subscribe(x => SetAlarm(1));
         }
 
         private void SetAlarm(int number)
@@ -57,15 +56,15 @@ namespace CustomAlarm.MAUI
             }
 
             string value = textTimer.ToString();
-            Console.WriteLine(value);
             Toast.MakeText(this, value, ToastLength.Short).Show();
         }
 
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        protected override void Dispose(bool disposing)
         {
-            _subscription?.Dispose();
-            Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            if (disposing)
+                _onSetAlarmSubscription.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 }

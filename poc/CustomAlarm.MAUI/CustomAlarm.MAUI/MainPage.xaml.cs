@@ -5,16 +5,14 @@ namespace CustomAlarm.MAUI
 {
     public partial class MainPage : ContentPage
     {
-        public static event EventHandler OnSetAlarmClickedEvent;
+        private readonly IGeneralEventsController _generalEventsController;
 
-        public MainPage()
+        public MainPage(IGeneralEventsController generalEventsController)
         {
             InitializeComponent();
+            _generalEventsController = generalEventsController;
         }
 
-        private void OnSetAlarmClicked(object sender, EventArgs e)
-        {
-            OnSetAlarmClickedEvent(sender, e);
-        }
+        private void OnSetAlarmClicked(object sender, EventArgs e) => _generalEventsController.OnSetAlarmClicked(sender, e);
     }
 }
