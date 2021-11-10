@@ -1,6 +1,5 @@
 ﻿using Microsoft.Maui.Hosting;
 using Microsoft.Maui.Controls.Hosting;
-using CustomAlarm.Application;
 
 namespace CustomAlarm.MAUI;
 
@@ -15,9 +14,9 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             });
+
         builder.Services
-            .AddMaui()
-            .AddApplication();
+            .AddMaui();
 
         return builder.Build();
     }

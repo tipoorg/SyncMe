@@ -1,5 +1,4 @@
 ﻿using System;
-using CustomAlarm.Application;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;
 using MaUIApplication = Microsoft.Maui.Controls.Application;
