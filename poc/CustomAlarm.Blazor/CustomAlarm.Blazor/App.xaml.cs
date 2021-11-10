@@ -1,10 +1,11 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;
+using System;
 using MaUIApplication = Microsoft.Maui.Controls.Application;
 
-namespace CustomAlarm.MAUI;
-
+namespace CustomAlarm.Blazor;
 public partial class App : MaUIApplication
 {
     private static IServiceProvider _serviceProvider { get; set; }
