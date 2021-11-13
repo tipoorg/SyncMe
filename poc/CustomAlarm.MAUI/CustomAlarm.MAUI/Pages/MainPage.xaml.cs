@@ -1,4 +1,4 @@
-﻿namespace CustomAlarm.MAUI;
+﻿namespace CustomAlarm.MAUI.Pages;
 
 public partial class MainPage : TabbedPage
 {

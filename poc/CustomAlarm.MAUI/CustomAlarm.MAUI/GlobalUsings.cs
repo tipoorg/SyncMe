@@ -14,3 +14,5 @@ global using System.Threading;
 global using System.Threading.Tasks;
 global using System.Reactive;
 global using System.Reactive.Linq;
+global using CustomAlarm.MAUI;
+global using CustomAlarm.MAUI.Pages;
