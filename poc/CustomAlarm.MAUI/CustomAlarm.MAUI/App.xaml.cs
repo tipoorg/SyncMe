@@ -1,13 +1,10 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui;
-using MaUIApplication = Microsoft.Maui.Controls.Application;
+﻿using MaUIApplication = Microsoft.Maui.Controls.Application;
 
 namespace CustomAlarm.MAUI;
 
 public partial class App : MaUIApplication
 {
-    private static IServiceProvider _serviceProvider { get; set; }
+    private static IServiceProvider _serviceProvider;
 
     public static T GetRequiredService<T>() => _serviceProvider.GetRequiredService<T>();
 
@@ -16,6 +13,6 @@ public partial class App : MaUIApplication
         _serviceProvider = serviceProvider;
         InitializeComponent();
 
-        MainPage = serviceProvider.GetService<MainPage>();
+        MainPage = new MainPage();
     }
 }
