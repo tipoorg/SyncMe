@@ -4,9 +4,4 @@
     xmlns:local="clr-namespace:CustomAlarm.MAUI.Pages"
     x:Class="CustomAlarm.MAUI.Pages.MainPage"
     BackgroundColor="{DynamicResource SecondaryColor}">
-
-    <TabbedPage.Children>
-        <local:HomePage />
-        <local:CalendarPage />
-    </TabbedPage.Children>
 </TabbedPage>

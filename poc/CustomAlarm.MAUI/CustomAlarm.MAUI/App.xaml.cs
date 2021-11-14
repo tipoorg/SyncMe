@@ -8,11 +8,11 @@ public partial class App : MaUIApplication
 
     public static T GetRequiredService<T>() => _serviceProvider.GetRequiredService<T>();
 
-    public App(IServiceProvider serviceProvider)
+    public App(IServiceProvider serviceProvider, MainPage mainPage)
     {
         _serviceProvider = serviceProvider;
         InitializeComponent();
 
-        MainPage = new MainPage();
+        MainPage = mainPage;
     }
 }

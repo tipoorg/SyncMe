@@ -1,12 +1,11 @@
-﻿using Android.App;
+﻿using System.Text;
+using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Icu.Text;
 using Android.Icu.Util;
 using Android.OS;
 using Android.Widget;
-using CustomAlarm.MAUI.Pages;
-using System.Text;
 
 namespace CustomAlarm.MAUI;
 
@@ -20,7 +19,7 @@ public class MainActivity : MauiAppCompatActivity
 
     public MainActivity()
     {
-        _setAlarmSubscription = ClicksController<HomePage>.Clicks.Subscribe(x => SetAlarm());
+        _setAlarmSubscription = App.GetRequiredService<HomePage>().SetAlarmClicks.Subscribe(x => SetAlarm());
     }
 
     private void SetAlarm()

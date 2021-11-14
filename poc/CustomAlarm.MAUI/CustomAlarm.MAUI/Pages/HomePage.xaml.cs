@@ -2,9 +2,11 @@
 
 public partial class HomePage : ContentPage
 {
+    public IObservable<EventPattern<object>> SetAlarmClicks { get; }
+
     public HomePage()
     {
         InitializeComponent();
-        ClicksController<HomePage>.SetButtonClickHandler(SetAlarmButton);
+        SetAlarmClicks = Observable.FromEventPattern(SetAlarmButton, nameof(IButton.Clicked));
     }
 }

@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Hosting;
-using Microsoft.Maui.Controls.Hosting;
-
-namespace CustomAlarm.MAUI;
+﻿namespace CustomAlarm.MAUI;
 
 public static class MauiProgram
 {
@@ -16,7 +13,7 @@ public static class MauiProgram
             });
 
         builder.Services
-            .AddMaui();
+            .AddCustomAlarm();
 
         return builder.Build();
     }
