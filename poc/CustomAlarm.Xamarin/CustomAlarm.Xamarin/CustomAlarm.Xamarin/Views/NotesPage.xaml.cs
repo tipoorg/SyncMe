@@ -1,12 +1,16 @@
 ﻿using System;
 using System.IO;
+using System.Reactive;
+using System.Reactive.Linq;
 using Xamarin.Forms;
 
 namespace CustomAlarm.Xamarin.Views
 {
     public partial class NotesPage : ContentPage
     {
-        string _fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "notes.txt");
+        private readonly string _fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "notes.txt");
+
+        public IObservable<EventPattern<object>> SetAlarmClicks { get; }
 
         public NotesPage()
         {
@@ -17,6 +21,8 @@ namespace CustomAlarm.Xamarin.Views
             {
                 editor.Text = File.ReadAllText(_fileName);
             }
+
+            SetAlarmClicks = Observable.FromEventPattern(SetAlarmButton, nameof(Button.Clicked));
         }
 
         void OnSaveButtonClicked(object sender, EventArgs e)

@@ -8,6 +8,5 @@ namespace CustomAlarm.Xamarin
         {
             InitializeComponent();
         }
-
     }
 }

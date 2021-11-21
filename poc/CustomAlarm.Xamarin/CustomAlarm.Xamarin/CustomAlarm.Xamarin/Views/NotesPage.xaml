@@ -14,7 +14,10 @@
                     Clicked="OnSaveButtonClicked" />
             <Button Grid.Column="1"
                     Text="Delete"
-                    Clicked="OnDeleteButtonClicked"/>
+                    Clicked="OnDeleteButtonClicked" />
+            <Button Grid.Column="2"
+                    x:Name="SetAlarmButton"
+                    Text="ALarm" />
         </Grid>
     </StackLayout>
 </ContentPage>
