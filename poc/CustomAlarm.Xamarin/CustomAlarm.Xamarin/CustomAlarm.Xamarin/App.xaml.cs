@@ -1,8 +1,4 @@
-﻿using System;
-using CustomAlarm.Xamarin.Services;
-using CustomAlarm.Xamarin.Views;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿using Xamarin.Forms;
 
 namespace CustomAlarm.Xamarin
 {
@@ -12,8 +8,6 @@ namespace CustomAlarm.Xamarin
         public App()
         {
             InitializeComponent();
-
-            DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
         }
 
