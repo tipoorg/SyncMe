@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Reactive;
+using System.Reactive.Linq;
 
 namespace SyncMe.Views;
 
@@ -15,7 +17,13 @@ public partial class NotesPage : ContentPage
         {
             editor.Text = File.ReadAllText(_fileName);
         }
+
+        SetAlarmClicks = Observable
+            .FromEventPattern(SetAlarmButton, nameof(Button.Clicked))
+            .Select(x => int.Parse(editor.Text));
     }
+
+    public IObservable<int> SetAlarmClicks { get; }
 
     void OnSaveButtonClicked(object sender, EventArgs e)
     {
