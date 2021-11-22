@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Reactive;
 using System.Reactive.Linq;
 
 namespace SyncMe.Views;
@@ -20,7 +19,7 @@ public partial class NotesPage : ContentPage
 
         SetAlarmClicks = Observable
             .FromEventPattern(SetAlarmButton, nameof(Button.Clicked))
-            .Select(x => int.Parse(editor.Text));
+            .Select(x => int.TryParse(editor.Text, out var times) ? times : 1);
     }
 
     public IObservable<int> SetAlarmClicks { get; }

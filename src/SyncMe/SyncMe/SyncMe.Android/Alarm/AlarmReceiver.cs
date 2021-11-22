@@ -14,15 +14,34 @@ internal class AlarmReceiver : BroadcastReceiver
 
         if (times > 0)
         {
-            PlayRingtone(context);
+            PlayAlarm(context);
             _alarmSetter.SetAlarm(times - 1, context);
         }
     }
 
-    private static void PlayRingtone(Context context)
+    private static void PlayAlarm(Context context)
     {
-        var soundUri = RingtoneManager.GetDefaultUri(RingtoneType.Notification);
-        var ringtone = RingtoneManager.GetRingtone(context, soundUri);
-        ringtone.Play();
+        var mp = new MediaPlayer();
+        var soundUri = RingtoneManager.GetActualDefaultRingtoneUri(context, RingtoneType.Notification);
+
+        try
+        {
+            mp.Reset();
+            mp.SetDataSource(context, soundUri);
+            mp.SetAudioAttributes(GetAudio());
+            mp.Prepare();
+            mp.Start();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+    }
+
+    private static AudioAttributes GetAudio()
+    {
+        return new AudioAttributes.Builder()
+            .SetUsage(AudioUsageKind.Alarm)
+            .Build();
     }
 }
