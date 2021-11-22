@@ -14,7 +14,7 @@ public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivit
 
         Xamarin.Essentials.Platform.Init(this, savedInstanceState);
         Xamarin.Forms.Forms.Init(this, savedInstanceState);
-        LoadApplication(new App());
+        LoadApplication(Bootstrapper.CreateApp());
     }
 
     public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)

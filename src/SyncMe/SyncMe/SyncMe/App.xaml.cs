@@ -1,16 +1,19 @@
-﻿using SyncMe.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace SyncMe;
 
 public partial class App : Application
 {
-    public App()
+    private readonly IServiceProvider _serviceProvider;
+
+    public App(IServiceProvider serviceProvider)
     {
         InitializeComponent();
-
-        DependencyService.Register<MockDataStore>();
-        MainPage = new AppShell();
+        MainPage = serviceProvider.GetRequiredService<AppShell>();
+        _serviceProvider = serviceProvider;
     }
+
+    public T GetRequiredService<T>() => _serviceProvider.GetRequiredService<T>();
 
     protected override void OnStart()
     {
