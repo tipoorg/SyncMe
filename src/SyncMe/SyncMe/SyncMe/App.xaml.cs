@@ -4,7 +4,7 @@ namespace SyncMe;
 
 public partial class App : Application
 {
-    private readonly IServiceProvider _serviceProvider;
+    private static IServiceProvider _serviceProvider;
 
     public App(IServiceProvider serviceProvider)
     {
@@ -13,7 +13,8 @@ public partial class App : Application
         _serviceProvider = serviceProvider;
     }
 
-    public T GetRequiredService<T>() => _serviceProvider.GetRequiredService<T>();
+    public static T GetRequiredService<T>() => _serviceProvider.GetRequiredService<T>();
+    public static Lazy<T> GetLazyRequiredService<T>() => new(() => GetRequiredService<T>());
 
     protected override void OnStart()
     {
