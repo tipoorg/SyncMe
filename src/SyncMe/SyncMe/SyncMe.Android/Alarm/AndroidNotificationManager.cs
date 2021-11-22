@@ -67,7 +67,7 @@ internal class AndroidNotificationManager : INotificationManager<Context>
 
         int uniqueId = Guid.NewGuid().GetHashCode();
 
-        return PendingIntent.GetBroadcast(context, uniqueId, intent, 0);
+        return PendingIntent.GetBroadcast(context, uniqueId, intent, PendingIntentFlags.Immutable);
     }
 
     private void CreateNotificationChannel()
