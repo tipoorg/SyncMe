@@ -1,6 +1,5 @@
-﻿using Android.Content;
-using Microsoft.Extensions.DependencyInjection;
-using SyncMe.Droid.Alarm;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SyncMe.Extensions;
 
 namespace SyncMe.Droid;
 
@@ -13,7 +12,6 @@ public static class Bootstrapper
             .AddSyncMeAndroid();
 
         var serviceProvider = DIDataTemplate.AppServiceProvider = services.BuildServiceProvider();
-
 
         var app = new App(serviceProvider);
 

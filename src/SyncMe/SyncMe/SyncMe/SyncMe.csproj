@@ -11,11 +11,21 @@
         <PackageReference Include="System.Reactive" Version="5.0.0" />
         <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
         <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+        <PackageReference Include="Xamarin.Plugin.Calendar" Version="1.4.5304" />
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Update="Views\EventAlert.xaml.cs">
+        <DependentUpon>EventAlert.xaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\CreateEvent.xaml.cs">
+        <DependentUpon>CreateEvent.xaml</DependentUpon>
+      </Compile>
       <Compile Update="Views\NotesPage.xaml.cs">
         <DependentUpon>NotesPage.xaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\DayView.xaml.cs">
+        <DependentUpon>DayView.xaml</DependentUpon>
       </Compile>
     </ItemGroup>
 

@@ -12,5 +12,10 @@
         <ShellContent Title="About"
                       Icon="icon_about.png"
                       ContentTemplate="{local:DIDataTemplate Type={x:Type views:AboutPage}}" />
+        <ShellContent Title="Calendar"
+                      Icon="icon_about.png"
+                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:CalendarPage}}" />
+        <ShellContent Title="Create New Event"
+                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:CreateEvent}}" />
     </TabBar>
 </Shell>
