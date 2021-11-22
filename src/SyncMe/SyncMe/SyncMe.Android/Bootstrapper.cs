@@ -10,7 +10,7 @@ public static class Bootstrapper
             .AddSyncMeLib()
             .AddSyncMeAndroid();
 
-        var serviceProvider = services.BuildServiceProvider();
+        var serviceProvider = DIDataTemplate.AppServiceProvider = services.BuildServiceProvider();
 
 
         var app = new App(serviceProvider);
