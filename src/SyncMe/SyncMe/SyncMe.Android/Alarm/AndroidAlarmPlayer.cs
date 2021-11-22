@@ -1,14 +1,16 @@
 ﻿using Android.Content;
 using Android.Media;
-using SyncMe.Services;
 
 namespace SyncMe.Droid.Alarm;
 
-internal sealed class AndroidAlarmPlayer : IAlarmPlayer<Context>
+internal sealed class AndroidAlarmPlayer
 {
     private readonly MediaPlayer _mediaPlayer;
 
-    public AndroidAlarmPlayer()
+    private static AndroidAlarmPlayer _instance;
+    public static AndroidAlarmPlayer Instance => _instance ??= new AndroidAlarmPlayer();
+
+    private AndroidAlarmPlayer()
     {
         _mediaPlayer = new MediaPlayer();
     }

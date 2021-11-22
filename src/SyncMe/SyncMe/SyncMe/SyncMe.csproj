@@ -18,4 +18,8 @@
         <DependentUpon>NotesPage.xaml</DependentUpon>
       </Compile>
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services\" />
+    </ItemGroup>
 </Project>

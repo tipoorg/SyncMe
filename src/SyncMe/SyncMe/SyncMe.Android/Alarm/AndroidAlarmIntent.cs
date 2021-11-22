@@ -5,11 +5,10 @@ using Android.Icu.Text;
 using Android.Icu.Util;
 using Android.OS;
 using Android.Widget;
-using SyncMe.Services;
 
 namespace SyncMe.Droid.Alarm;
 
-internal class AndroidAlarmSetter : IAlarmSetter<Context>
+internal class AndroidAlarmIntent
 {
     public void SetAlarm(int times, Context context)
     {
@@ -30,7 +29,7 @@ internal class AndroidAlarmSetter : IAlarmSetter<Context>
     private static Calendar GetCalendarItem()
     {
         var calendarItem = Calendar.Instance;
-        calendarItem.Add(CalendarField.Second, 5);
+        calendarItem.Add(CalendarField.Second, 10);
         return calendarItem;
     }
 
@@ -41,8 +40,8 @@ internal class AndroidAlarmSetter : IAlarmSetter<Context>
             am.SetExactAndAllowWhileIdle(AlarmType.RtcWakeup, calendarItem.TimeInMillis, alarmIntent);
         else
             am.SetExact(AlarmType.RtcWakeup, calendarItem.TimeInMillis, alarmIntent);
-
     }
+
     private PendingIntent GetSetAlarmIntent(int times, Context context)
     {
         var intent = new Intent(context, typeof(AlarmReceiver))

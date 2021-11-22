@@ -3,12 +3,11 @@ using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using AndroidX.Core.App;
-using SyncMe.Services;
 using AndroidApp = Android.App.Application;
 
 namespace SyncMe.Droid.Alarm;
 
-internal class AndroidNotificationManager : INotificationManager<Context>
+internal class AndroidNotificationManager
 {
     private const string _channelId = "default";
     private const string _channelName = "Default";
@@ -18,11 +17,13 @@ internal class AndroidNotificationManager : INotificationManager<Context>
 
     private int _messageId = 0;
     private int _pendingIntentId = 0;
-
     public const string TitleKey = "title";
     public const string MessageKey = "message";
 
-    public AndroidNotificationManager()
+    private static AndroidNotificationManager _instance;
+    public static AndroidNotificationManager Instance => _instance ??= new AndroidNotificationManager();
+
+    private AndroidNotificationManager()
     {
         _manager = AndroidApp.Context.GetSystemService(Context.NotificationService) as NotificationManager;
         CreateNotificationChannel();
@@ -31,6 +32,7 @@ internal class AndroidNotificationManager : INotificationManager<Context>
     public void Show(string title, string message, Context context)
     {
         var notificationId = _messageId++;
+        var stopNotificationIntent = GetStopNotificationIntent(context, notificationId);
 
         var notification = new NotificationCompat.Builder(context, _channelId)
             .SetContentIntent(GetShowNotificationIntent(title, message, context))
@@ -38,7 +40,8 @@ internal class AndroidNotificationManager : INotificationManager<Context>
             .SetContentText(message)
             .SetLargeIcon(BitmapFactory.DecodeResource(context.Resources, Resource.Drawable.icon_about))
             .SetSmallIcon(Resource.Drawable.icon_about)
-            .AddAction(Resource.Drawable.icon_feed, "STOP", GetStopNotificationIntent(context, notificationId))
+            .SetContentIntent(stopNotificationIntent)
+            .SetSilent(true)
             .SetAutoCancel(true)
             .Build();
 
@@ -79,6 +82,7 @@ internal class AndroidNotificationManager : INotificationManager<Context>
             {
                 Description = _channelDescription
             };
+
             _manager.CreateNotificationChannel(channel);
         }
     }

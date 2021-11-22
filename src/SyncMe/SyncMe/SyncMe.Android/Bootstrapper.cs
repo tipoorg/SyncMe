@@ -1,7 +1,6 @@
 ﻿using Android.Content;
 using Microsoft.Extensions.DependencyInjection;
 using SyncMe.Droid.Alarm;
-using SyncMe.Services;
 
 namespace SyncMe.Droid;
 
@@ -23,11 +22,6 @@ public static class Bootstrapper
 
     public static IServiceCollection AddSyncMeAndroid(this IServiceCollection services)
     {
-        services
-            .AddSingleton<INotificationManager<Context>, AndroidNotificationManager>()
-            .AddSingleton<IAlarmPlayer<Context>, AndroidAlarmPlayer>()
-            .AddSingleton<IAlarmSetter<Context>, AndroidAlarmSetter>();
-
         return services;
     }
 }

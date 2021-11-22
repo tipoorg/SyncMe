@@ -63,14 +63,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Alarm\AlarmMessage.cs" />
-    <Compile Include="Alarm\AndroidAlarmSetter.cs" />
-    <Compile Include="Alarm\AlarmReceiver.cs" />
+    <Compile Include="Alarm\AndroidAlarmIntent.cs" />
     <Compile Include="Alarm\AndroidAlarmPlayer.cs" />
     <Compile Include="IsExternalInit.cs" />
     <Compile Include="Alarm\AndroidNotificationManager.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="GlobalUsings.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="Alarm\AlarmReceiver.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
