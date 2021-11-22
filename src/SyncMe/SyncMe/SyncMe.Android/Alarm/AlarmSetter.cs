@@ -43,6 +43,7 @@ internal class AlarmSetter : IAlarmSetter
             am.SetExact(AlarmType.RtcWakeup, calendarItem.TimeInMillis, alarmIntent);
 
     }
+
     private PendingIntent GetAlarmIntent(int times, Context context)
     {
         var intent = new Intent(context, typeof(AlarmReceiver));
@@ -50,6 +51,6 @@ internal class AlarmSetter : IAlarmSetter
         intent.AddFlags(ActivityFlags.IncludeStoppedPackages);
         intent.AddFlags(ActivityFlags.ReceiverForeground);
         int uniqueId = Guid.NewGuid().GetHashCode();
-        return PendingIntent.GetBroadcast(context, uniqueId, intent, 0);
+        return PendingIntent.GetBroadcast(context, uniqueId, intent, PendingIntentFlags.Immutable);
     }
 }
