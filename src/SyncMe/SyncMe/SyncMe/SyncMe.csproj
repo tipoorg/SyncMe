@@ -11,6 +11,7 @@
         <PackageReference Include="System.Reactive" Version="5.0.0" />
         <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
         <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+        <PackageReference Include="Xamarin.Plugin.Calendar" Version="1.4.5304" />
     </ItemGroup>
 
     <ItemGroup>
@@ -18,4 +19,10 @@
         <DependentUpon>NotesPage.xaml</DependentUpon>
       </Compile>
     </ItemGroup>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Views\DayView.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
 </Project>
