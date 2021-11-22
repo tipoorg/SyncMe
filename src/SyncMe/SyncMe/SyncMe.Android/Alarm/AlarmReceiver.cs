@@ -1,6 +1,5 @@
 ﻿using Android.Content;
 using Android.Media;
-using Android.Widget;
 
 namespace SyncMe.Droid.Alarm;
 
@@ -11,17 +10,12 @@ internal class AlarmReceiver : BroadcastReceiver
 
     public override void OnReceive(Context context, Intent intent)
     {
-        PlayRingtone(context);
-
         var times = intent.GetIntExtra("TIMES", -1);
-        
+
         if (times > 0)
         {
+            PlayRingtone(context);
             _alarmSetter.SetAlarm(times - 1, context);
-        }
-        else
-        {
-            Toast.MakeText(context, $"It was Last Alarm", ToastLength.Short).Show();
         }
     }
 
