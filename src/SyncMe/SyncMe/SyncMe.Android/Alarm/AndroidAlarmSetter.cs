@@ -1,21 +1,21 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Android.App;
 using Android.Content;
 using Android.Icu.Text;
 using Android.Icu.Util;
 using Android.OS;
 using Android.Widget;
+using SyncMe.Services;
 
 namespace SyncMe.Droid.Alarm;
 
-internal class AlarmSetter : IAlarmSetter
+internal class AndroidAlarmSetter : IAlarmSetter<Context>
 {
     public void SetAlarm(int times, Context context)
     {
         var simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
         var calendarItem = GetCalendarItem();
-        var alarmIntent = GetAlarmIntent(times, context);
+        var alarmIntent = GetSetAlarmIntent(times, context);
 
         SetAlarm(calendarItem, alarmIntent, context);
 
@@ -43,13 +43,16 @@ internal class AlarmSetter : IAlarmSetter
             am.SetExact(AlarmType.RtcWakeup, calendarItem.TimeInMillis, alarmIntent);
 
     }
-    private PendingIntent GetAlarmIntent(int times, Context context)
+    private PendingIntent GetSetAlarmIntent(int times, Context context)
     {
-        var intent = new Intent(context, typeof(AlarmReceiver));
-        intent.PutExtra("TIMES", times);
-        intent.AddFlags(ActivityFlags.IncludeStoppedPackages);
-        intent.AddFlags(ActivityFlags.ReceiverForeground);
+        var intent = new Intent(context, typeof(AlarmReceiver))
+            .PutExtra(AlarmMessage.ActionKey, AlarmMessage.SetAlarmAction)
+            .PutExtra(AlarmMessage.TimesKey, times)
+            .AddFlags(ActivityFlags.IncludeStoppedPackages)
+            .AddFlags(ActivityFlags.ReceiverForeground);
+
         int uniqueId = Guid.NewGuid().GetHashCode();
+
         return PendingIntent.GetBroadcast(context, uniqueId, intent, 0);
     }
 }

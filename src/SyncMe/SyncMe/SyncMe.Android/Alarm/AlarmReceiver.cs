@@ -1,47 +1,51 @@
 ﻿using Android.Content;
-using Android.Media;
+using SyncMe.Services;
 
 namespace SyncMe.Droid.Alarm;
 
 [BroadcastReceiver]
 internal class AlarmReceiver : BroadcastReceiver
 {
-    private readonly IAlarmSetter _alarmSetter = App.GetRequiredService<IAlarmSetter>();
+    private readonly IAlarmSetter<Context> _alarmSetter = App.GetRequiredService<IAlarmSetter<Context>>();
+    private readonly IAlarmPlayer<Context> _alarmPlayer = App.GetRequiredService<IAlarmPlayer<Context>>();
+    private readonly INotificationManager<Context> _notificationManager = App.GetRequiredService<INotificationManager<Context>>();
 
     public override void OnReceive(Context context, Intent intent)
     {
-        var times = intent.GetIntExtra("TIMES", -1);
+        var action = intent.GetStringExtra(AlarmMessage.ActionKey);
+
+        switch (action)
+        {
+            case AlarmMessage.SetAlarmAction:
+                SetAlarm(context, intent);
+                return;
+
+            case AlarmMessage.StopAlarmAction:
+                StopAlarm(intent);
+                return;
+
+            default:
+                return;
+        }
+    }
+
+    private void SetAlarm(Context context, Intent intent)
+    {
+        var times = intent.GetIntExtra(AlarmMessage.TimesKey, -1);
 
         if (times > 0)
         {
-            PlayAlarm(context);
+            _alarmPlayer.PlayAlarm(context);
+            _notificationManager.Show("Alarm", "WakeUp", context);
             _alarmSetter.SetAlarm(times - 1, context);
         }
     }
 
-    private static void PlayAlarm(Context context)
+    private void StopAlarm(Intent intent)
     {
-        var mp = new MediaPlayer();
-        var soundUri = RingtoneManager.GetActualDefaultRingtoneUri(context, RingtoneType.Notification);
+        _alarmPlayer.StopPlaying();
 
-        try
-        {
-            mp.Reset();
-            mp.SetDataSource(context, soundUri);
-            mp.SetAudioAttributes(GetAudio());
-            mp.Prepare();
-            mp.Start();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-        }
-    }
-
-    private static AudioAttributes GetAudio()
-    {
-        return new AudioAttributes.Builder()
-            .SetUsage(AudioUsageKind.Alarm)
-            .Build();
+        var id = intent.GetIntExtra(AlarmMessage.NotificationIdKey, -1);
+        _notificationManager.Cancel(id);
     }
 }
