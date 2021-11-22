@@ -1,32 +1,26 @@
-﻿using System;
-using SyncMe.Services;
-using SyncMe.Views;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿using SyncMe.Services;
 
-namespace SyncMe
+namespace SyncMe;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    public App()
     {
+        InitializeComponent();
 
-        public App()
-        {
-            InitializeComponent();
+        DependencyService.Register<MockDataStore>();
+        MainPage = new AppShell();
+    }
 
-            DependencyService.Register<MockDataStore>();
-            MainPage = new AppShell();
-        }
+    protected override void OnStart()
+    {
+    }
 
-        protected override void OnStart()
-        {
-        }
+    protected override void OnSleep()
+    {
+    }
 
-        protected override void OnSleep()
-        {
-        }
-
-        protected override void OnResume()
-        {
-        }
+    protected override void OnResume()
+    {
     }
 }

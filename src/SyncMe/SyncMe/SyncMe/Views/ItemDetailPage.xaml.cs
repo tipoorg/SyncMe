@@ -1,15 +1,12 @@
-﻿using System.ComponentModel;
-using SyncMe.ViewModels;
-using Xamarin.Forms;
+﻿using SyncMe.ViewModels;
 
-namespace SyncMe.Views
+namespace SyncMe.Views;
+
+public partial class ItemDetailPage : ContentPage
 {
-    public partial class ItemDetailPage : ContentPage
+    public ItemDetailPage()
     {
-        public ItemDetailPage()
-        {
-            InitializeComponent();
-            BindingContext = new ItemDetailViewModel();
-        }
+        InitializeComponent();
+        BindingContext = new ItemDetailViewModel();
     }
 }

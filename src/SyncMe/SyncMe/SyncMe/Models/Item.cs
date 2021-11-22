@@ -1,11 +1,8 @@
-﻿using System;
+﻿namespace SyncMe.Models;
 
-namespace SyncMe.Models
+public class Item
 {
-    public class Item
-    {
-        public string Id { get; set; }
-        public string Text { get; set; }
-        public string Description { get; set; }
-    }
+    public string Id { get; init; }
+    public string Text { get; init; }
+    public string Description { get; init; }
 }

@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using SyncMe.ViewModels;
-using SyncMe.Views;
-using Xamarin.Forms;
+﻿using SyncMe.Views;
 
-namespace SyncMe
+namespace SyncMe;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Xamarin.Forms.Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-            Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
-            Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
-        }
-
+        InitializeComponent();
+        Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
+        Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
     }
 }
