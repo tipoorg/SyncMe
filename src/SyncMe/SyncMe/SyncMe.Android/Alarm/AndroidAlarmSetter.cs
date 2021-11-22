@@ -52,7 +52,6 @@ internal class AndroidAlarmSetter : IAlarmSetter<Context>
             .AddFlags(ActivityFlags.ReceiverForeground);
 
         int uniqueId = Guid.NewGuid().GetHashCode();
-
-        return PendingIntent.GetBroadcast(context, uniqueId, intent, 0);
+        return PendingIntent.GetBroadcast(context, uniqueId, intent, PendingIntentFlags.Immutable);
     }
 }
