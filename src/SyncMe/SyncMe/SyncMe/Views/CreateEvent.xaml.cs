@@ -113,7 +113,7 @@ public partial class CreateEvent : ContentPage
 
     private async void OnAddEventClicked(object sender, EventArgs e)
     {
-        var newEvent = new SyncEvent(EventTitle.Text, "", new Namespace(1, Namespace.Text), new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active);
+        var newEvent = new SyncEvent(Guid.NewGuid(), EventTitle.Text, "", new Namespace(1, Namespace.Text), new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active);
         EventRepository.Events.Add(newEvent);
         await NavigateToNotes();
         CleanUpElements();

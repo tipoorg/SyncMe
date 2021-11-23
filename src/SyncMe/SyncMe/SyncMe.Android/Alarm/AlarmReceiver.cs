@@ -2,12 +2,15 @@
 using SyncMe.Droid.Extensions;
 using SyncMe.Extensions;
 using SyncMe.Models;
+using SyncMe.Repos;
 
 namespace SyncMe.Droid.Alarm;
 
 [BroadcastReceiver]
 internal class AlarmReceiver : BroadcastReceiver
 {
+    private ISyncEventsRepository _syncEventsRepository = Bootstrapper.GetService<ISyncEventsRepository>();
+
     public override void OnReceive(Context context, Intent intent)
     {
         var action = intent.GetStringExtra(AlarmMessage.ActionKey);
@@ -30,8 +33,14 @@ internal class AlarmReceiver : BroadcastReceiver
     private void SetAlarm(Context context, Intent intent)
     {
         var syncEvent = intent.GetExtra<SyncEvent>();
+        if (_syncEventsRepository.TryGetSyncEvent(syncEvent.Id, out var storedEvent) 
+            && storedEvent.Status == SyncStatus.Active)
+        {
+            return;
+        }
+
         AndroidAlarmPlayer.Instance.PlayAlarm(context);
-        AndroidNotificationManager.Instance.Show("Alarm", context);
+        AndroidNotificationManager.Instance.Show(syncEvent, context);
         new AndroidAlarmIntent().SetAlarm(syncEvent.DecrementRemainingTimes(), context);
     }
 

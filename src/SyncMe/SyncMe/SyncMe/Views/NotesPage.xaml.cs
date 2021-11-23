@@ -2,16 +2,21 @@
 using System.Reactive.Linq;
 using CalendarProviders.Authorization;
 using SyncMe.Providers.OutlookProvider;
+using SyncMe.Extensions;
 using SyncMe.Models;
+using SyncMe.Repos;
 
 namespace SyncMe.Views;
 
 public partial class NotesPage : ContentPage
 {
     private readonly string _fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "notes.txt");
+    private readonly ISyncEventsRepository _syncEventsRepository;
 
-    public NotesPage()
+    public NotesPage(ISyncEventsRepository syncEventsRepository)
     {
+        _syncEventsRepository = syncEventsRepository;
+
         InitializeComponent();
 
         // Read the file.
@@ -22,8 +27,8 @@ public partial class NotesPage : ContentPage
 
         ScheduledEvents = Observable
             .FromEventPattern(SetAlarmButton, nameof(Button.Clicked))
-            .Select(x => new SyncSchedule(SyncRepeat.Every10Seconds, int.TryParse(editor.Text, out var times) ? times : 1))
-            .Select(x => new SyncEvent("My First Event", "", default, x, default, SyncStatus.Active));
+            .SelectMany(x => _syncEventsRepository.GetAllSyncEvents())
+            .Select(x => x.Activate());
     }
 
     public IObservable<SyncEvent> ScheduledEvents { get; }

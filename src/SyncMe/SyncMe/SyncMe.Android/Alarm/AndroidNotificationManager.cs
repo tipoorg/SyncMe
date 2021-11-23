@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using AndroidX.Core.App;
+using SyncMe.Models;
 using AndroidApp = Android.App.Application;
 
 namespace SyncMe.Droid.Alarm;
@@ -27,13 +28,13 @@ internal class AndroidNotificationManager
         CreateNotificationChannel();
     }
 
-    public void Show(string eventName, Context context)
+    public void Show(SyncEvent syncEvent, Context context)
     {
         var notificationId = _messageId++;
         var stopNotificationIntent = GetStopNotificationIntent(context, notificationId);
 
         var notification = new NotificationCompat.Builder(context, _channelId)
-            .SetContentTitle(eventName)
+            .SetContentTitle(syncEvent.Title)
             .SetContentText("OK")
             .SetContentIntent(stopNotificationIntent)
             .SetLargeIcon(BitmapFactory.DecodeResource(context.Resources, Resource.Drawable.icon_open_calendar))

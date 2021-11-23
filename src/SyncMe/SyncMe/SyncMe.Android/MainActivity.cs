@@ -24,7 +24,7 @@ public class MainActivity : FormsAppCompatActivity
         var app = Bootstrapper.CreateApp();
         LoadApplication(app);
 
-        _setAlarmSubscription = App.GetRequiredService<NotesPage>().ScheduledEvents
+        _setAlarmSubscription = Bootstrapper.GetService<NotesPage>().ScheduledEvents
             .Subscribe(x => new AndroidAlarmIntent().SetAlarm(x, this));
         App.AuthUIParent = this;
     }

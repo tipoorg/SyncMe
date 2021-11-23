@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SyncMe.Repos;
 using SyncMe.Views;
 
 namespace SyncMe.Extensions;
@@ -8,7 +9,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddSyncMeLib(this IServiceCollection services)
     {
         services
-            .AddSingleton<AppShell>()
+            .AddScoped<AppShell>()
             .AddViews()
             .AddServices();
 
@@ -18,16 +19,19 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddViews(this IServiceCollection services)
     {
         services
-            .AddSingleton<NotesPage>()
-            .AddSingleton<CalendarPage>()
-            .AddSingleton<CreateEvent>()
-            .AddSingleton<NamespaceManagmentPage>();
+            .AddScoped<NotesPage>()
+            .AddScoped<CalendarPage>()
+            .AddScoped<CreateEvent>()
+            .AddScoped<NamespaceManagmentPage>();
 
         return services;
     }
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services
+            .AddSingleton<ISyncEventsRepository, SyncEventsRepository>();
+
         return services;
     }
 }
