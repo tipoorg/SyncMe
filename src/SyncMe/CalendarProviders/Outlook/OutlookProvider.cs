@@ -1,7 +1,5 @@
 ﻿using Azure.Identity;
 using Microsoft.Graph;
-using Microsoft.Graph.Auth;
-using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -13,29 +11,30 @@ namespace SyncMe.Providers.OutlookProvider
     {
         private readonly GraphServiceClient? _graphClient;
         private readonly string _email;
-        public OutlookProvider(string email)
+        public OutlookProvider(GraphServiceClient graphClient, string email)
         {
-            var scopes = new[] { "Calendars.Read" };
+            //var scopes = new[] { "Calendars.Read" };
 
-            var tenantId = "common";
-            var clientId = "904b52b5-a7ad-4ad5-b7e5-23160e0800e1";
-            //Can be used later
-            //var clientSecret = "Gve7Q~PMZJwmfrDSn7FBCxuGHu0hFNhMybR0W";
+            //var tenantId = "common";
+            //var clientId = "904b52b5-a7ad-4ad5-b7e5-23160e0800e1";
+            ////Can be used later
+            ////var clientSecret = "Gve7Q~PMZJwmfrDSn7FBCxuGHu0hFNhMybR0W";
 
-            var options = new TokenCredentialOptions
-            {
-                AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
-            };
+            //var options = new TokenCredentialOptions
+            //{
+            //    AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
+            //};
 
-            Func<DeviceCodeInfo, CancellationToken, Task> callback = (code, cancellation) => {
-                Console.WriteLine(code.Message);
-                return Task.FromResult(0);
-            };
+            //Func<DeviceCodeInfo, CancellationToken, Task> callback = (code, cancellation) => {
+            //    Console.WriteLine(code.Message);
+            //    return Task.FromResult(0);
+            //};
 
-            var deviceCodeCredential = new DeviceCodeCredential(
-                callback, tenantId, clientId, options);
+            //var deviceCodeCredential = new DeviceCodeCredential(
+            //    callback, tenantId, clientId, options);
 
-            _graphClient = new GraphServiceClient(deviceCodeCredential, scopes);
+            //_graphClient = new GraphServiceClient(deviceCodeCredential, scopes);
+            _graphClient = graphClient;
             _email = email;
         }
         public async Task<List<Event>> GetEventsAsync()

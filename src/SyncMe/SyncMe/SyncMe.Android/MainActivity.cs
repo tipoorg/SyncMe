@@ -1,7 +1,9 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
+using Microsoft.Identity.Client;
 using SyncMe.Droid.Alarm;
 using SyncMe.Views;
 using Xamarin.Forms.Platform.Android;
@@ -23,6 +25,8 @@ public class MainActivity : FormsAppCompatActivity
         var app = Bootstrapper.CreateApp();
         LoadApplication(app);
 
+        App.AuthUIParent = this;
+
         _setAlarmSubscription = App.GetRequiredService<NotesPage>().SetAlarmClicks
             .Subscribe(x => App.GetRequiredService<IAlarmSetter>().SetAlarm(x, this));
     }
@@ -40,5 +44,12 @@ public class MainActivity : FormsAppCompatActivity
             _setAlarmSubscription.Dispose();
 
         base.Dispose(disposing);
+    }
+
+    protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+    {
+        base.OnActivityResult(requestCode, resultCode, data);
+        AuthenticationContinuationHelper
+            .SetAuthenticationContinuationEventArgs(requestCode, resultCode, data);
     }
 }
