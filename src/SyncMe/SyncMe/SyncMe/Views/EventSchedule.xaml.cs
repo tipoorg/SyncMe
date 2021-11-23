@@ -7,7 +7,7 @@ namespace SyncMe.Views;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class EventSchedule : ContentPage
 {
-    private readonly ButtonWithValue<Repeat> _scheduleButton;
+    private readonly CreateEvent _createEvent;
 
     public Label DoesNotRepeatLabel { get; set; }
     public RadioWithValue<Repeat> DoesNotRepeat { get; init; }
@@ -20,7 +20,7 @@ public partial class EventSchedule : ContentPage
     public Label EveryYearLabel { get; set; }
     public RadioWithValue<Repeat> EveryYear { get; init; }
 
-    public EventSchedule(ButtonWithValue<Repeat> button)
+    public EventSchedule(CreateEvent createEvent)
     {
         InitializeComponent();
         DoesNotRepeat = CreateButton(Repeat.None);
@@ -33,6 +33,9 @@ public partial class EventSchedule : ContentPage
         EveryWeekLabel = CreateLabel("Every week");
         EveryMonthLabel = CreateLabel("Every month");
         EveryYearLabel = CreateLabel("Every year");
+
+        Disappearing += ResetState;
+        Appearing += ResetState;
 
         var layout = new StackLayout
         {
@@ -47,7 +50,16 @@ public partial class EventSchedule : ContentPage
         };
 
         Content = layout;
-        _scheduleButton = button;
+        _createEvent = createEvent;
+    }
+
+    private void ResetState(object sender, EventArgs e)
+    {
+        DoesNotRepeat.IsChecked = false;
+        EveryDay.IsChecked = false;
+        EveryWeek.IsChecked = false;
+        EveryMonth.IsChecked = false;
+        EveryYear.IsChecked = false;
     }
 
     private StackLayout CreateLayout(RadioButton radioButton, Label label) => new() { Children = { radioButton, label }, Orientation = StackOrientation.Horizontal };
@@ -75,7 +87,8 @@ public partial class EventSchedule : ContentPage
                 Repeat.EveryYear => EveryYearLabel.Text,
                 _ => throw new NotImplementedException(),
             };
-            _scheduleButton.Text = text;
+            _createEvent.ConfigureSchedule.Text = text;
+            _createEvent.ConfigureSchedule.Value = radio.Value;
         }
         await Navigation.PopAsync();
     }

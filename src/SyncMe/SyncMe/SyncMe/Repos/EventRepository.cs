@@ -1,8 +1,9 @@
-﻿using Microsoft.Graph;
+﻿using System.Collections.ObjectModel;
+using SyncMe.Models;
 
 namespace SyncMe.Repos;
 
 public class EventRepository
 {
-    public static List<Event> Events = new List<Event>();
+    public static ObservableCollection<Event> Events = new ObservableCollection<Event>();
 }

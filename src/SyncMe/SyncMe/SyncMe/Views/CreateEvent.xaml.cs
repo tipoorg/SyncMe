@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using Microsoft.Graph;
 using SyncMe.Elements;
 using SyncMe.Models;
 using SyncMe.Repos;
@@ -17,13 +16,15 @@ public partial class CreateEvent : ContentPage
     public DatePicker StartsPicker { get; init; }
     public DatePicker EndsPicker { get; init; }
     public ButtonWithValue<Repeat> ConfigureSchedule { get; set; }
-    public Button ConfigureAlert { get; init; }
-    public Button AddEvent { get; init; }
+    public ButtonWithValue<Reminder> ConfigureAlert { get; init; }
+    public ToolbarItem AddEvent { get; init; }
 
     public CreateEvent()
     {
         InitializeComponent();
 
+        AddEvent = new ToolbarItem { Text = "Add event", };
+        AddEvent.Clicked += OnAddEventClicked;
         Namespace = new Entry { Placeholder = "Namespace" };
         Namespace.PropertyChanged += ValidateButtonState;
         EventTitle = new Entry { Placeholder = "Title" };
@@ -36,24 +37,19 @@ public partial class CreateEvent : ContentPage
         ConfigureSchedule = new ButtonWithValue<Repeat> { Text = "Does not repeat", };
         ConfigureSchedule.Clicked += ConfigureSchedule_Clicked;
 
-        ConfigureAlert = new Button { Text = "Alert" };
+        ConfigureAlert = new ButtonWithValue<Reminder> { Text = "Alert" };
         ConfigureAlert.Clicked += AlertButton_Clicked;
-
-        AddEvent = new() { Text = "Add" };
-        AddEvent.Clicked += OnAddEventClicked;
 
         var stack = CreatePageLayout();
         Content = new ScrollView { Content = stack };
-        var addEvent = new ToolbarItem { Text = "Add event", };
-        addEvent.Clicked += OnAddEventClicked;
         var cancelEventCreation = new ToolbarItem { Text = "Cancel" };
         cancelEventCreation.Clicked += OnCancelEventCreationClicked;
 
-        ToolbarItems.Add(addEvent);
+        ToolbarItems.Add(AddEvent);
         ToolbarItems.Add(cancelEventCreation);
     }
 
-    private async void ConfigureSchedule_Clicked(object sender, EventArgs e) => await Navigation.PushAsync(new EventSchedule((ButtonWithValue<Repeat>)sender));
+    private async void ConfigureSchedule_Clicked(object sender, EventArgs e) => await Navigation.PushAsync(new EventSchedule(this));
 
     private async void OnCancelEventCreationClicked(object sender, EventArgs e)
     {
@@ -62,10 +58,12 @@ public partial class CreateEvent : ContentPage
             if (!await DisplayAlert(null, "Discard this event?", "Keep editing", "Discard"))
             {
                 CleanUpElements();
-                await Shell.Current.GoToAsync("//notes");
             }
         }
+        await NavigateToNotes();
     }
+
+    private static async Task NavigateToNotes() => await Shell.Current.GoToAsync("//notes");
 
     private void CleanUpElements()
     {
@@ -85,7 +83,7 @@ public partial class CreateEvent : ContentPage
         }
     }
 
-    private StackLayout CreatePageLayout() => new() { Spacing = 20, Children = { CreateHeader(), CreateSchedule(), CreateAlert(), AddEvent } };
+    private StackLayout CreatePageLayout() => new() { Spacing = 20, Children = { CreateHeader(), CreateSchedule(), CreateAlert() } };
 
     private StackLayout CreateHeader() => new() { Children = { Namespace, EventTitle } };
 
@@ -115,15 +113,9 @@ public partial class CreateEvent : ContentPage
 
     private async void OnAddEventClicked(object sender, EventArgs e)
     {
-        var newEvent = new Microsoft.Graph.Event
-        {
-            Start = new DateTimeTimeZone { DateTime = StartsPicker.Date.ToString() },
-            End = new DateTimeTimeZone { DateTime = EndsPicker.Date.ToString() },
-            IsAllDay = IsAllDay.IsToggled,
-            Subject = EventTitle.Text,
-            Recurrence = new PatternedRecurrence()
-        };
-
+        var newEvent = new Event(EventTitle.Text, "", new Namespace(1, Namespace.Text), new Schedule(ConfigureSchedule.Value), new Alert(new Reminder[] { ConfigureAlert.Value }), Status.Active);
         EventRepository.Events.Add(newEvent);
+        await NavigateToNotes();
+        CleanUpElements();
     }
 }
