@@ -31,7 +31,7 @@ internal class AlarmReceiver : BroadcastReceiver
         if (times > 0)
         {
             AndroidAlarmPlayer.Instance.PlayAlarm(context);
-            AndroidNotificationManager.Instance.Show("Alarm", "WakeUp", context);
+            AndroidNotificationManager.Instance.Show("Alarm", context);
             new AndroidAlarmIntent().SetAlarm(times - 1, context);
         }
     }
