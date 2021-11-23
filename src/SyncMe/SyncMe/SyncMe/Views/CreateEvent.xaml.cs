@@ -12,6 +12,7 @@ public partial class CreateEvent : ContentPage
     private static readonly DateTime _maximumDate = new(2100, 12, 31);
     private readonly ISyncNamespaceRepository _namespaceRepository;
     private readonly ISyncEventsRepository _eventsRepository;
+    private readonly Dictionary<string, IReadOnlyCollection<Namespace>> _namespaces;
 
     public AutoSuggestBox Namespace { get; init; }
     public Entry EventTitle { get; init; }
@@ -29,6 +30,7 @@ public partial class CreateEvent : ContentPage
         InitializeComponent();
         _namespaceRepository = namespaceRepository;
         _eventsRepository = eventsRepository;
+        _namespaces = _namespaceRepository.GetAllSyncNamespaces();
 
         AddEvent = new ToolbarItem { Text = "Add event", };
         AddEvent.Clicked += OnAddEventClicked;
@@ -78,7 +80,7 @@ public partial class CreateEvent : ContentPage
         if (sender is AutoSuggestBox autoSuggest)
         {
             var particles = autoSuggest.Text.Split('.');
-            if (particles.Length > 1)
+            //if (particles.Length > 1)
 
             autoSuggest.Text = $"{e.SelectedItem}.";
         }
@@ -88,10 +90,10 @@ public partial class CreateEvent : ContentPage
     {
         if (e.Reason == AutoSuggestionBoxTextChangeReason.UserInput && sender is AutoSuggestBox autoSuggest)
         {
-            autoSuggest.ItemsSource = _namespaceRepository
-                .GetAllSyncNamespacrs()
-                .Select(x => x.Title)
+            autoSuggest.ItemsSource = _namespaces
+                .Select(x => x.Key)
                 .Where(x => x.StartsWith(autoSuggest.Text, StringComparison.OrdinalIgnoreCase))
+                .Distinct()
                 .ToArray();
         }
     }
@@ -175,8 +177,10 @@ public partial class CreateEvent : ContentPage
     private async void OnAddEventClicked(object sender, EventArgs e)
     {
         var guid = Guid.NewGuid();
-        var newEvent = new SyncEvent(guid, EventTitle.Text, "", new Namespace(1, Namespace.Text), new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active);
-        _eventsRepository.AddSyncEvent(newEvent);   
+        var newNamespace = new Namespace (1, Namespace.Text);
+        var newEvent = new SyncEvent(guid, EventTitle.Text, "", newNamespace, new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active);
+        _eventsRepository.AddSyncEvent(newEvent);
+        _namespaceRepository.AddSyncNamespace(Namespace.Text);
         await NavigateToNotes();
         CleanUpElements();
     }
