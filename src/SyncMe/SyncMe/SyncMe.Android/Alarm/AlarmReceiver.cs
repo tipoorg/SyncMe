@@ -1,28 +1,44 @@
 ﻿using Android.Content;
-using Android.Media;
+using SyncMe.Droid.Extensions;
+using SyncMe.Extensions;
+using SyncMe.Models;
 
 namespace SyncMe.Droid.Alarm;
 
 [BroadcastReceiver]
 internal class AlarmReceiver : BroadcastReceiver
 {
-    private readonly IAlarmSetter _alarmSetter = App.GetRequiredService<IAlarmSetter>();
-
     public override void OnReceive(Context context, Intent intent)
     {
-        var times = intent.GetIntExtra("TIMES", -1);
+        var action = intent.GetStringExtra(AlarmMessage.ActionKey);
 
-        if (times > 0)
+        switch (action)
         {
-            PlayRingtone(context);
-            _alarmSetter.SetAlarm(times - 1, context);
+            case AlarmMessage.SetAlarmAction:
+                SetAlarm(context, intent);
+                return;
+
+            case AlarmMessage.StopAlarmAction:
+                StopAlarm(intent);
+
+                return;
+            default:
+                return;
         }
     }
 
-    private static void PlayRingtone(Context context)
+    private void SetAlarm(Context context, Intent intent)
     {
-        var soundUri = RingtoneManager.GetDefaultUri(RingtoneType.Notification);
-        var ringtone = RingtoneManager.GetRingtone(context, soundUri);
-        ringtone.Play();
+        var syncEvent = intent.GetExtra<SyncEvent>();
+        AndroidAlarmPlayer.Instance.PlayAlarm(context);
+        AndroidNotificationManager.Instance.Show("Alarm", context);
+        new AndroidAlarmIntent().SetAlarm(syncEvent.DecrementRemainingTimes(), context);
+    }
+
+    private void StopAlarm(Intent intent)
+    {
+        AndroidAlarmPlayer.Instance.StopPlaying();
+        var id = intent.GetIntExtra(AlarmMessage.NotificationIdKey, -1);
+        AndroidNotificationManager.Instance.Cancel(id);
     }
 }

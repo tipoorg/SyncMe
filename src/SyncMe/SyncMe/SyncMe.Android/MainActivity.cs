@@ -7,8 +7,7 @@ using SyncMe.Views;
 using Xamarin.Forms.Platform.Android;
 
 namespace SyncMe.Droid;
-
-[Activity(Label = "SyncMe", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
+[Activity(Label = "SyncMe", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
 public class MainActivity : FormsAppCompatActivity
 {
     private IDisposable _setAlarmSubscription;
@@ -23,8 +22,8 @@ public class MainActivity : FormsAppCompatActivity
         var app = Bootstrapper.CreateApp();
         LoadApplication(app);
 
-        _setAlarmSubscription = App.GetRequiredService<NotesPage>().SetAlarmClicks
-            .Subscribe(x => App.GetRequiredService<IAlarmSetter>().SetAlarm(x, this));
+        _setAlarmSubscription = App.GetRequiredService<NotesPage>().ScheduledEvents
+            .Subscribe(x => new AndroidAlarmIntent().SetAlarm(x, this));
     }
 
     public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
