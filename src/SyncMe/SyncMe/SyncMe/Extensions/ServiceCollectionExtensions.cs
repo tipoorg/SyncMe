@@ -18,7 +18,6 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddViews(this IServiceCollection services)
     {
         services
-            .AddSingleton<AboutPage>()
             .AddSingleton<NotesPage>()
             .AddSingleton<CalendarPage>()
             .AddSingleton<CreateEvent>();
