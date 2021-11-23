@@ -5,17 +5,17 @@ namespace SyncMe.Views;
 public partial class EventAlert : ContentPage
 {
     private readonly CreateEvent createEvent;
-    public ButtonWithLoad<int> None { get; init; }
-    public ButtonWithLoad<int> AtTimeOfEvent { get; init; }
-    public ButtonWithLoad<int> FiveMinBefore { get; init; }
-    public ButtonWithLoad<int> TenMinBefore { get; init; }
-    public ButtonWithLoad<int> FiveteenMinBefore { get; init; }
-    public ButtonWithLoad<int> ThirtyMinBefore { get; init; }
-    public ButtonWithLoad<int> HourBefore { get; init; }
-    public ButtonWithLoad<int> TwoHoursBefore { get; init; }
-    public ButtonWithLoad<int> DayBefore { get; init; }
-    public ButtonWithLoad<int> TwoDaysBefore { get; init; }
-    public ButtonWithLoad<int> WeekBefore { get; init; }
+    public ButtonWithValue<int> None { get; init; }
+    public ButtonWithValue<int> AtTimeOfEvent { get; init; }
+    public ButtonWithValue<int> FiveMinBefore { get; init; }
+    public ButtonWithValue<int> TenMinBefore { get; init; }
+    public ButtonWithValue<int> FiveteenMinBefore { get; init; }
+    public ButtonWithValue<int> ThirtyMinBefore { get; init; }
+    public ButtonWithValue<int> HourBefore { get; init; }
+    public ButtonWithValue<int> TwoHoursBefore { get; init; }
+    public ButtonWithValue<int> DayBefore { get; init; }
+    public ButtonWithValue<int> TwoDaysBefore { get; init; }
+    public ButtonWithValue<int> WeekBefore { get; init; }
 
     public EventAlert(CreateEvent createEvent)
     {
@@ -44,17 +44,17 @@ public partial class EventAlert : ContentPage
         this.createEvent = createEvent;
     }
 
-    private ButtonWithLoad<int> CreateAndSubscribe(string text, int load)
+    private ButtonWithValue<int> CreateAndSubscribe(string text, int load)
     {
-        ButtonWithLoad<int> button = new() { Text = text, Load = load };
+        ButtonWithValue<int> button = new() { Text = text, Value = load };
         button.Clicked += OnClicked;
         return button;
     }
 
     private async void OnClicked(object sender, EventArgs e)
     {
-        if (sender is ButtonWithLoad<int> button)
-            createEvent.ConfigureAlert.Text += $" {button.Load}";
+        if (sender is ButtonWithValue<int> button)
+            createEvent.ConfigureAlert.Text += $" {button.Value}";
 
         await Navigation.PopAsync();
     }

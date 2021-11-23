@@ -13,7 +13,7 @@ public record Namespace(int Id, string Title);
 
 public enum Repeat
 {
-    Dayly, WeekDays, EveryMonth, EveryYear
+    None, Dayly, WeekDays, EveryMonth, EveryYear
 }
 
 public record Schedule(Repeat Repeat);
