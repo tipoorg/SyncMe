@@ -1,5 +1,8 @@
 ﻿using CalendarProviders.Authorization;
+using SyncMe.Models;
 using SyncMe.Providers.OutlookProvider;
+using SyncMe.Repos;
+using SyncMe.Extensions;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using Xamarin.Forms.Xaml;
@@ -15,7 +18,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
     public ObservableCollection<Identity> Identities { get; } = new ObservableCollection<Identity>();
 
-    public IdentityProvidersPage()
+    public IdentityProvidersPage(ISyncEventsRepository syncEventsRepository)
     {
         InitializeComponent();
         BindingContext = this;
@@ -36,12 +39,20 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
                 var client = await manager.GetGraphClientAsync();
                 var events = await new OutlookProvider(client, manager.CurrentAccounts.First().Username).GetEventsAsync();
 
-                return (events, manager);
+                var syncEvents = events.Select(e => new SyncEvent(Guid.Empty, e.Id, e.Subject, e.Body.Content, new Namespace(0, ""), new SyncSchedule(SyncRepeat.None, null),
+                                                 new SyncAlert(new SyncReminder[] { }), SyncStatus.Active,
+                                                 DateTime.Parse(e.Start.DateTime), DateTime.Parse(e.End.DateTime)));
+                foreach(var @event in syncEvents)
+                {
+                    syncEventsRepository.AddSyncEvent(@event);
+                }
+
+                return manager;
             }) // open browser and await task
             .Subscribe(x =>
             {
                 Device.BeginInvokeOnMainThread(() => SwitchLayouts());
-                Identities.Add(new Identity(x.manager.CurrentAccounts.First().Username));
+                Identities.Add(new Identity(x.CurrentAccounts.First().Username));
             });
     }
 
