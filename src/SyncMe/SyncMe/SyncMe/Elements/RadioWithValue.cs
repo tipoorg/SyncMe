@@ -2,5 +2,5 @@
 
 public class RadioWithValue<T> : RadioButton
 {
-    public T Value { get; set; }
+    public T Data { get; set; }
 }

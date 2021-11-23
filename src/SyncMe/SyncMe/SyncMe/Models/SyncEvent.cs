@@ -9,7 +9,9 @@ public enum SyncStatus
 
 public record SyncEvent(Guid Id, string Title, string Description, Namespace Namespace, SyncSchedule Schedule, SyncAlert Alert, SyncStatus Status);
 
-public record NamespaceTree(ILookup<Namespace, Namespace> Tree);
+public record NamespaceTree(Dictionary<int, Value> Tree);
+
+public record Value(string Name, Dictionary<int, Value> Values);
 
 public record Namespace(int Id, string Title);
 

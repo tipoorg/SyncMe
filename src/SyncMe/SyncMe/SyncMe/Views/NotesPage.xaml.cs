@@ -37,11 +37,6 @@ public partial class NotesPage : ContentPage
     {
         // Save the file.
 
-        var manager = new MicrosoftAuthorizationManager();
-        await manager.SignInAsync(App.AuthUIParent);
-        var client = await manager.GetGraphClientAsync();
-        var events = await new OutlookProvider(client, manager.CurrentAccounts.First().Username).GetEventsAsync();
-
         File.WriteAllText(_fileName, editor.Text);
     }
 
