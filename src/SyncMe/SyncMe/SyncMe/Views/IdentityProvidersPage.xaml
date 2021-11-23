@@ -57,6 +57,7 @@
                         Style="{StaticResource FloadButtonStyle}"/>
                 <Button x:Name="AddGoogle"
                         IsVisible="False"
+                        IsEnabled="False"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
                         AbsoluteLayout.LayoutBounds="1, 0.85, AutoSize, AutoSize"
                         Style="{StaticResource FloadButtonStyle}"/>
