@@ -21,6 +21,8 @@
         <ShellContent Title="Namespaces"
                       Icon="icon_feed.png"
                       ContentTemplate="{local:DIDataTemplate Type={x:Type views:NamespaceManagmentPage}}"/>
-        
+        <ShellContent Title="Identities"
+                      Icon="icon_feed.png"
+                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:IdentityProvidersPage}}"/>
     </TabBar>
 </Shell>
