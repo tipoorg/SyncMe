@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.CSharp" Version="4.0.1" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
         <PackageReference Include="Microsoft.Graph" Version="3.35.0" />
         <PackageReference Include="System.Reactive" Version="5.0.0" />
@@ -22,6 +22,9 @@
       </Compile>
       <Compile Update="Views\CreateEvent.xaml.cs">
         <DependentUpon>CreateEvent.xaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\IdentityProvidersPage.xaml.cs">
+        <DependentUpon>IdentityProvidersPage.xaml</DependentUpon>
       </Compile>
       <Compile Update="Views\NotesPage.xaml.cs">
         <DependentUpon>NotesPage.xaml</DependentUpon>
@@ -44,5 +47,9 @@
       <EmbeddedResource Update="Views\NamespaceManagmentPage.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\CalendarProviders\CalendarProviders.csproj" />
     </ItemGroup>
 </Project>
