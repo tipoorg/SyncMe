@@ -8,7 +8,7 @@ public class EventCalculator
     {
         delay = syncEvent switch
         {
-            { Schedule.Repeat: Repeat.Every10Seconds } => TimeSpan.FromSeconds(10),
+            { Schedule.Repeat: SyncRepeat.Every10Seconds } => TimeSpan.FromSeconds(10),
             _ => throw new NotImplementedException()
         };
 

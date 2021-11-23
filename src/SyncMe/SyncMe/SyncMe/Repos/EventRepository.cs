@@ -5,5 +5,5 @@ namespace SyncMe.Repos;
 
 public class EventRepository
 {
-    public static ObservableCollection<Event> Events = new ObservableCollection<Event>();
+    public static ObservableCollection<SyncEvent> Events = new ObservableCollection<SyncEvent>();
 }

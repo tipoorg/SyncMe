@@ -20,8 +20,8 @@ public partial class NotesPage : ContentPage
 
         ScheduledEvents = Observable
             .FromEventPattern(SetAlarmButton, nameof(Button.Clicked))
-            .Select(x => new Schedule(Repeat.Every10Seconds, int.TryParse(editor.Text, out var times) ? times : 1))
-            .Select(x => new SyncEvent(1, "My First Event", "", default, x, default, Status.Active));
+            .Select(x => new SyncSchedule(SyncRepeat.Every10Seconds, int.TryParse(editor.Text, out var times) ? times : 1))
+            .Select(x => new SyncEvent("My First Event", "", default, x, default, SyncStatus.Active));
     }
 
     public IObservable<SyncEvent> ScheduledEvents { get; }

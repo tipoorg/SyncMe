@@ -2,27 +2,27 @@
 
 namespace SyncMe.Models;
 
-public enum Status
+public enum SyncStatus
 {
     Active, Stopped
 }
 
-public record SyncEvent(string Title, string Description, Namespace Namespace, Schedule Schedule, Alert Alert, Status Status);
+public record SyncEvent(string Title, string Description, Namespace Namespace, SyncSchedule Schedule, SyncAlert Alert, SyncStatus Status);
 
 public record NamespaceTree(ILookup<Namespace, Namespace> Tree);
 
 public record Namespace(int Id, string Title);
 
-public enum Repeat
+public enum SyncRepeat
 {
     None, Dayly, WeekDays, EveryMonth, EveryYear, Every10Seconds
 }
 
-public record Schedule(Repeat Repeat, int? Times);
+public record SyncSchedule(SyncRepeat Repeat, int? Times);
 
-public record Alert(Reminder[] Reminders);
+public record SyncAlert(SyncReminder[] Reminders);
 
-public enum Reminder
+public enum SyncReminder
 {
     [Description("None")]
     None,

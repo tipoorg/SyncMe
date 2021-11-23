@@ -10,24 +10,24 @@ public partial class EventSchedule : ContentPage
     private readonly CreateEvent _createEvent;
 
     public Label DoesNotRepeatLabel { get; set; }
-    public RadioWithValue<Repeat> DoesNotRepeat { get; init; }
+    public RadioWithValue<SyncRepeat> DoesNotRepeat { get; init; }
     public Label EveryDayLabel { get; set; }
-    public RadioWithValue<Repeat> EveryDay { get; init; }
+    public RadioWithValue<SyncRepeat> EveryDay { get; init; }
     public Label EveryWeekLabel { get; set; }
-    public RadioWithValue<Repeat> EveryWeek { get; init; }
+    public RadioWithValue<SyncRepeat> EveryWeek { get; init; }
     public Label EveryMonthLabel { get; set; }
-    public RadioWithValue<Repeat> EveryMonth { get; init; }
+    public RadioWithValue<SyncRepeat> EveryMonth { get; init; }
     public Label EveryYearLabel { get; set; }
-    public RadioWithValue<Repeat> EveryYear { get; init; }
+    public RadioWithValue<SyncRepeat> EveryYear { get; init; }
 
     public EventSchedule(CreateEvent createEvent)
     {
         InitializeComponent();
-        DoesNotRepeat = CreateButton(Repeat.None);
-        EveryDay = CreateButton(Repeat.Dayly);
-        EveryWeek = CreateButton(Repeat.WeekDays);
-        EveryMonth = CreateButton(Repeat.EveryMonth);
-        EveryYear = CreateButton(Repeat.EveryYear);
+        DoesNotRepeat = CreateButton(SyncRepeat.None);
+        EveryDay = CreateButton(SyncRepeat.Dayly);
+        EveryWeek = CreateButton(SyncRepeat.WeekDays);
+        EveryMonth = CreateButton(SyncRepeat.EveryMonth);
+        EveryYear = CreateButton(SyncRepeat.EveryYear);
         DoesNotRepeatLabel = CreateLabel("Does not repeat");
         EveryDayLabel = CreateLabel("Every day");
         EveryWeekLabel = CreateLabel("Every week");
@@ -65,9 +65,9 @@ public partial class EventSchedule : ContentPage
     private StackLayout CreateLayout(RadioButton radioButton, Label label) => new() { Children = { radioButton, label }, Orientation = StackOrientation.Horizontal };
 
 
-    private RadioWithValue<Repeat> CreateButton(Repeat value)
+    private RadioWithValue<SyncRepeat> CreateButton(SyncRepeat value)
     {
-        var radioButton = new RadioWithValue<Repeat> { Value = value };
+        var radioButton = new RadioWithValue<SyncRepeat> { Value = value };
         radioButton.CheckedChanged += OnCheckedChanged;
         return radioButton;
     }
@@ -76,15 +76,15 @@ public partial class EventSchedule : ContentPage
 
     private async void OnCheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-        if (sender is RadioWithValue<Repeat> radio)
+        if (sender is RadioWithValue<SyncRepeat> radio)
         {
             var text = radio.Value switch
             {
-                Repeat.None => DoesNotRepeatLabel.Text,
-                Repeat.Dayly => EveryDayLabel.Text,
-                Repeat.WeekDays => EveryWeekLabel.Text,
-                Repeat.EveryMonth => EveryMonthLabel.Text,
-                Repeat.EveryYear => EveryYearLabel.Text,
+                SyncRepeat.None => DoesNotRepeatLabel.Text,
+                SyncRepeat.Dayly => EveryDayLabel.Text,
+                SyncRepeat.WeekDays => EveryWeekLabel.Text,
+                SyncRepeat.EveryMonth => EveryMonthLabel.Text,
+                SyncRepeat.EveryYear => EveryYearLabel.Text,
                 _ => throw new NotImplementedException(),
             };
             _createEvent.ConfigureSchedule.Text = text;

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using Microsoft.Graph;
 using SyncMe.Elements;
 using SyncMe.Models;
 using SyncMe.Repos;
@@ -16,8 +15,8 @@ public partial class CreateEvent : ContentPage
     public Switch IsAllDay { get; init; }
     public DatePicker StartsPicker { get; init; }
     public DatePicker EndsPicker { get; init; }
-    public ButtonWithValue<Repeat> ConfigureSchedule { get; set; }
-    public ButtonWithValue<Reminder> ConfigureAlert { get; init; }
+    public ButtonWithValue<SyncRepeat> ConfigureSchedule { get; set; }
+    public ButtonWithValue<SyncReminder> ConfigureAlert { get; init; }
     public ToolbarItem AddEvent { get; init; }
 
     public CreateEvent()
@@ -35,10 +34,10 @@ public partial class CreateEvent : ContentPage
         IsAllDay.Toggled += OnSwitchToggled;
         StartsPicker = new DatePicker { MinimumDate = _minimumDate, MaximumDate = _maximumDate };
         EndsPicker = new DatePicker { MinimumDate = _minimumDate, MaximumDate = _maximumDate };
-        ConfigureSchedule = new ButtonWithValue<Repeat> { Text = "Does not repeat", };
+        ConfigureSchedule = new ButtonWithValue<SyncRepeat> { Text = "Does not repeat", };
         ConfigureSchedule.Clicked += ConfigureSchedule_Clicked;
 
-        ConfigureAlert = new ButtonWithValue<Reminder> { Text = "Alert" };
+        ConfigureAlert = new ButtonWithValue<SyncReminder> { Text = "Alert" };
         ConfigureAlert.Clicked += AlertButton_Clicked;
 
         var stack = CreatePageLayout();
@@ -114,7 +113,7 @@ public partial class CreateEvent : ContentPage
 
     private async void OnAddEventClicked(object sender, EventArgs e)
     {
-        var newEvent = new Event(EventTitle.Text, "", new Namespace(1, Namespace.Text), new Schedule(ConfigureSchedule.Value), new Alert(new Reminder[] { ConfigureAlert.Value }), Status.Active);
+        var newEvent = new SyncEvent(EventTitle.Text, "", new Namespace(1, Namespace.Text), new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active);
         EventRepository.Events.Add(newEvent);
         await NavigateToNotes();
         CleanUpElements();
