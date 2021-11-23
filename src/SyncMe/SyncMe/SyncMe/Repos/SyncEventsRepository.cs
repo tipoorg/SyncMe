@@ -22,4 +22,9 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
         var res = _events.Values.ToList();
         return res;
     }
+
+    public void AddSyncEvent(SyncEvent syncEvent)
+    {
+        _events.Add(syncEvent.Id, syncEvent);
+    }
 }

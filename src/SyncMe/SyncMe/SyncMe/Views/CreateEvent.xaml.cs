@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using dotMorten.Xamarin.Forms;
 using SyncMe.Elements;
 using SyncMe.Models;
 using SyncMe.Repos;
@@ -9,26 +10,33 @@ public partial class CreateEvent : ContentPage
 {
     private static readonly DateTime _minimumDate = new(2000, 1, 1);
     private static readonly DateTime _maximumDate = new(2100, 12, 31);
+    private readonly ISyncNamespaceRepository _namespaceRepository;
+    private readonly ISyncEventsRepository _eventsRepository;
 
-    public Entry Namespace { get; init; }
+    public AutoSuggestBox Namespace { get; init; }
     public Entry EventTitle { get; init; }
     public Switch IsAllDay { get; init; }
     public DatePicker StartsDate { get; init; }
     public TimePicker StartsTime { get; init; }
     public DatePicker EndsDate { get; init; }
     public TimePicker EndsTime { get; init; }
-    public ButtonWithValue<SyncRepeat> ConfigureSchedule { get; set; }
+    public ButtonWithValue<SyncRepeat> ConfigureSchedule { get; init; }
     public ButtonWithValue<SyncReminder> ConfigureAlert { get; init; }
     public ToolbarItem AddEvent { get; init; }
 
-    public CreateEvent()
+    public CreateEvent(ISyncEventsRepository eventsRepository, ISyncNamespaceRepository namespaceRepository)
     {
         InitializeComponent();
+        _namespaceRepository = namespaceRepository;
+        _eventsRepository = eventsRepository;
 
         AddEvent = new ToolbarItem { Text = "Add event", };
         AddEvent.Clicked += OnAddEventClicked;
-        Namespace = new Entry { Placeholder = "Namespace" };
+        Namespace = new AutoSuggestBox { PlaceholderText = "Namespace" };
         Namespace.PropertyChanged += ValidateButtonState;
+        Namespace.TextChanged += OnTextChanged;
+        Namespace.SuggestionChosen += OnSuggestionChosen;
+        Namespace.QuerySubmitted += OnQuerySubmitted;
         EventTitle = new Entry { Placeholder = "Title" };
         EventTitle.PropertyChanged += ValidateButtonState;
 
@@ -51,6 +59,41 @@ public partial class CreateEvent : ContentPage
 
         ToolbarItems.Add(AddEvent);
         ToolbarItems.Add(cancelEventCreation);
+    }
+
+    private void OnQuerySubmitted(object sender, AutoSuggestBoxQuerySubmittedEventArgs e)
+    {
+        if (e.ChosenSuggestion != null)
+        {
+            // User selected an item from the suggestion list, take an action on it here.
+        }
+        else
+        {
+            // User hit Enter from the search box. Use args.QueryText to determine what to do.
+        }
+    }
+
+    private void OnSuggestionChosen(object sender, AutoSuggestBoxSuggestionChosenEventArgs e)
+    {
+        if (sender is AutoSuggestBox autoSuggest)
+        {
+            var particles = autoSuggest.Text.Split('.');
+            if (particles.Length > 1)
+
+            autoSuggest.Text = $"{e.SelectedItem}.";
+        }
+    }
+
+    private void OnTextChanged(object sender, AutoSuggestBoxTextChangedEventArgs e)
+    {
+        if (e.Reason == AutoSuggestionBoxTextChangeReason.UserInput && sender is AutoSuggestBox autoSuggest)
+        {
+            autoSuggest.ItemsSource = _namespaceRepository
+                .GetAllSyncNamespacrs()
+                .Select(x => x.Title)
+                .Where(x => x.StartsWith(autoSuggest.Text, StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+        }
     }
 
     private async void ConfigureSchedule_Clicked(object sender, EventArgs e) => await Navigation.PushAsync(new EventSchedule(this));
@@ -131,8 +174,9 @@ public partial class CreateEvent : ContentPage
 
     private async void OnAddEventClicked(object sender, EventArgs e)
     {
-        var newEvent = new SyncEvent(Guid.NewGuid(), EventTitle.Text, "", new Namespace(1, Namespace.Text), new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active);
-        EventRepository.Events.Add(newEvent);
+        var guid = Guid.NewGuid();
+        var newEvent = new SyncEvent(guid, EventTitle.Text, "", new Namespace(1, Namespace.Text), new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active);
+        _eventsRepository.AddSyncEvent(newEvent);   
         await NavigateToNotes();
         CleanUpElements();
     }
