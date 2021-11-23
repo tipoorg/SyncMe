@@ -18,5 +18,9 @@
                       Icon="icon_create_event.png"
                       ContentTemplate="{local:DIDataTemplate Type={x:Type views:CreateEvent}}"
                       Route="newEvent"/>
+        <ShellContent Title="Namespaces"
+                      Icon="icon_feed.png"
+                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:NamespaceManagmentPage}}"/>
+        
     </TabBar>
 </Shell>
