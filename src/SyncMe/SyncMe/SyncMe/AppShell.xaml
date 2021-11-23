@@ -8,9 +8,19 @@
     <TabBar>
         <ShellContent Title="Notes"
                       Icon="icon_feed.png"
-                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:NotesPage}}" />
-        <ShellContent Title="About"
-                      Icon="icon_about.png"
-                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:AboutPage}}" />
+                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:NotesPage}}"
+                      Route="notes"/>
+        <ShellContent Title="Calendar"
+                      Icon="icon_open_calendar.png"
+                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:CalendarPage}}"
+                      Route="calendar"/>
+        <ShellContent Title="New Event"
+                      Icon="icon_create_event.png"
+                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:CreateEvent}}"
+                      Route="newEvent"/>
+        <ShellContent Title="Namespaces"
+                      Icon="icon_feed.png"
+                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:NamespaceManagmentPage}}"/>
+        
     </TabBar>
 </Shell>

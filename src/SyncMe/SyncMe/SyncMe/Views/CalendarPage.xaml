@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SyncMe.Views.CalendarPage"
+             xmlns:controls="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar" 
+             xmlns:local1="clr-namespace:SyncMe.ViewModels"
+             Title="Calendar"
+             >
+    
+    <ContentPage.BindingContext>
+        <local1:CalendarPageViewModel/>
+    </ContentPage.BindingContext>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7*" />
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" FontAttributes="Bold" Grid.Column="0" FontSize="20" Text="Notifications:" Margin="20"></Label>
+        <Switch Grid.Row="0" Grid.Column="1" IsToggled="True" Margin="20" x:Name="NotificationsSwitcher"></Switch>
+        <controls:Calendar 
+            Grid.Row="1"  
+            Grid.Column="0" 
+            Grid.ColumnSpan="2"
+            Events="{Binding Events}">
+        </controls:Calendar>
+        <Button 
+            x:Name="AddEvent"
+            Grid.Row="2"  
+            Grid.Column="1" 
+            FontSize="35" 
+            Text="+" 
+            BackgroundColor="LightPink"
+            />
+    </Grid>
+</ContentPage>
+    
+    
+    

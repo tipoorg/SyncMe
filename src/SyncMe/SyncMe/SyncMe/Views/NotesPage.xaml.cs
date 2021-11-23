@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using CalendarProviders.Authorization;
 using SyncMe.Providers.OutlookProvider;
+using SyncMe.Models;
 
 namespace SyncMe.Views;
 
@@ -19,12 +20,13 @@ public partial class NotesPage : ContentPage
             editor.Text = File.ReadAllText(_fileName);
         }
 
-        SetAlarmClicks = Observable
+        ScheduledEvents = Observable
             .FromEventPattern(SetAlarmButton, nameof(Button.Clicked))
-            .Select(x => int.TryParse(editor.Text, out var times) ? times : 1);
+            .Select(x => new SyncSchedule(SyncRepeat.Every10Seconds, int.TryParse(editor.Text, out var times) ? times : 1))
+            .Select(x => new SyncEvent("My First Event", "", default, x, default, SyncStatus.Active));
     }
 
-    public IObservable<int> SetAlarmClicks { get; }
+    public IObservable<SyncEvent> ScheduledEvents { get; }
 
     async void OnSaveButtonClicked(object sender, EventArgs e)
     {

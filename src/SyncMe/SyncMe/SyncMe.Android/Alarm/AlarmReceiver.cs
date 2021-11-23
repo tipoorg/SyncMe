@@ -1,47 +1,44 @@
 ﻿using Android.Content;
-using Android.Media;
+using SyncMe.Droid.Extensions;
+using SyncMe.Extensions;
+using SyncMe.Models;
 
 namespace SyncMe.Droid.Alarm;
 
 [BroadcastReceiver]
 internal class AlarmReceiver : BroadcastReceiver
 {
-    private readonly IAlarmSetter _alarmSetter = App.GetRequiredService<IAlarmSetter>();
-
     public override void OnReceive(Context context, Intent intent)
     {
-        var times = intent.GetIntExtra("TIMES", -1);
+        var action = intent.GetStringExtra(AlarmMessage.ActionKey);
 
-        if (times > 0)
+        switch (action)
         {
-            PlayAlarm(context);
-            _alarmSetter.SetAlarm(times - 1, context);
+            case AlarmMessage.SetAlarmAction:
+                SetAlarm(context, intent);
+                return;
+
+            case AlarmMessage.StopAlarmAction:
+                StopAlarm(intent);
+
+                return;
+            default:
+                return;
         }
     }
 
-    private static void PlayAlarm(Context context)
+    private void SetAlarm(Context context, Intent intent)
     {
-        var mp = new MediaPlayer();
-        var soundUri = RingtoneManager.GetActualDefaultRingtoneUri(context, RingtoneType.Notification);
-
-        try
-        {
-            mp.Reset();
-            mp.SetDataSource(context, soundUri);
-            mp.SetAudioAttributes(GetAudio());
-            mp.Prepare();
-            mp.Start();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-        }
+        var syncEvent = intent.GetExtra<SyncEvent>();
+        AndroidAlarmPlayer.Instance.PlayAlarm(context);
+        AndroidNotificationManager.Instance.Show("Alarm", context);
+        new AndroidAlarmIntent().SetAlarm(syncEvent.DecrementRemainingTimes(), context);
     }
 
-    private static AudioAttributes GetAudio()
+    private void StopAlarm(Intent intent)
     {
-        return new AudioAttributes.Builder()
-            .SetUsage(AudioUsageKind.Alarm)
-            .Build();
+        AndroidAlarmPlayer.Instance.StopPlaying();
+        var id = intent.GetIntExtra(AlarmMessage.NotificationIdKey, -1);
+        AndroidNotificationManager.Instance.Cancel(id);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SyncMe.Views;
 
-namespace SyncMe.Droid;
+namespace SyncMe.Extensions;
 
 public static class ServiceCollectionExtensions
 {
@@ -18,8 +18,10 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddViews(this IServiceCollection services)
     {
         services
-            .AddSingleton<AboutPage>()
-            .AddSingleton<NotesPage>();
+            .AddSingleton<NotesPage>()
+            .AddSingleton<CalendarPage>()
+            .AddSingleton<CreateEvent>()
+            .AddSingleton<NamespaceManagmentPage>();
 
         return services;
     }
