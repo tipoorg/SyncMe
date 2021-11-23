@@ -11,10 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="no-profile-pic.png" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
         <PackageReference Include="System.Reactive" Version="5.0.0" />
         <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
