@@ -21,14 +21,11 @@
       <Compile Update="Views\EventAlert.xaml.cs">
         <DependentUpon>EventAlert.xaml</DependentUpon>
       </Compile>
-      <Compile Update="Views\CreateEvent.xaml.cs">
-        <DependentUpon>CreateEvent.xaml</DependentUpon>
+      <Compile Update="Views\CreateEventPage.xaml.cs">
+        <DependentUpon>CreateEventPage.xaml</DependentUpon>
       </Compile>
       <Compile Update="Views\IdentityProvidersPage.xaml.cs">
         <DependentUpon>IdentityProvidersPage.xaml</DependentUpon>
-      </Compile>
-      <Compile Update="Views\NotesPage.xaml.cs">
-        <DependentUpon>NotesPage.xaml</DependentUpon>
       </Compile>
       <Compile Update="Views\DayView.xaml.cs">
         <DependentUpon>DayView.xaml</DependentUpon>

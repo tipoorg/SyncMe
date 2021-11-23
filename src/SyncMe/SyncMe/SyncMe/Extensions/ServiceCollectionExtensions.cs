@@ -19,9 +19,8 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddViews(this IServiceCollection services)
     {
         services
-            .AddScoped<NotesPage>()
             .AddScoped<CalendarPage>()
-            .AddScoped<CreateEvent>()
+            .AddScoped<CreateEventPage>()
             .AddScoped<NamespaceManagmentPage>()
             .AddScoped<IdentityProvidersPage>();
 

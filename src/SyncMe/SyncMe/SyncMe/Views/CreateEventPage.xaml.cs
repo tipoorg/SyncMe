@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Reactive;
 using System.Reactive.Linq;
 using dotMorten.Xamarin.Forms;
 using SyncMe.Elements;
@@ -7,12 +8,14 @@ using SyncMe.Repos;
 
 namespace SyncMe.Views;
 
-public partial class CreateEvent : ContentPage
+public sealed partial class CreateEventPage : ContentPage, IDisposable
 {
     private static readonly DateTime _minimumDate = new(2000, 1, 1);
     private static readonly DateTime _maximumDate = new(2100, 12, 31);
     private readonly ISyncNamespaceRepository _namespaceRepository;
     private readonly ISyncEventsRepository _eventsRepository;
+    private readonly IDisposable _addEventConnection;
+    private readonly IDisposable _addEventSubscription;
 
     public AutoSuggestBox Namespace { get; init; }
     public Entry EventTitle { get; init; }
@@ -26,18 +29,26 @@ public partial class CreateEvent : ContentPage
     public ToolbarItem AddEvent { get; init; }
     public IObservable<SyncEvent> ScheduledEvents { get; }
 
-    public CreateEvent(ISyncEventsRepository eventsRepository, ISyncNamespaceRepository namespaceRepository)
+    public CreateEventPage(ISyncEventsRepository eventsRepository, ISyncNamespaceRepository namespaceRepository)
     {
         InitializeComponent();
         _namespaceRepository = namespaceRepository;
         _eventsRepository = eventsRepository;
 
         AddEvent = new ToolbarItem { Text = "Add event", };
-        ScheduledEvents = Observable
-            .FromEventPattern(AddEvent, nameof(Button.Clicked))
-            .Subscribe(OnAddEventClicked);
 
-        AddEvent.Clicked += OnAddEventClicked;
+        var scheduledEvents = Observable
+            .FromEventPattern(AddEvent, nameof(Button.Clicked))
+            .Select(x => AddNewSyncEvent())
+            .Publish();
+
+        _addEventConnection = scheduledEvents.Connect();
+        ScheduledEvents = scheduledEvents;
+
+        _addEventSubscription = ScheduledEvents
+            .SelectMany(x => NavigateToCalendar())
+            .Subscribe(x => CleanUpElements());
+
         Namespace = new AutoSuggestBox { PlaceholderText = "Namespace" };
         Namespace.PropertyChanged += ValidateButtonState;
         Namespace.TextChanged += OnTextChanged;
@@ -86,7 +97,7 @@ public partial class CreateEvent : ContentPage
             var particles = autoSuggest.Text.Split('.');
             if (particles.Length > 1)
 
-            autoSuggest.Text = $"{e.SelectedItem}.";
+                autoSuggest.Text = $"{e.SelectedItem}.";
         }
     }
 
@@ -113,10 +124,14 @@ public partial class CreateEvent : ContentPage
                 CleanUpElements();
             }
         }
-        await NavigateToNotes();
+        await NavigateToCalendar();
     }
 
-    private static async Task NavigateToNotes() => await Shell.Current.GoToAsync("//notes");
+    private static async Task<Unit> NavigateToCalendar()
+    {
+        await Shell.Current.GoToAsync("//calendar");
+        return Unit.Default;
+    }
 
     private void CleanUpElements()
     {
@@ -148,7 +163,7 @@ public partial class CreateEvent : ContentPage
         {
             Children =
             {
-                grid, ConfigureSchedule, 
+                grid, ConfigureSchedule,
                 BuildDateLayout("Start date", StartsDate,StartsTime),
                 BuildDateLayout("End date", EndsDate, EndsTime),
             },
@@ -160,7 +175,7 @@ public partial class CreateEvent : ContentPage
     {
         return new StackLayout
         {
-            Children = { new Label { Text = labelText, VerticalTextAlignment = TextAlignment.Center }, datepicker, timepicker},
+            Children = { new Label { Text = labelText, VerticalTextAlignment = TextAlignment.Center }, datepicker, timepicker },
             Orientation = StackOrientation.Horizontal
         };
     }
@@ -178,16 +193,15 @@ public partial class CreateEvent : ContentPage
 
     private async void AlertButton_Clicked(object sender, EventArgs e) => await Navigation.PushAsync(new EventAlert(this));
 
-    private async void OnAddEventClicked(object sender, EventArgs e)
+    private SyncEvent AddNewSyncEvent()
     {
-        var newEvent = new SyncEvent("", EventTitle.Text, "", new Namespace(1, Namespace.Text), new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active, StartsDate.Date, EndsDate.Date);
-        _eventsRepository.AddSyncEvent(newEvent);
-        await NavigateToNotes();
-        CleanUpElements();
+        var newEvent = new SyncEvent(Guid.Empty, "", EventTitle.Text, "", new Namespace(1, Namespace.Text), new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active, StartsDate.Date, EndsDate.Date);
+        return _eventsRepository.AddSyncEvent(newEvent);
     }
 
-    private SyncEvent GetNewSyncEvent()
+    public void Dispose()
     {
-        return  new SyncEvent(EventTitle.Text, "", new Namespace(1, Namespace.Text), new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active);
+        _addEventSubscription.Dispose();
+        _addEventConnection.Dispose();
     }
 }

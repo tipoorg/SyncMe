@@ -7,7 +7,7 @@ namespace SyncMe.Views;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class EventSchedule : ContentPage
 {
-    private readonly CreateEvent _createEvent;
+    private readonly CreateEventPage _createEvent;
 
     public Label DoesNotRepeatLabel { get; set; }
     public RadioWithValue<SyncRepeat> DoesNotRepeat { get; init; }
@@ -20,7 +20,7 @@ public partial class EventSchedule : ContentPage
     public Label EveryYearLabel { get; set; }
     public RadioWithValue<SyncRepeat> EveryYear { get; init; }
 
-    public EventSchedule(CreateEvent createEvent)
+    public EventSchedule(CreateEventPage createEvent)
     {
         InitializeComponent();
         DoesNotRepeat = CreateButton(SyncRepeat.None);
