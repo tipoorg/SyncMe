@@ -1,37 +1,38 @@
 ﻿using SyncMe.Elements;
+using SyncMe.Models;
 
 namespace SyncMe.Views;
 
 public partial class EventAlert : ContentPage
 {
     private readonly CreateEvent createEvent;
-    public ButtonWithValue<int> None { get; init; }
-    public ButtonWithValue<int> AtTimeOfEvent { get; init; }
-    public ButtonWithValue<int> FiveMinBefore { get; init; }
-    public ButtonWithValue<int> TenMinBefore { get; init; }
-    public ButtonWithValue<int> FiveteenMinBefore { get; init; }
-    public ButtonWithValue<int> ThirtyMinBefore { get; init; }
-    public ButtonWithValue<int> HourBefore { get; init; }
-    public ButtonWithValue<int> TwoHoursBefore { get; init; }
-    public ButtonWithValue<int> DayBefore { get; init; }
-    public ButtonWithValue<int> TwoDaysBefore { get; init; }
-    public ButtonWithValue<int> WeekBefore { get; init; }
+    public ButtonWithValue<Reminder> None { get; init; }
+    public ButtonWithValue<Reminder> AtTimeOfEvent { get; init; }
+    public ButtonWithValue<Reminder> FiveMinBefore { get; init; }
+    public ButtonWithValue<Reminder> TenMinBefore { get; init; }
+    public ButtonWithValue<Reminder> FiveteenMinBefore { get; init; }
+    public ButtonWithValue<Reminder> ThirtyMinBefore { get; init; }
+    public ButtonWithValue<Reminder> HourBefore { get; init; }
+    public ButtonWithValue<Reminder> TwoHoursBefore { get; init; }
+    public ButtonWithValue<Reminder> DayBefore { get; init; }
+    public ButtonWithValue<Reminder> TwoDaysBefore { get; init; }
+    public ButtonWithValue<Reminder> WeekBefore { get; init; }
 
     public EventAlert(CreateEvent createEvent)
     {
         InitializeComponent();
 
-        None = CreateAndSubscribe("None", -1);
-        AtTimeOfEvent = CreateAndSubscribe("At time of event", 0);
-        FiveMinBefore = CreateAndSubscribe("5 minutes before", 5);
-        TenMinBefore = CreateAndSubscribe("10 minutes before", 10);
-        FiveteenMinBefore = CreateAndSubscribe("15 minutes before", 15);
-        ThirtyMinBefore = CreateAndSubscribe("30 minutes before", 30);
-        HourBefore = CreateAndSubscribe("1 hour before", 60);
-        TwoHoursBefore = CreateAndSubscribe("2 hours before", 120);
-        DayBefore = CreateAndSubscribe("1 day before", 1440);
-        TwoDaysBefore = CreateAndSubscribe("2 days before", 2880);
-        WeekBefore = CreateAndSubscribe("1 week before", 10080);
+        None = CreateAndSubscribe("None", Reminder.None);
+        AtTimeOfEvent = CreateAndSubscribe("At time of event", Reminder.AtEventTime);
+        FiveMinBefore = CreateAndSubscribe("5 minutes before", Reminder.Before5Min);
+        TenMinBefore = CreateAndSubscribe("10 minutes before", Reminder.Before10Min);
+        FiveteenMinBefore = CreateAndSubscribe("15 minutes before", Reminder.Before15Min);
+        ThirtyMinBefore = CreateAndSubscribe("30 minutes before", Reminder.Before30Min);
+        HourBefore = CreateAndSubscribe("1 hour before", Reminder.Before1Hour);
+        TwoHoursBefore = CreateAndSubscribe("2 hours before", Reminder.TwoDaysBefore);
+        DayBefore = CreateAndSubscribe("1 day before", Reminder.DayBefore);
+        TwoDaysBefore = CreateAndSubscribe("2 days before", Reminder.TwoDaysBefore);
+        WeekBefore = CreateAndSubscribe("1 week before", Reminder.OneWeekBefore);
 
         Content = new StackLayout 
         { 
@@ -44,17 +45,20 @@ public partial class EventAlert : ContentPage
         this.createEvent = createEvent;
     }
 
-    private ButtonWithValue<int> CreateAndSubscribe(string text, int load)
+    private ButtonWithValue<Reminder> CreateAndSubscribe(string text, Reminder reminder)
     {
-        ButtonWithValue<int> button = new() { Text = text, Value = load };
+        ButtonWithValue<Reminder> button = new() { Text = text, Value = reminder };
         button.Clicked += OnClicked;
         return button;
     }
 
     private async void OnClicked(object sender, EventArgs e)
     {
-        if (sender is ButtonWithValue<int> button)
-            createEvent.ConfigureAlert.Text += $" {button.Value}";
+        if (sender is ButtonWithValue<Reminder> button)
+        {
+            createEvent.ConfigureAlert.Text = $"Alert {button.Text}";
+            createEvent.ConfigureAlert.Value = button.Value;
+        }
 
         await Navigation.PopAsync();
     }
