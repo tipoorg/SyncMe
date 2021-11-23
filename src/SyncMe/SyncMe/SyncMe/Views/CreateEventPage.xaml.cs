@@ -14,6 +14,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     private static readonly DateTime _maximumDate = new(2100, 12, 31);
     private readonly ISyncNamespaceRepository _namespaceRepository;
     private readonly ISyncEventsRepository _eventsRepository;
+    private readonly Dictionary<string, IReadOnlyCollection<Namespace>> _namespaces;
     private readonly IDisposable _addEventConnection;
     private readonly IDisposable _addEventSubscription;
 
@@ -34,12 +35,14 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         InitializeComponent();
         _namespaceRepository = namespaceRepository;
         _eventsRepository = eventsRepository;
+        _namespaces = _namespaceRepository.GetAllSyncNamespaces();
 
         AddEvent = new ToolbarItem { Text = "Add event", };
 
         var scheduledEvents = Observable
             .FromEventPattern(AddEvent, nameof(Button.Clicked))
             .Select(x => AddNewSyncEvent())
+            .Do(x => _namespaceRepository.AddSyncNamespace(Namespace.Text))
             .Publish();
 
         _addEventConnection = scheduledEvents.Connect();
@@ -95,7 +98,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         if (sender is AutoSuggestBox autoSuggest)
         {
             var particles = autoSuggest.Text.Split('.');
-            if (particles.Length > 1)
+            //if (particles.Length > 1)
 
                 autoSuggest.Text = $"{e.SelectedItem}.";
         }
@@ -105,10 +108,10 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     {
         if (e.Reason == AutoSuggestionBoxTextChangeReason.UserInput && sender is AutoSuggestBox autoSuggest)
         {
-            autoSuggest.ItemsSource = _namespaceRepository
-                .GetAllSyncNamespacrs()
-                .Select(x => x.Title)
+            autoSuggest.ItemsSource = _namespaces
+                .Select(x => x.Key)
                 .Where(x => x.StartsWith(autoSuggest.Text, StringComparison.OrdinalIgnoreCase))
+                .Distinct()
                 .ToArray();
         }
     }
