@@ -20,7 +20,7 @@ public static class ServiceCollectionExtensions
         services
             .AddSingleton<NotesPage>()
             .AddSingleton<CalendarPage>()
-            .AddSingleton<CreateEvent>();
+            .AddSingleton<CreateEvent>()
             .AddSingleton<NamespaceManagmentPage>();
 
         return services;
