@@ -54,7 +54,7 @@ public partial class EventAlert : ContentPage
     private async void OnClicked(object sender, EventArgs e)
     {
         if (sender is ButtonWithValue<int> button)
-            createEvent.ConfigureAlert.Text += $" {button.Value}";
+            createEvent.ConfigureAlert.Text = $"Alert {button.Text}";
 
         await Navigation.PopAsync();
     }

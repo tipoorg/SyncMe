@@ -9,51 +9,73 @@ public partial class EventSchedule : ContentPage
 {
     private readonly ButtonWithValue<Repeat> _scheduleButton;
 
+    public Label DoesNotRepeatLabel { get; set; }
     public RadioWithValue<Repeat> DoesNotRepeat { get; init; }
+    public Label EveryDayLabel { get; set; }
     public RadioWithValue<Repeat> EveryDay { get; init; }
+    public Label EveryWeekLabel { get; set; }
     public RadioWithValue<Repeat> EveryWeek { get; init; }
+    public Label EveryMonthLabel { get; set; }
     public RadioWithValue<Repeat> EveryMonth { get; init; }
+    public Label EveryYearLabel { get; set; }
     public RadioWithValue<Repeat> EveryYear { get; init; }
-    public RadioWithValue<Repeat> Custom { get; init; }
 
     public EventSchedule(ButtonWithValue<Repeat> button)
     {
         InitializeComponent();
-        DoesNotRepeat = CreateAndSubscribe(Repeat.None);
-        EveryDay = CreateAndSubscribe(Repeat.Dayly);
-        EveryWeek = CreateAndSubscribe(Repeat.WeekDays);
-        EveryMonth = CreateAndSubscribe(Repeat.EveryMonth);
-        EveryYear = CreateAndSubscribe(Repeat.EveryYear);
+        DoesNotRepeat = CreateButton(Repeat.None);
+        EveryDay = CreateButton(Repeat.Dayly);
+        EveryWeek = CreateButton(Repeat.WeekDays);
+        EveryMonth = CreateButton(Repeat.EveryMonth);
+        EveryYear = CreateButton(Repeat.EveryYear);
+        DoesNotRepeatLabel = CreateLabel("Does not repeat");
+        EveryDayLabel = CreateLabel("Every day");
+        EveryWeekLabel = CreateLabel("Every week");
+        EveryMonthLabel = CreateLabel("Every month");
+        EveryYearLabel = CreateLabel("Every year");
 
-        var grid = new Grid();
-        grid.RowDefinitions.Add(new RowDefinition());
-        grid.RowDefinitions.Add(new RowDefinition());
-        grid.RowDefinitions.Add(new RowDefinition());
-        grid.ColumnDefinitions.Add(new ColumnDefinition());
-        grid.ColumnDefinitions.Add(new ColumnDefinition());
+        var layout = new StackLayout
+        {
+            Children = 
+            {
+                CreateLayout(DoesNotRepeat, DoesNotRepeatLabel),
+                CreateLayout(EveryDay, EveryDayLabel),
+                CreateLayout(EveryWeek, EveryWeekLabel),
+                CreateLayout(EveryMonth, EveryMonthLabel),
+                CreateLayout(EveryYear, EveryYearLabel),
+            }
+        };
 
-        grid.Children.AddVertical(new View[] { DoesNotRepeat, new Label { Text = "Does not repeat" } } );
-        grid.Children.AddVertical(new View[] { EveryDay, new Label { Text = "Every day" } });
-        grid.Children.AddVertical(new View[] { EveryWeek, new Label { Text = "Every week" } });
-        grid.Children.AddVertical(new View[] { EveryMonth, new Label { Text = "Every month" } });
-        grid.Children.AddVertical(new View[] { EveryYear, new Label { Text = "Every year" } });
-
-        Content = grid;
+        Content = layout;
         _scheduleButton = button;
     }
 
-    private RadioWithValue<Repeat> CreateAndSubscribe(Repeat value)
+    private StackLayout CreateLayout(RadioButton radioButton, Label label) => new() { Children = { radioButton, label }, Orientation = StackOrientation.Horizontal };
+
+
+    private RadioWithValue<Repeat> CreateButton(Repeat value)
     {
         var radioButton = new RadioWithValue<Repeat> { Value = value };
         radioButton.CheckedChanged += OnCheckedChanged;
         return radioButton;
     }
 
+    private Label CreateLabel(string text) => new Label { Text = text };
+
     private async void OnCheckedChanged(object sender, CheckedChangedEventArgs e)
     {
         if (sender is RadioWithValue<Repeat> radio)
         {
-            _scheduleButton.Value = radio.Value;
+            var text = radio.Value switch
+            {
+                Repeat.None => DoesNotRepeatLabel.Text,
+                Repeat.Dayly => EveryDayLabel.Text,
+                Repeat.WeekDays => EveryWeekLabel.Text,
+                Repeat.EveryMonth => EveryMonthLabel.Text,
+                Repeat.EveryYear => EveryYearLabel.Text,
+                _ => throw new NotImplementedException(),
+            };
+            _scheduleButton.Text = text;
         }
         await Navigation.PopAsync();
     }
