@@ -13,8 +13,10 @@ public partial class CreateEvent : ContentPage
     public Entry Namespace { get; init; }
     public Entry EventTitle { get; init; }
     public Switch IsAllDay { get; init; }
-    public DatePicker StartsPicker { get; init; }
-    public DatePicker EndsPicker { get; init; }
+    public DatePicker StartsDate { get; init; }
+    public TimePicker StartsTime { get; init; }
+    public DatePicker EndsDate { get; init; }
+    public TimePicker EndsTime { get; init; }
     public ButtonWithValue<SyncRepeat> ConfigureSchedule { get; set; }
     public ButtonWithValue<SyncReminder> ConfigureAlert { get; init; }
     public ToolbarItem AddEvent { get; init; }
@@ -32,8 +34,10 @@ public partial class CreateEvent : ContentPage
 
         IsAllDay = new Switch { IsToggled = false, OnColor = Color.FromRgb(74, 215, 100), ThumbColor = Color.White };
         IsAllDay.Toggled += OnSwitchToggled;
-        StartsPicker = new DatePicker { MinimumDate = _minimumDate, MaximumDate = _maximumDate };
-        EndsPicker = new DatePicker { MinimumDate = _minimumDate, MaximumDate = _maximumDate };
+        StartsDate = new DatePicker { MinimumDate = _minimumDate, MaximumDate = _maximumDate };
+        StartsTime = new TimePicker();
+        EndsDate = new DatePicker { MinimumDate = _minimumDate, MaximumDate = _maximumDate };
+        EndsTime = new TimePicker();
         ConfigureSchedule = new ButtonWithValue<SyncRepeat> { Text = "Does not repeat", };
         ConfigureSchedule.Clicked += ConfigureSchedule_Clicked;
 
@@ -93,8 +97,22 @@ public partial class CreateEvent : ContentPage
 
         return new StackLayout()
         {
-            Children = { grid, ConfigureSchedule, new Label { Text = "Starts" }, StartsPicker, new Label { Text = "Ends" }, EndsPicker },
+            Children =
+            {
+                grid, ConfigureSchedule, 
+                BuildDateLayout("Start date", StartsDate,StartsTime),
+                BuildDateLayout("End date", EndsDate, EndsTime),
+            },
             Padding = new Thickness(0, 10)
+        };
+    }
+
+    private StackLayout BuildDateLayout(string labelText, DatePicker datepicker, TimePicker timepicker)
+    {
+        return new StackLayout
+        {
+            Children = { new Label { Text = labelText, VerticalTextAlignment = TextAlignment.Center }, datepicker, timepicker},
+            Orientation = StackOrientation.Horizontal
         };
     }
 
@@ -102,8 +120,8 @@ public partial class CreateEvent : ContentPage
     {
         if (e.Value)
         {
-            StartsPicker.Date = DateTime.Today.Date;
-            EndsPicker.Date = DateTime.Today.Date.AddDays(1).AddTicks(-1);
+            StartsDate.Date = DateTime.Today.Date;
+            EndsDate.Date = DateTime.Today.Date.AddDays(1).AddTicks(-1);
         }
     }
 

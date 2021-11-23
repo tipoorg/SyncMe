@@ -67,7 +67,7 @@ public partial class EventSchedule : ContentPage
 
     private RadioWithValue<SyncRepeat> CreateButton(SyncRepeat value)
     {
-        var radioButton = new RadioWithValue<SyncRepeat> { Value = value };
+        var radioButton = new RadioWithValue<SyncRepeat> { Data = value };
         radioButton.CheckedChanged += OnCheckedChanged;
         return radioButton;
     }
@@ -78,7 +78,7 @@ public partial class EventSchedule : ContentPage
     {
         if (sender is RadioWithValue<SyncRepeat> radio)
         {
-            var text = radio.Value switch
+            var text = radio.Data switch
             {
                 SyncRepeat.None => DoesNotRepeatLabel.Text,
                 SyncRepeat.Dayly => EveryDayLabel.Text,
@@ -88,7 +88,7 @@ public partial class EventSchedule : ContentPage
                 _ => throw new NotImplementedException(),
             };
             _createEvent.ConfigureSchedule.Text = text;
-            _createEvent.ConfigureSchedule.Value = radio.Value;
+            _createEvent.ConfigureSchedule.Value = radio.Data;
         }
         await Navigation.PopAsync();
     }
