@@ -58,7 +58,6 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
     private void SwitchLayouts()
     {
-        AddIdentity.IsVisible = !AddIdentity.IsVisible;
         AddOutlook.IsVisible = !AddOutlook.IsVisible;
         AddGoogle.IsVisible = !AddGoogle.IsVisible;
     }
