@@ -9,4 +9,9 @@ public static class SyncEventExtensions
         var remainingTimes = syncEvent.Schedule.Times - 1;
         return syncEvent with { Schedule = syncEvent.Schedule with { Times = remainingTimes } };
     }
+
+    public static SyncEvent Activate(this SyncEvent syncEvent)
+    {
+        return syncEvent with { Status = SyncStatus.Active };
+    }
 }

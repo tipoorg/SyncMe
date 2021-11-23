@@ -4,7 +4,8 @@ namespace SyncMe;
 
 public partial class App : Application
 {
-    private static IServiceProvider _serviceProvider;
+    private IDisposable _appScope;
+    private readonly IServiceProvider _serviceProvider;
 
     public App(IServiceProvider serviceProvider)
     {
@@ -13,18 +14,30 @@ public partial class App : Application
         _serviceProvider = serviceProvider;
     }
 
-    public static T GetRequiredService<T>() => _serviceProvider.GetRequiredService<T>();
-    public static Lazy<T> GetLazyRequiredService<T>() => new(() => GetRequiredService<T>());
-
     protected override void OnStart()
     {
+        if (_appScope is not null)
+            CloseScope();
+
+        _appScope = _serviceProvider.CreateScope();
     }
 
     protected override void OnSleep()
     {
+        CloseScope();
     }
 
     protected override void OnResume()
     {
+        if (_appScope is not null)
+            CloseScope();
+
+        _appScope = _serviceProvider.CreateScope();
+    }
+
+    private void CloseScope()
+    {
+        _appScope.Dispose();
+        _appScope = null;
     }
 }
