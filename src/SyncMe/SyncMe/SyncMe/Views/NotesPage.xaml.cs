@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Reactive.Linq;
+using CalendarProviders.Authorization;
+using SyncMe.Providers.OutlookProvider;
 using SyncMe.Extensions;
 using SyncMe.Models;
 using SyncMe.Repos;
@@ -31,9 +33,15 @@ public partial class NotesPage : ContentPage
 
     public IObservable<SyncEvent> ScheduledEvents { get; }
 
-    void OnSaveButtonClicked(object sender, EventArgs e)
+    async void OnSaveButtonClicked(object sender, EventArgs e)
     {
         // Save the file.
+
+        var manager = new MicrosoftAuthorizationManager();
+        await manager.SignInAsync(App.AuthUIParent);
+        var client = await manager.GetGraphClientAsync();
+        var events = await new OutlookProvider(client, manager.CurrentAccounts.First().Username).GetEventsAsync();
+
         File.WriteAllText(_fileName, editor.Text);
     }
 
