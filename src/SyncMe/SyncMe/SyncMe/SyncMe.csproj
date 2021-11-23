@@ -7,7 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.CSharp" Version="4.0.1" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Graph" Version="3.35.0" />
         <PackageReference Include="System.Reactive" Version="5.0.0" />
         <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
         <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
@@ -15,18 +17,21 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Update="Views\EventAlert.xaml.cs">
+        <DependentUpon>EventAlert.xaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\CreateEvent.xaml.cs">
+        <DependentUpon>CreateEvent.xaml</DependentUpon>
+      </Compile>
       <Compile Update="Views\NotesPage.xaml.cs">
         <DependentUpon>NotesPage.xaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\DayView.xaml.cs">
+        <DependentUpon>DayView.xaml</DependentUpon>
       </Compile>
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Services\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Update="Views\DayView.xaml">
-        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      </EmbeddedResource>
     </ItemGroup>
 </Project>
