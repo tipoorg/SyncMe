@@ -14,8 +14,8 @@
                 <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
                 <Setter Property="VerticalTextAlignment" Value="Center"/>
                 <Setter Property="VerticalOptions" Value="Center"/>
-                <Setter Property="Margin" Value="20,0,0,0" />
-                <Setter Property="Padding" Value="5"/>
+                <Setter Property="Margin" Value="5,0,0,0" />
+                <Setter Property="Padding" Value="0"/>
             </Style>
             <Style x:Key="ButtonStyle" TargetType="Button">
                 <Setter Property="VerticalOptions" Value="Center"/>
@@ -26,53 +26,85 @@
                 <Setter Property="BackgroundColor" Value="{StaticResource epamBlue}"/>
                 <Setter Property="Margin" Value="0,0,0,5"/>
             </Style>
+            <Style x:Key="FrameStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="Padding" Value="10"/>
+                <Setter Property="Margin" Value="5,5,5,5"/>
+                <Setter Property="WidthRequest" Value="200"/>
+            </Style>
+            <Style x:Key="MinorButtonStyle" TargetType="Button">
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="WidthRequest" Value="20"/>
+                <Setter Property="HeightRequest" Value="20"/>
+                <Setter Property="CornerRadius" Value="100"/>
+                <Setter Property="BackgroundColor" Value="White"/>
+            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.Content>
         <StackLayout>
 
-            <Label 
-                Text="Active namespaces" Style="{StaticResource TitleStyle}" />
+            <Frame BorderColor="{StaticResource epamBlue}" Padding="5">
+                <Label Text="Active namespaces" Style="{StaticResource TitleStyle}" />
+            </Frame>
             <ListView 
                 x:Name="activeNamespaces" 
                 ItemsSource="{Binding ActiveNamespaces}"
                 HasUnevenRows="True"
-                ItemTapped="activeNamespaces_ItemTapped">
+                ItemTapped="activeNamespaces_ItemTapped"
+                SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout>
-                            <Label Text="{Binding Name}" Style="{StaticResource NamespaceStyle}"/>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                    <Button Text="Tomorrow" Style="{StaticResource ButtonStyle}" Grid.Column="0" IsVisible="{Binding IsVisible}" Command="{Binding TomorrowClick}" />
-                                    <Button Text="Never" Style="{StaticResource ButtonStyle}" Grid.Column="1" IsVisible="{Binding IsVisible}" Command="{Binding TomorrowClick}"/>
-                                    <Button Text="Custom" Style="{StaticResource ButtonStyle}" Grid.Column="2" IsVisible="{Binding IsVisible}" Command="{Binding TomorrowClick}"/>
-                            </Grid>
-                            </StackLayout>
+                            <Frame BorderColor="{StaticResource epamBlue}" Style="{StaticResource FrameStyle}">
+                                <StackLayout>
+                                    <FlexLayout JustifyContent="SpaceBetween">
+                                        <Button ImageSource="icon_arrow.xml" Style="{StaticResource MinorButtonStyle}"/>
+                                        <Label Text="{Binding Name}" Style="{StaticResource NamespaceStyle}"/>
+                                        <Button ImageSource="icon_plus_minor.xml" Style="{StaticResource MinorButtonStyle}"/>
+                                    </FlexLayout>
+                                    <Label Text="Turn off until..." IsVisible="{Binding Path=IsButtonsVisible}" HorizontalTextAlignment="Center"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button Text="Tomorrow" Style="{StaticResource ButtonStyle}" Grid.Column="0" IsVisible="{Binding Path=IsButtonsVisible}" Command="{Binding TomorrowClick}" />
+                                        <Button Text="Never" Style="{StaticResource ButtonStyle}" Grid.Column="1" IsVisible="{Binding Path=IsButtonsVisible}" Command="{Binding TomorrowClick}"/>
+                                        <Button Text="Custom" Style="{StaticResource ButtonStyle}" Grid.Column="2" IsVisible="{Binding Path=IsButtonsVisible}" Command="{Binding TomorrowClick}"/>
+                                    </Grid>
+                                </StackLayout>
+                            </Frame>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
-            <Label Text="Suspended namespaces" Style="{StaticResource TitleStyle}"/>
+            
+            <Frame BorderColor="#8e244d" Padding="5" Margin="0,0,0,0">
+                <Label Text="Suspended namespaces" Style="{StaticResource TitleStyle}" TextColor=" #8e244d"/>
+            </Frame>
             <ListView 
                 x:Name="suspendedNamespaces" 
                 ItemsSource="{Binding SuspendedNamespaces}"
                 ItemTapped="suspendedNamespaces_ItemTapped"
-                HasUnevenRows="True">
+                HasUnevenRows="True"
+                SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout>
-                                <Label Text="{Binding Name}" Style="{StaticResource NamespaceStyle}"/>
-                                <Button Text="Restore" Style="{StaticResource ButtonStyle}" IsVisible="{Binding IsVisible}" Command="{Binding RestoreClick}"/>
-                            </StackLayout>
+                            <Frame BorderColor="#8e244d" Style="{StaticResource FrameStyle}">
+                                <StackLayout>
+                                    <FlexLayout JustifyContent="SpaceBetween">
+                                        <Button ImageSource="icon_arrow.xml" Style="{StaticResource MinorButtonStyle}"/>
+                                        <Label Text="{Binding Name}" Style="{StaticResource NamespaceStyle}"/>
+                                        <Button ImageSource="icon_plus_minor.xml" Style="{StaticResource MinorButtonStyle}"/>
+                                    </FlexLayout>
+                                    <Button Text="Restore" Style="{StaticResource ButtonStyle}" IsVisible="{Binding IsButtonsVisible}" Command="{Binding RestoreClick}"/>
+                                </StackLayout>
+                            </Frame>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
