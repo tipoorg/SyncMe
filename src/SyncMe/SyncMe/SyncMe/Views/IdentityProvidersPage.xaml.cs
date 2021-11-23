@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using CalendarProviders.Authorization;
+using SyncMe.Providers.OutlookProvider;
+using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using Xamarin.Forms.Xaml;
 
@@ -27,11 +29,19 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
         _addOutlookIdentity = Observable
             .FromEventPattern(AddOutlook, nameof(Button.Clicked))
-            .Select(x => x) // open browser and await task
+            .SelectMany(async x =>
+            {
+                var manager = new MicrosoftAuthorizationManager();
+                await manager.SignInAsync(App.AuthUIParent);
+                var client = await manager.GetGraphClientAsync();
+                var events = await new OutlookProvider(client, manager.CurrentAccounts.First().Username).GetEventsAsync();
+
+                return (events, manager);
+            }) // open browser and await task
             .Subscribe(x =>
             {
-                SwitchLayouts();
-                Identities.Add(new Identity("My Identitiy"));
+                Device.BeginInvokeOnMainThread(() => SwitchLayouts());
+                Identities.Add(new Identity(x.manager.CurrentAccounts.First().Username));
             });
     }
 
