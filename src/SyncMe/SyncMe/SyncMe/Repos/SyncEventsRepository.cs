@@ -23,7 +23,7 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
         return res;
     }
 
-    public void AddSyncEvent(SyncEvent syncEvent)
+    public SyncEvent AddSyncEvent(SyncEvent syncEvent)
     {
         syncEvent = syncEvent with { Id = Guid.NewGuid() };
         _events.Add(syncEvent.Id, syncEvent);

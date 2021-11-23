@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Reactive.Linq;
 using dotMorten.Xamarin.Forms;
 using SyncMe.Elements;
 using SyncMe.Models;
@@ -23,6 +24,7 @@ public partial class CreateEvent : ContentPage
     public ButtonWithValue<SyncRepeat> ConfigureSchedule { get; init; }
     public ButtonWithValue<SyncReminder> ConfigureAlert { get; init; }
     public ToolbarItem AddEvent { get; init; }
+    public IObservable<SyncEvent> ScheduledEvents { get; }
 
     public CreateEvent(ISyncEventsRepository eventsRepository, ISyncNamespaceRepository namespaceRepository)
     {
@@ -31,6 +33,10 @@ public partial class CreateEvent : ContentPage
         _eventsRepository = eventsRepository;
 
         AddEvent = new ToolbarItem { Text = "Add event", };
+        ScheduledEvents = Observable
+            .FromEventPattern(AddEvent, nameof(Button.Clicked))
+            .Subscribe(OnAddEventClicked);
+
         AddEvent.Clicked += OnAddEventClicked;
         Namespace = new AutoSuggestBox { PlaceholderText = "Namespace" };
         Namespace.PropertyChanged += ValidateButtonState;
@@ -174,10 +180,14 @@ public partial class CreateEvent : ContentPage
 
     private async void OnAddEventClicked(object sender, EventArgs e)
     {
-        var guid = Guid.NewGuid();
-        var newEvent = new SyncEvent(guid, "", EventTitle.Text, "", new Namespace(1, Namespace.Text), new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active, StartsDate.Date, EndsDate.Date);
-        _eventsRepository.AddSyncEvent(newEvent);   
+        var newEvent = new SyncEvent("", EventTitle.Text, "", new Namespace(1, Namespace.Text), new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active, StartsDate.Date, EndsDate.Date);
+        _eventsRepository.AddSyncEvent(newEvent);
         await NavigateToNotes();
         CleanUpElements();
+    }
+
+    private SyncEvent GetNewSyncEvent()
+    {
+        return  new SyncEvent(EventTitle.Text, "", new Namespace(1, Namespace.Text), new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active);
     }
 }
