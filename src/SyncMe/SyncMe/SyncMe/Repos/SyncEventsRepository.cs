@@ -8,8 +8,8 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
 
     public SyncEventsRepository()
     {
-        var e1 = new SyncEvent(Guid.NewGuid(), "First", "", default, new SyncSchedule(SyncRepeat.Every10Seconds, 2), default, SyncStatus.Stopped);
-        var e2 = new SyncEvent(Guid.NewGuid(), "Second", "", default, new SyncSchedule(SyncRepeat.Every10Seconds, 4), default, SyncStatus.Stopped);
+        var e1 = new SyncEvent(Guid.NewGuid(), "", "First", "", default, new SyncSchedule(SyncRepeat.Every10Seconds, 2), default, SyncStatus.Stopped, DateTime.Now, DateTime.Now);
+        var e2 = new SyncEvent(Guid.NewGuid(), "", "Second", "", default, new SyncSchedule(SyncRepeat.Every10Seconds, 4), default, SyncStatus.Stopped, DateTime.Now, DateTime.Now);
 
         _events.Add(e1.Id, e1);
         _events.Add(e2.Id, e2);
@@ -25,6 +25,7 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
 
     public void AddSyncEvent(SyncEvent syncEvent)
     {
+        syncEvent = syncEvent with { Id = Guid.NewGuid() };
         _events.Add(syncEvent.Id, syncEvent);
     }
 }

@@ -7,7 +7,7 @@ public enum SyncStatus
     Active, Stopped
 }
 
-public record SyncEvent(Guid Id, string Title, string Description, Namespace Namespace, SyncSchedule Schedule, SyncAlert Alert, SyncStatus Status);
+public record SyncEvent(Guid Id, string ExternalId, string Title, string Description, Namespace Namespace, SyncSchedule Schedule, SyncAlert Alert, SyncStatus Status, DateTime Start, DateTime End);
 
 public record NamespaceTree(Dictionary<string, List<Namespace>> Tree);
 

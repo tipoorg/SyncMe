@@ -178,7 +178,16 @@ public partial class CreateEvent : ContentPage
     {
         var guid = Guid.NewGuid();
         var newNamespace = new Namespace (1, Namespace.Text);
-        var newEvent = new SyncEvent(guid, EventTitle.Text, "", newNamespace, new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active);
+        var newEvent = new SyncEvent(guid,
+                                     "",
+                                     EventTitle.Text,
+                                     "",
+                                     newNamespace,
+                                     new SyncSchedule(ConfigureSchedule.Value, null),
+                                     new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }),
+                                     SyncStatus.Active,
+                                     new DateTime(StartsTime.Time.Ticks),
+                                     new DateTime(EndsTime.Time.Ticks));
         _eventsRepository.AddSyncEvent(newEvent);
         _namespaceRepository.AddSyncNamespace(Namespace.Text);
         await NavigateToNotes();

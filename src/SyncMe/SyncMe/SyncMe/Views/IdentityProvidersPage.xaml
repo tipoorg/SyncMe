@@ -19,7 +19,6 @@
             </Style>
             <Style x:Key="FloadButtonStyle" TargetType="Button">
                 <Setter Property="CornerRadius" Value="100"/>
-                <Setter Property="BackgroundColor" Value="{StaticResource epamGrey}"/>
                 <Setter Property="HeightRequest" Value="55"/>
                 <Setter Property="WidthRequest" Value="55"/>
                 <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
@@ -47,19 +46,22 @@
                 </ListView>
             </StackLayout>
                 <Button x:Name="AddIdentity"
+                        ImageSource="icon_plus.xml"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
                         AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
                         Style="{StaticResource FloadButtonStyle}"/>
                 <Button x:Name="AddOutlook"
+                        ImageSource="icon_outlook.xml"
                         IsVisible="False"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
+                        AbsoluteLayout.LayoutBounds="1, 0.85, AutoSize, AutoSize"
                         Style="{StaticResource FloadButtonStyle}"/>
                 <Button x:Name="AddGoogle"
+                        ImageSource="icon_google.xml"
                         IsVisible="False"
                         IsEnabled="False"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="1, 0.85, AutoSize, AutoSize"
+                        AbsoluteLayout.LayoutBounds="1, 0.70, AutoSize, AutoSize"
                         Style="{StaticResource FloadButtonStyle}"/>
         </AbsoluteLayout>
     </ContentPage.Content>
