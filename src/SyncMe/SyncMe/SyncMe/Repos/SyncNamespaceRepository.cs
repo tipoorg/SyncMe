@@ -7,7 +7,7 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
 {
     private readonly object syncLock = new();
     private static int _idCounter = 0;
-    private readonly Dictionary<int, Namespace> _existingNamespaces;
+    private readonly Dictionary<int, Namespace> _existingNamespaces = new Dictionary<int, Namespace>();
 
     public SyncNamespaceRepository()
     {
