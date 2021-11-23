@@ -8,7 +8,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddSyncMeLib(this IServiceCollection services)
     {
         services
-            .AddSingleton<AppShell>()
+            .AddTransient<AppShell>()
             .AddViews()
             .AddServices();
 
@@ -18,9 +18,9 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddViews(this IServiceCollection services)
     {
         services
-            .AddSingleton<NotesPage>()
-            .AddSingleton<CalendarPage>()
-            .AddSingleton<CreateEvent>();
+            .AddTransient<NotesPage>()
+            .AddTransient<CalendarPage>()
+            .AddTransient<CreateEvent>();
 
         return services;
     }
