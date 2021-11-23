@@ -23,6 +23,9 @@
       <Compile Update="Views\CreateEvent.xaml.cs">
         <DependentUpon>CreateEvent.xaml</DependentUpon>
       </Compile>
+      <Compile Update="Views\IdentityProvidersPage.xaml.cs">
+        <DependentUpon>IdentityProvidersPage.xaml</DependentUpon>
+      </Compile>
       <Compile Update="Views\NotesPage.xaml.cs">
         <DependentUpon>NotesPage.xaml</DependentUpon>
       </Compile>

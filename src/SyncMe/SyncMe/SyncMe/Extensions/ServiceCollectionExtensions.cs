@@ -22,7 +22,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<NotesPage>()
             .AddScoped<CalendarPage>()
             .AddScoped<CreateEvent>()
-            .AddScoped<NamespaceManagmentPage>();
+            .AddScoped<NamespaceManagmentPage>()
+            .AddScoped<IdentityProvidersPage>();
 
         return services;
     }
