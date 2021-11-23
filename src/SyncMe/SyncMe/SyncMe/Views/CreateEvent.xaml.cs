@@ -1,4 +1,6 @@
 ﻿//using Microsoft.Graph;
+using System.ComponentModel;
+
 namespace SyncMe.Views;
 
 public partial class CreateEvent : ContentPage
@@ -6,20 +8,22 @@ public partial class CreateEvent : ContentPage
     private static readonly DateTime _minimumDate = new(2000, 1, 1);
     private static readonly DateTime _maximumDate = new(2100, 12, 31);
 
-    private Entry Namespace { get; init; }
-    private Entry EventTitle { get; init; }
-    private Switch IsAllDay { get; init; }
-    private DatePicker StartsPicker { get; init; }
-    private DatePicker EndsPicker { get; init; }
-    private Button ConfigureAlert { get; init; }
-    private Button AddEvent { get; init; }
+    public Entry Namespace { get; init; }
+    public Entry EventTitle { get; init; }
+    public Switch IsAllDay { get; init; }
+    public DatePicker StartsPicker { get; init; }
+    public DatePicker EndsPicker { get; init; }
+    public Button ConfigureAlert { get; init; }
+    public Button AddEvent { get; init; }
 
     public CreateEvent()
     {
         InitializeComponent();
 
         Namespace = new Entry { Placeholder = "Namespace" };
+        Namespace.PropertyChanged += ValidateButtonState;
         EventTitle = new Entry { Placeholder = "Title" };
+        EventTitle.PropertyChanged += ValidateButtonState;
 
         IsAllDay = new Switch { IsToggled = false, OnColor = Color.FromRgb(74, 215, 100), ThumbColor = Color.White };
         IsAllDay.Toggled += OnSwitchToggled;
@@ -34,6 +38,18 @@ public partial class CreateEvent : ContentPage
 
         var stack = CreatePageLayout();
         Content = new ScrollView { Content = stack };
+    }
+
+    private void ValidateButtonState(object sender, PropertyChangedEventArgs e)
+    {
+        if (sender is Entry eventNamespace && eventNamespace.Placeholder.Equals(nameof(Namespace)) && !string.IsNullOrEmpty(eventNamespace.Text))
+        {
+            AddEvent.IsEnabled = true;
+        }
+        else
+        {
+            AddEvent.IsEnabled = false;
+        }
     }
 
     private StackLayout CreatePageLayout() => new() { Spacing = 20, Children = { CreateHeader(), CreateSchedule(), CreateAlert(), AddEvent } };
@@ -62,10 +78,7 @@ public partial class CreateEvent : ContentPage
 
     private StackLayout CreateAlert() => new() { Children = { new Label { Text = "Alert" }, ConfigureAlert }, Padding = new Thickness(0, 10) };
 
-    private async void AlertButton_Clicked(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new EventAlert());
-    }
+    private async void AlertButton_Clicked(object sender, EventArgs e) => await Navigation.PushAsync(new EventAlert(this));
 
     private async void OnButtonClicked(object sender, EventArgs e)
     {
