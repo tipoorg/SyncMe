@@ -1,4 +1,7 @@
 ﻿using Android.Content;
+using SyncMe.Droid.Extensions;
+using SyncMe.Extensions;
+using SyncMe.Models;
 
 namespace SyncMe.Droid.Alarm;
 
@@ -26,14 +29,10 @@ internal class AlarmReceiver : BroadcastReceiver
 
     private void SetAlarm(Context context, Intent intent)
     {
-        var times = intent.GetIntExtra(AlarmMessage.TimesKey, -1);
-
-        if (times > 0)
-        {
-            AndroidAlarmPlayer.Instance.PlayAlarm(context);
-            AndroidNotificationManager.Instance.Show("Alarm", context);
-            new AndroidAlarmIntent().SetAlarm(times - 1, context);
-        }
+        var syncEvent = intent.GetExtra<SyncEvent>();
+        AndroidAlarmPlayer.Instance.PlayAlarm(context);
+        AndroidNotificationManager.Instance.Show("Alarm", context);
+        new AndroidAlarmIntent().SetAlarm(syncEvent.DecrementRemainingTimes(), context);
     }
 
     private void StopAlarm(Intent intent)

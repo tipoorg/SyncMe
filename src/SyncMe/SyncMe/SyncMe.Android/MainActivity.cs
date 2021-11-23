@@ -1,12 +1,7 @@
-﻿using System.Text;
-using Android.App;
-using Android.Content;
+﻿using Android.App;
 using Android.Content.PM;
-using Android.Icu.Text;
-using Android.Icu.Util;
 using Android.OS;
 using Android.Runtime;
-using Android.Widget;
 using SyncMe.Droid.Alarm;
 using SyncMe.Views;
 using Xamarin.Forms.Platform.Android;
@@ -27,7 +22,7 @@ public class MainActivity : FormsAppCompatActivity
         var app = Bootstrapper.CreateApp();
         LoadApplication(app);
 
-        _setAlarmSubscription = App.GetRequiredService<NotesPage>().SetAlarmClicks
+        _setAlarmSubscription = App.GetRequiredService<NotesPage>().ScheduledEvents
             .Subscribe(x => new AndroidAlarmIntent().SetAlarm(x, this));
     }
 

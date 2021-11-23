@@ -4,8 +4,6 @@ public static class AlarmMessage
 {
     public const string ActionKey = "ACTION";
 
-    public const string TimesKey = "TIMES";
-
     public const string NotificationIdKey = "NOTIFICATION_ID";
 
     public const string SetAlarmAction = "SET_ALARM";
