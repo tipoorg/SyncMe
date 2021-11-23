@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SyncMe.Views.NamespaceManagmentPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="HorizontalTextAlignment" Value="Start"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="Margin" Value="20,5,0,0"/>
+            </Style>
+            <Style x:Key="NamespaceStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="Margin" Value="20,0,0,0" />
+                <Setter Property="Padding" Value="5"/>
+            </Style>
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="FontSize" Value="Micro"/>
+                <Setter Property="WidthRequest" Value="90"/>
+                <Setter Property="HeightRequest" Value="30"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="Margin" Value="0,0,0,5"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout>
+
+            <Label 
+                Text="Active namespaces" Style="{StaticResource TitleStyle}" />
+            <ListView 
+                x:Name="activeNamespaces" 
+                ItemsSource="{Binding ActiveNamespaces}"
+                HasUnevenRows="True"
+                ItemTapped="activeNamespaces_ItemTapped">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                            <Label Text="{Binding Name}" Style="{StaticResource NamespaceStyle}"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                    <Button Text="Tomorrow" Style="{StaticResource ButtonStyle}" Grid.Column="0" IsVisible="{Binding IsVisible}" Command="{Binding TomorrowClick}" />
+                                    <Button Text="Never" Style="{StaticResource ButtonStyle}" Grid.Column="1" IsVisible="{Binding IsVisible}" Command="{Binding TomorrowClick}"/>
+                                    <Button Text="Custom" Style="{StaticResource ButtonStyle}" Grid.Column="2" IsVisible="{Binding IsVisible}" Command="{Binding TomorrowClick}"/>
+                            </Grid>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Label Text="Suspended namespaces" Style="{StaticResource TitleStyle}"/>
+            <ListView 
+                x:Name="suspendedNamespaces" 
+                ItemsSource="{Binding SuspendedNamespaces}"
+                ItemTapped="suspendedNamespaces_ItemTapped"
+                HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                                <Label Text="{Binding Name}" Style="{StaticResource NamespaceStyle}"/>
+                                <Button Text="Restore" Style="{StaticResource ButtonStyle}" IsVisible="{Binding IsVisible}" Command="{Binding RestoreClick}"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

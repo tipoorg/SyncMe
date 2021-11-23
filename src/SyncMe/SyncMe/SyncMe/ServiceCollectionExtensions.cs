@@ -19,7 +19,8 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddSingleton<AboutPage>()
-            .AddSingleton<NotesPage>();
+            .AddSingleton<NotesPage>()
+            .AddSingleton<NamespaceManagmentPage>();
 
         return services;
     }

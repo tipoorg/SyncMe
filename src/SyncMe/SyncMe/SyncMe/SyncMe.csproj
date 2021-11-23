@@ -17,9 +17,18 @@
       <Compile Update="Views\NotesPage.xaml.cs">
         <DependentUpon>NotesPage.xaml</DependentUpon>
       </Compile>
+      <Compile Update="Views\NamespaceManagmentPage.xaml.cs">
+        <DependentUpon>NamespaceManagmentPage.xaml</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Services\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Views\NamespaceManagmentPage.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
     </ItemGroup>
 </Project>
