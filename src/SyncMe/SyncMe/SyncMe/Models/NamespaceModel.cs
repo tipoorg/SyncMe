@@ -40,8 +40,10 @@ namespace SyncMe.Models
         {
             get { return _isExpanded; }
             set 
-            { 
-                _isExpanded = value; 
+            {
+                if(value == _isExpanded) return;
+                _isExpanded = value;
+                
                 OnPropertyChanged(nameof(IsExpanded));
                 OnPropertyChanged(nameof(ArrowRotation));
             }
@@ -85,6 +87,7 @@ namespace SyncMe.Models
             {
                 if (_isActive == value) return;
                 _isActive = value;
+
                 OnPropertyChanged(nameof(IsActive));
                 OnPropertyChanged(nameof(BorderColor)); 
             }
@@ -113,12 +116,6 @@ namespace SyncMe.Models
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(string prop = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-            }
-        }
+        private void OnPropertyChanged(string prop = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
     }
 }
