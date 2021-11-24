@@ -8,7 +8,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="NotificationStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
                 <Setter Property="FontSize" Value="Large"/>
                 <Setter Property="Margin" Value="20,5,0,0"/>
