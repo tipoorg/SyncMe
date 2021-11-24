@@ -38,7 +38,7 @@ public class SyncEventViewModel : INotifyPropertyChanged
         }
     }
 
-    private string _alertButtonText = "Does Not Repeat";
+    private string _alertButtonText = "At Event Time";
     public string AlertButtonText
     {
         get { return _alertButtonText; }
