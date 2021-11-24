@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SyncMe.Views.IdentityProvidersPage">
+             x:Class="SyncMe.Views.IdentityProvidersPage"
+             Title="Identities">
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="TitleStyle" TargetType="Label">
@@ -26,16 +28,14 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="icon_plus_minor.xml" Clicked="OnSyncClicked" CommandParameter="{Binding .}" />
+    </ContentPage.ToolbarItems>
+    
     <ContentPage.Content>
         <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <StackLayout>
                 <FlexLayout Direction="Column">
-                    <StackLayout>
-                        <FlexLayout JustifyContent="SpaceBetween">
-                            <Label Text="Identities" Style="{StaticResource TitleStyle}" />
-                            <Button Clicked="OnSyncClicked" CommandParameter="{Binding .}" Style="{StaticResource SyncButton}" />
-                        </FlexLayout>
-                    </StackLayout>
                     <ListView ItemsSource="{Binding Identities}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
