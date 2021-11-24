@@ -1,12 +1,26 @@
-﻿using System.ComponentModel;
-using SyncMe.Models;
+﻿using SyncMe.Models;
+using System.Windows.Input;
 using Xamarin.Plugin.Calendar.Models;
 
 namespace SyncMe.ViewModels;
 
-internal class CalendarPageViewModel : INotifyPropertyChanged
+internal class CalendarPageViewModel
 {
-    public event PropertyChangedEventHandler PropertyChanged;
+    public CalendarPageViewModel()
+    {
+        DayTappedCommand = new Command<DateTime>((date) => DayTappedEvent.Invoke(date, this));
+        DayTappedEvent += DayTappedd;
+    }
+
+    public ICommand DayTappedCommand { get; set; }
+
+    private static event EventHandler<CalendarPageViewModel> DayTappedEvent;
+
+    public EventCollection Events
+    {
+        get => events;
+        set => events = value;
+    }
 
     EventCollection events = new EventCollection()
     {
@@ -27,10 +41,12 @@ internal class CalendarPageViewModel : INotifyPropertyChanged
         },
     };
 
-    public EventCollection Events
+    private async void DayTappedd(object sender, CalendarPageViewModel item)
     {
-        get => events;
-        set => events = value;
+        var date = (DateTime)sender;
+         var message = $"Received tap event from date: {date}";
+         await App.Current.MainPage.DisplayAlert("DayTapped", message, "Ok");
     }
+
 };
 
