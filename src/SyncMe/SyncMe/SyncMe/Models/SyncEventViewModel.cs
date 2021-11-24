@@ -9,13 +9,14 @@ public class SyncEventViewModel : INotifyPropertyChanged
     {
         SyncEvent = new SyncEvent
         {
+            Start = DateTime.Now,
+            End = DateTime.Now.AddHours(1),
             Namespace = new Namespace(),
             Schedule = new SyncSchedule(),
-            Alert = new SyncAlert { Reminders = new SyncReminder[1] }
+            Alert = new SyncAlert {  Reminder = SyncReminder.AtEventTime }
         };
+
         IsAddEventEnabled = false;
-        StartDate = DateTime.Today;
-        EndDate = DateTime.Today;
         ScheduleButtonText = "Does Not Repeat";
         AlertButtonText = "Alert";
     }
@@ -110,12 +111,12 @@ public class SyncEventViewModel : INotifyPropertyChanged
 
     public SyncReminder Notification
     {
-        get { return SyncEvent.Alert.Reminders.First(); }
+        get { return SyncEvent.Alert.Reminder; }
         set
         {
-            if (SyncEvent.Alert.Reminders.First() != value)
+            if (SyncEvent.Alert.Reminder != value)
             {
-                SyncEvent.Alert.Reminders[0] = value;
+                SyncEvent.Alert.Reminder = value;
                 OnPropertyChanged(nameof(Title));
             }
         }

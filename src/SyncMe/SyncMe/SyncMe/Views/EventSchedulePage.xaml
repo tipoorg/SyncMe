@@ -17,12 +17,16 @@
                 <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="None"/>
             </StackLayout>
             <StackLayout Style="{StaticResource StackLayoutStyle}">
+                <Label Text="Every minute"></Label>
+                <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="EveryMinute"/>
+            </StackLayout>
+            <StackLayout Style="{StaticResource StackLayoutStyle}">
                 <Label Text="Every day"></Label>
                 <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="Dayly"/>
             </StackLayout>
             <StackLayout Style="{StaticResource StackLayoutStyle}">
                 <Label Text="Every week"></Label>
-                <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="WeekDays"/>
+                <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="WorkDays"/>
             </StackLayout>
             <StackLayout Style="{StaticResource StackLayoutStyle}">
                 <Label Text="Every month"></Label>

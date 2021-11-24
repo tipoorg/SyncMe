@@ -13,8 +13,7 @@ namespace CalendarProviders.Authorization
         public string[] Scopes => new[] { "Calendars.Read" };
         public string iOSKeychainSecurityGroup { get; private set; } = null;
         public IPublicClientApplication PCA { get; private set; }
-
-        public IEnumerable<IAccount> CurrentAccounts { get; private set; }
+        public static IEnumerable<IAccount> CurrentAccounts { get; private set; } = new List<IAccount>();
 
         public MicrosoftAuthorizationManager()
         {
@@ -28,9 +27,10 @@ namespace CalendarProviders.Authorization
             }
 
             PCA = builder.Build();
+            CurrentAccounts = PCA.GetAccountsAsync().Result;
         }
 
-        public async Task SignInAsync(object AuthUIParent)
+        public async Task<string> SignInAsync(object AuthUIParent)
         {
             // This exception is thrown when an interactive sign-in is required.
             // Prompt the user to sign-in
@@ -42,19 +42,20 @@ namespace CalendarProviders.Authorization
                     .WithParentActivityOrWindow(AuthUIParent);
             }
 
-            await interactiveRequest.ExecuteAsync();
+            var result = await interactiveRequest.ExecuteAsync();
+            return result.Account.Username;
         }
 
-        public async Task<GraphServiceClient> GetGraphClientAsync()
+        public async Task<GraphServiceClient> GetGraphClientAsync(string username)
         {
-            CurrentAccounts = await PCA.GetAccountsAsync();
             if (CurrentAccounts.Count() > 0)
             {
                 // Initialize Graph client
                 return new GraphServiceClient(new DelegateAuthenticationProvider(
                     async (requestMessage) =>
                     {
-                        var result = await PCA.AcquireTokenSilent(Scopes, CurrentAccounts.FirstOrDefault())
+                        var currentAccount = CurrentAccounts.FirstOrDefault(a => a.Username == username);
+                        var result = await PCA.AcquireTokenSilent(Scopes, currentAccount)
                             .ExecuteAsync();
 
                         requestMessage.Headers.Authorization =
