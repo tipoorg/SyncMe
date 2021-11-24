@@ -29,7 +29,6 @@
             <Style x:Key="FrameStyle" TargetType="Frame">
                 <Setter Property="CornerRadius" Value="10"/>
                 <Setter Property="Padding" Value="10"/>
-                <Setter Property="Margin" Value="5,5,5,5"/>
                 <Setter Property="WidthRequest" Value="200"/>
             </Style>
             <Style x:Key="MinorButtonStyle" TargetType="Button">
@@ -58,23 +57,23 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Frame BorderColor="{StaticResource epamBlue}" Style="{StaticResource FrameStyle}">
+                            <Frame BorderColor="{StaticResource epamBlue}" Style="{StaticResource FrameStyle}" Margin="{Binding Margin}">
                                 <StackLayout>
                                     <FlexLayout JustifyContent="SpaceBetween">
-                                        <Button ImageSource="icon_arrow.xml" Style="{StaticResource MinorButtonStyle}"/>
+                                        <Button ImageSource="icon_arrow.xml" Style="{StaticResource MinorButtonStyle}" Command="{Binding ExpandClick}" Rotation="{Binding ArrowRotation}"/>
                                         <Label Text="{Binding Name}" Style="{StaticResource NamespaceStyle}"/>
                                         <Button ImageSource="icon_plus_minor.xml" Style="{StaticResource MinorButtonStyle}"/>
                                     </FlexLayout>
-                                    <Label Text="Turn off until..." IsVisible="{Binding Path=IsButtonsVisible}" HorizontalTextAlignment="Center"/>
+                                    <Label Text="Turn off until..." IsVisible="{Binding IsButtonsVisible}" HorizontalTextAlignment="Center"/>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <Button Text="Tomorrow" Style="{StaticResource ButtonStyle}" Grid.Column="0" IsVisible="{Binding Path=IsButtonsVisible}" Command="{Binding TomorrowClick}" />
-                                        <Button Text="Never" Style="{StaticResource ButtonStyle}" Grid.Column="1" IsVisible="{Binding Path=IsButtonsVisible}" Command="{Binding TomorrowClick}"/>
-                                        <Button Text="Custom" Style="{StaticResource ButtonStyle}" Grid.Column="2" IsVisible="{Binding Path=IsButtonsVisible}" Command="{Binding TomorrowClick}"/>
+                                        <Button Text="Tomorrow" Style="{StaticResource ButtonStyle}" Grid.Column="0" IsVisible="{Binding IsButtonsVisible}" Command="{Binding TomorrowClick}" />
+                                        <Button Text="Never" Style="{StaticResource ButtonStyle}" Grid.Column="1" IsVisible="{Binding IsButtonsVisible}" Command="{Binding TomorrowClick}"/>
+                                        <Button Text="Custom" Style="{StaticResource ButtonStyle}" Grid.Column="2" IsVisible="{Binding IsButtonsVisible}" Command="{Binding TomorrowClick}"/>
                                     </Grid>
                                 </StackLayout>
                             </Frame>
@@ -95,10 +94,10 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Frame BorderColor="#8e244d" Style="{StaticResource FrameStyle}">
+                            <Frame BorderColor="#8e244d" Style="{StaticResource FrameStyle}" Margin="{Binding Margin}">
                                 <StackLayout>
                                     <FlexLayout JustifyContent="SpaceBetween">
-                                        <Button ImageSource="icon_arrow.xml" Style="{StaticResource MinorButtonStyle}"/>
+                                        <Button ImageSource="icon_arrow.xml" Style="{StaticResource MinorButtonStyle}" Command="{Binding ExpandClick}" Rotation="{Binding ArrowRotation}"/>
                                         <Label Text="{Binding Name}" Style="{StaticResource NamespaceStyle}"/>
                                         <Button ImageSource="icon_plus_minor.xml" Style="{StaticResource MinorButtonStyle}"/>
                                     </FlexLayout>
