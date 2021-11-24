@@ -43,6 +43,7 @@ public partial class NamespaceManagmentPage : ContentPage
             Namespaces.CollapseAllButtons();
             tappedItem.IsRestoreButtonsVisible = !prevValue;
         }
+        Namespaces.RemoveAndInsertItem(tappedItem);
     }
 
     private void MoveToSuspended(NamespaceModel item)
@@ -128,5 +129,12 @@ public static class NamespaceExtensions
         {
             items.Insert(index + i + 1, new NamespaceModel(children[i].FullName, children[i].IsActive, children[i].HasChildren));
         }
+    }
+
+    public static void RemoveAndInsertItem(this ObservableCollection<NamespaceModel> items, NamespaceModel item)
+    {
+        var index = items.IndexOf(item);
+        items.RemoveAt(index);
+        items.Insert(index, item);
     }
 }
