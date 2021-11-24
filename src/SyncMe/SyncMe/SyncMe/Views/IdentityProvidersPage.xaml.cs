@@ -92,7 +92,9 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
     private async Task<(string username, List<Guid> newEvents)> LoadEventsAsync(string username = null)
     {
-        var syncEvents = await FetchEventsAsync(username);
+        var fetchResult = await FetchEventsAsync(username);
+        username = fetchResult.username;
+        var syncEvents = fetchResult.events;
 
         if (Identities.Any(i => i.Name == username))
             _syncEventsRepository.RemoveEvents(e => username == e.ExternalEmail);
@@ -109,7 +111,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
         _syncEventsRepository.RemoveEvents(e => accountsToResync.Contains(e.ExternalEmail));
         foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
         {
-            var syncEvents = await FetchEventsAsync(account.Username);
+            var (_, syncEvents) = await FetchEventsAsync(account.Username);
 
             foreach (var @event in syncEvents)
             {
@@ -118,13 +120,13 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
         }
     }
 
-    private async Task<IEnumerable<SyncEvent>> FetchEventsAsync(string username)
+    private async Task<(string username, IEnumerable<SyncEvent> events)> FetchEventsAsync(string username)
     {
         var manager = new MicrosoftAuthorizationManager();
         username ??= await manager.SignInAsync(App.AuthUIParent);
         var client = await manager.GetGraphClientAsync(username);
         var events = await new OutlookProvider(client, username).GetEventsAsync();
-        return events.Select(e => e.ToSyncEvent(username));
+        return (username, events.Select(e => e.ToSyncEvent(username)));
     }
 
     private void SwitchLayouts()
