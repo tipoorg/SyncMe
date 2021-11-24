@@ -26,12 +26,6 @@ public class Namespace
 {
     public string Title { get; set; }
     public Guid Id { get; init; }
-
-    public Namespace()
-    {
-        Id = Guid.NewGuid();
-        Title = string.Empty;
-    }
 }
 
 public enum SyncRepeat

@@ -9,9 +9,11 @@ namespace SyncMe.Views;
 
 public sealed partial class CreateEventPage : ContentPage, IDisposable
 {
+    private static readonly TimeSpan _defaultTime = new TimeSpan(12, 0, 0);
+
     private readonly ISyncNamespaceRepository _namespaceRepository;
     private readonly ISyncEventsRepository _eventsRepository;
-    private readonly Dictionary<string, IReadOnlyCollection<Namespace>> _namespaces;
+    private readonly Dictionary<string, Namespace> _namespaces;
     private readonly IDisposable _addEventConnection;
     private readonly IDisposable _addEventSubscription;
     private SyncEventViewModel _eventModel;
@@ -111,11 +113,11 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     {
         if (!string.IsNullOrEmpty(_eventModel.Namespace) && !string.IsNullOrEmpty(_eventModel.Title))
         {
-            _eventModel.IsAddEvenEnabled = true;
+            _eventModel.IsAddEventEnabled = true;
         }
         else
         {
-            _eventModel.IsAddEvenEnabled = false;
+            _eventModel.IsAddEventEnabled = false;
         }
     }
 
@@ -132,6 +134,12 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     {
         _eventModel.Namespace = string.Empty;
         _eventModel.Title = string.Empty;
+        _eventModel.StartDate = DateTime.Today;
+        _eventModel.StartTime = _defaultTime;
+        _eventModel.EndDate = DateTime.Today;
+        _eventModel.EndTime = _defaultTime;
+        _eventModel.ScheduleButtonText = "Does Not Repeat";
+        _eventModel.AlertButtonText = "Alert";
     }
 
     public void Dispose()
