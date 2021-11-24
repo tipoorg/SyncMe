@@ -29,7 +29,6 @@
             <Style x:Key="FrameStyle" TargetType="Frame">
                 <Setter Property="CornerRadius" Value="10"/>
                 <Setter Property="Padding" Value="10"/>
-                <Setter Property="Margin" Value="5,5,5,5"/>
                 <Setter Property="WidthRequest" Value="200"/>
             </Style>
             <Style x:Key="MinorButtonStyle" TargetType="Button">
@@ -51,58 +50,37 @@
             </Frame>
             <ListView 
                 x:Name="activeNamespaces" 
-                ItemsSource="{Binding ActiveNamespaces}"
+                ItemsSource="{Binding Namespaces}"
                 HasUnevenRows="True"
                 ItemTapped="activeNamespaces_ItemTapped"
                 SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Frame BorderColor="{StaticResource epamBlue}" Style="{StaticResource FrameStyle}">
+                            <Frame BorderColor="{Binding BorderColor}" Style="{StaticResource FrameStyle}" Margin="{Binding Margin}">
                                 <StackLayout>
-                                    <FlexLayout JustifyContent="SpaceBetween">
-                                        <Button ImageSource="icon_arrow.xml" Style="{StaticResource MinorButtonStyle}"/>
-                                        <Label Text="{Binding Name}" Style="{StaticResource NamespaceStyle}"/>
-                                        <Button ImageSource="icon_plus_minor.xml" Style="{StaticResource MinorButtonStyle}"/>
-                                    </FlexLayout>
-                                    <Label Text="Turn off until..." IsVisible="{Binding Path=IsButtonsVisible}" HorizontalTextAlignment="Center"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="10*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button ImageSource="icon_arrow.xml" Style="{StaticResource MinorButtonStyle}" Command="{Binding ExpandClick}" Rotation="{Binding ArrowRotation}" IsVisible="{Binding HasChildren}" Grid.Column="0"/>
+                                        <Label Text="{Binding Name}" Style="{StaticResource NamespaceStyle}" Grid.Column="1"/>
+                                        <Button ImageSource="icon_plus_minor.xml" Style="{StaticResource MinorButtonStyle}" Grid.Column="2"/>
+                                    </Grid>
+                                    <Label Text="Turn off until..." IsVisible="{Binding IsSuspendButtonsVisible}" HorizontalTextAlignment="Center"/>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <Button Text="Tomorrow" Style="{StaticResource ButtonStyle}" Grid.Column="0" IsVisible="{Binding Path=IsButtonsVisible}" Command="{Binding TomorrowClick}" />
-                                        <Button Text="Never" Style="{StaticResource ButtonStyle}" Grid.Column="1" IsVisible="{Binding Path=IsButtonsVisible}" Command="{Binding TomorrowClick}"/>
-                                        <Button Text="Custom" Style="{StaticResource ButtonStyle}" Grid.Column="2" IsVisible="{Binding Path=IsButtonsVisible}" Command="{Binding TomorrowClick}"/>
+                                        <Button Text="Tomorrow" Style="{StaticResource ButtonStyle}" Grid.Column="0" IsVisible="{Binding IsSuspendButtonsVisible}" Command="{Binding TomorrowClick}" />
+                                        <Button Text="Never" Style="{StaticResource ButtonStyle}" Grid.Column="1" IsVisible="{Binding IsSuspendButtonsVisible}" Command="{Binding TomorrowClick}"/>
+                                        <Button Text="Custom" Style="{StaticResource ButtonStyle}" Grid.Column="2" IsVisible="{Binding IsSuspendButtonsVisible}" Command="{Binding TomorrowClick}"/>
                                     </Grid>
-                                </StackLayout>
-                            </Frame>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            
-            <Frame BorderColor="#8e244d" Padding="5" Margin="0,0,0,0">
-                <Label Text="Suspended namespaces" Style="{StaticResource TitleStyle}" TextColor=" #8e244d"/>
-            </Frame>
-            <ListView 
-                x:Name="suspendedNamespaces" 
-                ItemsSource="{Binding SuspendedNamespaces}"
-                ItemTapped="suspendedNamespaces_ItemTapped"
-                HasUnevenRows="True"
-                SelectionMode="None">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Frame BorderColor="#8e244d" Style="{StaticResource FrameStyle}">
-                                <StackLayout>
-                                    <FlexLayout JustifyContent="SpaceBetween">
-                                        <Button ImageSource="icon_arrow.xml" Style="{StaticResource MinorButtonStyle}"/>
-                                        <Label Text="{Binding Name}" Style="{StaticResource NamespaceStyle}"/>
-                                        <Button ImageSource="icon_plus_minor.xml" Style="{StaticResource MinorButtonStyle}"/>
-                                    </FlexLayout>
-                                    <Button Text="Restore" Style="{StaticResource ButtonStyle}" IsVisible="{Binding IsButtonsVisible}" Command="{Binding RestoreClick}"/>
+                                    <Button Text="Restore" Style="{StaticResource ButtonStyle}" IsVisible="{Binding IsRestoreButtonsVisible}" Command="{Binding RestoreClick}"/>
                                 </StackLayout>
                             </Frame>
                         </ViewCell>
