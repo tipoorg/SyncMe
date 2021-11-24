@@ -13,7 +13,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
 
     private readonly ISyncNamespaceRepository _namespaceRepository;
     private readonly ISyncEventsRepository _eventsRepository;
-    private readonly Dictionary<string, IReadOnlyCollection<Namespace>> _namespaces;
+    private readonly Dictionary<string, Namespace> _namespaces;
     private readonly IDisposable _addEventConnection;
     private readonly IDisposable _addEventSubscription;
     private SyncEventViewModel _eventModel;

@@ -6,7 +6,7 @@ namespace SyncMe.Repos;
 public class SyncNamespaceRepository : ISyncNamespaceRepository
 {
     private static int _idCounter = 0;
-    private readonly Dictionary<string, IReadOnlyCollection<Namespace>> _existingNamespaces = new();
+    private readonly Dictionary<string, Namespace> _existingNamespaces = new();
 
     public SyncNamespaceRepository()
     {
@@ -15,8 +15,8 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
 
     private void SeedData()
     {
-        _existingNamespaces.Add("Test", new List<Namespace> { CreateNamespace("Test") });
-        _existingNamespaces.Add("Another.Test", new List<Namespace> { CreateNamespace("Another"), CreateNamespace("Test") });
+        _existingNamespaces.Add("Test", CreateNamespace("Test"));
+        _existingNamespaces.Add("Another.Test", CreateNamespace("Another"));
     }
 
     private void Increment(ref int counter) => Interlocked.Increment(ref counter);
@@ -27,27 +27,14 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
         return new Namespace() { Title = title };
     }
 
-    public Dictionary<string, IReadOnlyCollection<Namespace>> GetAllSyncNamespaces() => 
+    public Dictionary<string, Namespace> GetAllSyncNamespaces() => 
         _existingNamespaces;
 
     public void AddSyncNamespace(string name)
     {
-        _existingNamespaces.Add(name, GenerateSubNamespaces(name.Split('.')));
+        _existingNamespaces.Add(name, new Namespace { Title = name });
     }
 
-    private IReadOnlyCollection<Namespace> GenerateSubNamespaces(params string[] subspaces)
-    {
-        var namespaces = new List<Namespace>();
-        foreach (var subspace in subspaces)
-        {
-            Increment(ref _idCounter);
-            var newNamespace = new Namespace() { Title = subspace };
-            namespaces.Add(newNamespace);
-        }
-
-        return namespaces;
-    }
-
-    public bool TryGetSyncNamespace(string name, out IReadOnlyCollection<Namespace> existingNamespaces) =>
-        _existingNamespaces.TryGetValue(name, out existingNamespaces);
+    public bool TryGetSyncNamespace(string name, out Namespace existingNamespace) =>
+        _existingNamespaces.TryGetValue(name, out existingNamespace);
 }
