@@ -16,7 +16,6 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 {
     private readonly IDisposable _addIdentitySubsciption;
     private readonly IDisposable _addOutlookIdentity;
-    private readonly IDisposable _addGoogleIdentity;
     private readonly IDisposable _addEventConnection;
     private readonly ISyncEventsRepository _syncEventsRepository;
 
@@ -55,38 +54,8 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
             .ObserveOn(SynchronizationContext.Current)
             .Subscribe(x =>
             {
-                Device.BeginInvokeOnMainThread(() => SwitchLayouts());
-
                 if(!Identities.Any(i => i.Name == x.username))
                     Identities.Add(new Identity(x.username));
-            });
-
-        _addGoogleIdentity = Observable
-            .FromEventPattern(AddGoogle, nameof(Button.Clicked))
-            .SelectMany(async x =>
-            {
-                var manager = new MicrosoftAuthorizationManager();
-                var accountsToResync = MicrosoftAuthorizationManager.CurrentAccounts.Select(a => a.Username).ToList();
-                syncEventsRepository.RemoveEvents(e => accountsToResync.Contains(e.ExternalEmail));
-                foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
-                {
-                    var username = account.Username;
-                    var client = await manager.GetGraphClientAsync(account.Username);
-                    var events = await new OutlookProvider(client, username).GetEventsAsync();
-
-                    var syncEvents = events.Select(e => e.ToSyncEvent(username));
-
-                    foreach (var @event in syncEvents)
-                    {
-                        syncEventsRepository.AddSyncEvent(@event);
-                    }
-                }
-
-                return manager;
-            }) // open browser and await task
-            .Subscribe(x =>
-            {
-                Device.BeginInvokeOnMainThread(() => SwitchLayouts());
             });
     }
 

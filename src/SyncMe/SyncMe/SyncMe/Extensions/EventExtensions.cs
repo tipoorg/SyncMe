@@ -13,7 +13,7 @@ namespace SyncMe.Extensions
                                                                                                      Description = e.Body.Content,
                                                                                                      Namespace = new Namespace { Title = "", Id = Guid.Empty },
                                                                                                      Schedule = new SyncSchedule { Repeat = SyncRepeat.None },
-                                                                                                     Alert = new SyncAlert { Reminders = new[] { SyncReminder.AtEventTime } },
+                                                                                                     Alert = new SyncAlert { Reminder = SyncReminder.AtEventTime },
                                                                                                      Status = SyncStatus.Active,
                                                                                                      Start = DateTime.Parse(e.Start.DateTime),
                                                                                                      End = DateTime.Parse(e.End.DateTime) 
