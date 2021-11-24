@@ -4,7 +4,7 @@
              xmlns:forms="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
              x:Class="SyncMe.Views.CreateEventPage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add event" Clicked="AddNewSyncEvent" IsEnabled="{Binding IsAddEvenEnabled}"></ToolbarItem>
+        <ToolbarItem x:Name="AddEvent" Text="Add event" IsEnabled="{Binding IsAddEvenEnabled}"></ToolbarItem>
         <ToolbarItem Text="Cancel" Clicked="CancelEvent"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>

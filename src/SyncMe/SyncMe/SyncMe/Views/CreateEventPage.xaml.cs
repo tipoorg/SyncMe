@@ -16,7 +16,6 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     private readonly IDisposable _addEventSubscription;
     private readonly SyncEventViewModel _eventModel;
 
-    public ToolbarItem AddEvent { get; init; }
     public IObservable<Guid> ScheduledEvents { get; }
 
     public CreateEventPage(ISyncEventsRepository eventsRepository, ISyncNamespaceRepository namespaceRepository)
@@ -28,8 +27,6 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         _namespaces = _namespaceRepository.GetAllSyncNamespaces();
         BindingContext = _eventModel;
 
-        AddEvent = new ToolbarItem { Text = "Add event", };
-
         var scheduledEvents = Observable
             .FromEventPattern(AddEvent, nameof(Button.Clicked))
             .Select(x => AddNewSyncEvent())
@@ -39,7 +36,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         _addEventConnection = scheduledEvents.Connect();
         ScheduledEvents = scheduledEvents;
 
-        _addEventSubscription = ScheduledEvents
+        _addEventSubscription = scheduledEvents
             .SelectMany(x => NavigateToCalendar())
             .Subscribe(x => CleanUpElements());
     }
@@ -83,9 +80,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
 
     private async void OnAlertButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new EventAlertPage(_eventModel));
 
-    public Guid AddNewSyncEvent() => _eventsRepository.AddSyncEvent(_eventModel.SyncEvent);
-
-    private void AddNewSyncEvent(object sender, EventArgs e) => AddNewSyncEvent();
+    private Guid AddNewSyncEvent() => _eventsRepository.AddSyncEvent(_eventModel.SyncEvent);
 
     private async void CancelEvent(object sender, EventArgs e)
     {
