@@ -40,14 +40,14 @@ public enum SyncRepeat
     None,
     [Description("Daily")]
     Dayly,
-    [Description("Week Days")]
-    WeekDays,
-    [Description("Eveery Month")]
+    [Description("Work Days")]
+    WorkDays,
+    [Description("Every Month")]
     EveryMonth, 
     [Description("Every Year")]
     EveryYear,
-    [Description("Every 10 seconds")]
-    Every10Seconds
+    [Description("Every Minute")]
+    EveryMinute
 }
 
 public class SyncSchedule
@@ -57,7 +57,7 @@ public class SyncSchedule
 
 public class SyncAlert
 {
-    public SyncReminder[] Reminders { get; set; } = new SyncReminder[1];
+    public SyncReminder Reminder { get; set; }
 }
 
 public record SyncAlarm(string Title, Guid EventId, int DelaySeconds);
