@@ -21,9 +21,6 @@ namespace SyncMe.Views
 
             switch (action)
             {
-                case "Event":
-                    await Navigation.PushModalAsync(new CreateEvent());
-                    break;
                 case "Namespace":
                     await Navigation.PushModalAsync(new NamespaceManagmentPage());
                     break;
