@@ -15,6 +15,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 {
     private readonly IDisposable _addIdentitySubsciption;
     private readonly IDisposable _addOutlookIdentity;
+    private readonly IDisposable _addGoogleIdentity;
 
     public ObservableCollection<Identity> Identities { get; } = new ObservableCollection<Identity>();
 
@@ -22,6 +23,13 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
     {
         InitializeComponent();
         BindingContext = this;
+
+        var manager = new MicrosoftAuthorizationManager();
+
+        foreach(var account in MicrosoftAuthorizationManager.CurrentAccounts)
+        {
+            Identities.Add(new Identity(account.Username));
+        }
 
         _addIdentitySubsciption = Observable
             .FromEventPattern(AddIdentity, nameof(Button.Clicked))
@@ -35,23 +43,49 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
             .SelectMany(async x =>
             {
                 var manager = new MicrosoftAuthorizationManager();
-                await manager.SignInAsync(App.AuthUIParent);
-                var client = await manager.GetGraphClientAsync();
-                var events = await new OutlookProvider(client, manager.CurrentAccounts.First().Username).GetEventsAsync();
+                var username = await manager.SignInAsync(App.AuthUIParent);
+                var client = await manager.GetGraphClientAsync(username);
+                var events = await new OutlookProvider(client, username).GetEventsAsync();
 
-                var syncEvents = events.Select(e => new SyncEvent(
-                    ExternalId: e.Id,
-                    Title: e.Subject,
-                    Description: e.Body.Content,
-                    Namespace: new Namespace(0, ""),
-                    Schedule: new SyncSchedule(SyncRepeat.None),
-                    Alert: new SyncAlert(SyncReminder.AtEventTime),
-                    Status: SyncStatus.Active,
-                    Start: DateTime.Parse(e.Start.DateTime),
-                    End: DateTime.Parse(e.End.DateTime)));
+                if (Identities.Any(i => i.Name == username))
+                    syncEventsRepository.RemoveEvents(e => username == e.ExternalEmail);
+
+                var syncEvents = events.Select(e => e.ToSyncEvent(username));
                 foreach(var @event in syncEvents)
                 {
                     syncEventsRepository.AddSyncEvent(@event);
+                }
+
+                return username;
+            }) // open browser and await task
+            .Subscribe(x =>
+            {
+                Device.BeginInvokeOnMainThread(() => SwitchLayouts());
+
+                if(!Identities.Any(i => i.Name == x))
+                    Identities.Add(new Identity(x));
+            });
+
+        //Try to use google button as resync
+        _addGoogleIdentity = Observable
+            .FromEventPattern(AddGoogle, nameof(Button.Clicked))
+            .SelectMany(async x =>
+            {
+                var manager = new MicrosoftAuthorizationManager();
+                var accountsToResync = MicrosoftAuthorizationManager.CurrentAccounts.Select(a => a.Username).ToList();
+                syncEventsRepository.RemoveEvents(e => accountsToResync.Contains(e.ExternalEmail));
+                foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
+                {
+                    var username = account.Username;
+                    var client = await manager.GetGraphClientAsync(account.Username);
+                    var events = await new OutlookProvider(client, username).GetEventsAsync();
+
+                    var syncEvents = events.Select(e => e.ToSyncEvent(username));
+
+                    foreach (var @event in syncEvents)
+                    {
+                        syncEventsRepository.AddSyncEvent(@event);
+                    }
                 }
 
                 return manager;
@@ -59,7 +93,6 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
             .Subscribe(x =>
             {
                 Device.BeginInvokeOnMainThread(() => SwitchLayouts());
-                Identities.Add(new Identity(x.CurrentAccounts.First().Username));
             });
     }
 

@@ -200,6 +200,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     {
         var newEvent = new SyncEvent(
             ExternalId: "",
+            ExternalEmail: null,
             Title: EventTitle.Text,
             Description: "",
             Namespace: new Namespace(1, Namespace.Text),
