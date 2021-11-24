@@ -24,21 +24,11 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
     private Namespace CreateNamespace(string title)
     {
         Increment(ref _idCounter);
-        return new Namespace(_idCounter, title);
+        return new Namespace() { Title = title };
     }
 
     public Dictionary<string, IReadOnlyCollection<Namespace>> GetAllSyncNamespaces() => 
         _existingNamespaces;
-
-    private IReadOnlyCollection<Namespace> GetAllSyncNamespaces(Dictionary<int, Namespace> existingNamespaces, List<Namespace> namespaces)
-    {
-        foreach (var space in existingNamespaces)
-        {
-            namespaces.Add(new Namespace(space.Key, space.Value.Title));
-        }
-
-        return namespaces;
-    }
 
     public void AddSyncNamespace(string name)
     {
@@ -51,7 +41,7 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
         foreach (var subspace in subspaces)
         {
             Increment(ref _idCounter);
-            var newNamespace = new Namespace(_idCounter, subspace);
+            var newNamespace = new Namespace() { Title = subspace };
             namespaces.Add(newNamespace);
         }
 

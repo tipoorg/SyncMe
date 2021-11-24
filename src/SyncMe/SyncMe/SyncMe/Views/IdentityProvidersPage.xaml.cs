@@ -39,16 +39,18 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
                 var client = await manager.GetGraphClientAsync();
                 var events = await new OutlookProvider(client, manager.CurrentAccounts.First().Username).GetEventsAsync();
 
-                var syncEvents = events.Select(e => new SyncEvent(
-                    ExternalId: e.Id,
-                    Title: e.Subject,
-                    Description: e.Body.Content,
-                    Namespace: new Namespace(0, ""),
-                    Schedule: new SyncSchedule(SyncRepeat.None),
-                    Alert: new SyncAlert(SyncReminder.AtEventTime),
-                    Status: SyncStatus.Active,
-                    Start: DateTime.Parse(e.Start.DateTime),
-                    End: DateTime.Parse(e.End.DateTime)));
+                var syncEvents = events.Select(e => new SyncEvent
+                {
+                    ExternalId = e.Id,
+                    Title = e.Subject,
+                    Description = e.Body.Content,
+                    Namespace = new Namespace(),
+                    Schedule = new SyncSchedule(),
+                    Alert = new SyncAlert(),
+                    Status = SyncStatus.Active,
+                    Start = DateTime.Parse(e.Start.DateTime),
+                    End = DateTime.Parse(e.End.DateTime)
+                });
                 foreach(var @event in syncEvents)
                 {
                     syncEventsRepository.AddSyncEvent(@event);

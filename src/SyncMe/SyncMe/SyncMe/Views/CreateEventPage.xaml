@@ -1,5 +1,41 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SyncMe.Views.CreateEventPage" >
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:forms="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
+             x:Class="SyncMe.Views.CreateEventPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add event" Clicked="AddNewSyncEvent" IsEnabled="{Binding IsAddEvenEnabled}"></ToolbarItem>
+        <ToolbarItem Text="Cancel" Clicked="CancelEvent"></ToolbarItem>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Spacing="20">
+                <StackLayout>
+                    <forms:AutoSuggestBox Text="{Binding Namespace}" PlaceholderText="Namespace" QuerySubmitted="OnQuerySubmitted" SuggestionChosen="OnSuggestionChosen"/>
+                    <Entry Text="{Binding Title}" Placeholder="Title"></Entry>
+                </StackLayout>
+                <StackLayout Padding="0, 10">
+                    <Grid>
+                        <Label Text="All-Day"></Label>
+                        <Switch IsToggled="False" OnColor="#4AD764" ThumbColor="#FFFFFF" Toggled="OnSwitchToggled"></Switch>
+                    </Grid>
+                    <Button Text="{Binding ScheduleButtonText}" Clicked="OnConfigureScheduleClicked"></Button>
+                    <StackLayout>
+                        <Label Text="Starts date" VerticalTextAlignment="Center"></Label>
+                        <DatePicker Date="{Binding StartDate}"></DatePicker>
+                        <TimePicker Time="{Binding StartTime}"></TimePicker>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label Text="Ends date" VerticalTextAlignment="Center"></Label>
+                        <DatePicker Date="{Binding EndDate}"></DatePicker>
+                        <TimePicker Time="{Binding EndTime}"></TimePicker>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Padding="0, 10">
+                    <Label Text="Alert"></Label>
+                    <Button Text="{Binding AlertButtonText}" Clicked="OnAlertButtonClicked"></Button>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
 </ContentPage>

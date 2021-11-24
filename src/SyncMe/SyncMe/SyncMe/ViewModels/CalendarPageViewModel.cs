@@ -10,20 +10,20 @@ internal class CalendarPageViewModel : INotifyPropertyChanged
 
     EventCollection events = new EventCollection()
     {
-        [DateTime.Now] = new List<EventModel>
+        [DateTime.Now] = new List<SyncEventViewModel>
         {
-            new EventModel { Description = "Happy day", Name = "Birthday"},
-            new EventModel { Description = "Very happy day", Name = "New year"}
+            new SyncEventViewModel { Description = "Happy day", Name = "Birthday"},
+            new SyncEventViewModel { Description = "Very happy day", Name = "New year"}
         },
-        [DateTime.Now.AddDays(5)] = new List<EventModel>
+        [DateTime.Now.AddDays(5)] = new List<SyncEventViewModel>
         {
-            new EventModel { Name = "Win", Description = "Our win day" },
-            new EventModel { Name = "Winter", Description = "Very cold time day" }
+            new SyncEventViewModel { Name = "Win", Description = "Our win day" },
+            new SyncEventViewModel { Name = "Winter", Description = "Very cold time day" }
         },
         // 3 days ago
-        [DateTime.Now.AddDays(-4)] = new List<EventModel>
+        [DateTime.Now.AddDays(-4)] = new List<SyncEventViewModel>
         {
-            new EventModel { Name = "Key", Description = "Very amazing key day" }
+            new SyncEventViewModel { Name = "Key", Description = "Very amazing key day" }
         },
     };
 

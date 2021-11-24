@@ -2,7 +2,6 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using dotMorten.Xamarin.Forms;
-using SyncMe.Elements;
 using SyncMe.Models;
 using SyncMe.Repos;
 
@@ -10,39 +9,31 @@ namespace SyncMe.Views;
 
 public sealed partial class CreateEventPage : ContentPage, IDisposable
 {
-    private static readonly DateTime _minimumDate = new(2000, 1, 1);
-    private static readonly DateTime _maximumDate = new(2100, 12, 31);
     private readonly ISyncNamespaceRepository _namespaceRepository;
     private readonly ISyncEventsRepository _eventsRepository;
     private readonly Dictionary<string, IReadOnlyCollection<Namespace>> _namespaces;
     private readonly IDisposable _addEventConnection;
     private readonly IDisposable _addEventSubscription;
+    private readonly SyncEventViewModel _eventModel;
 
-    public AutoSuggestBox Namespace { get; init; }
-    public Entry EventTitle { get; init; }
-    public Switch IsAllDay { get; init; }
-    public DatePicker StartsDate { get; init; }
-    public TimePicker StartsTime { get; init; }
-    public DatePicker EndsDate { get; init; }
-    public TimePicker EndsTime { get; init; }
-    public ButtonWithValue<SyncRepeat> ConfigureSchedule { get; init; }
-    public ButtonWithValue<SyncReminder> ConfigureAlert { get; init; }
     public ToolbarItem AddEvent { get; init; }
     public IObservable<Guid> ScheduledEvents { get; }
 
     public CreateEventPage(ISyncEventsRepository eventsRepository, ISyncNamespaceRepository namespaceRepository)
     {
+        _eventModel = new SyncEventViewModel();
         InitializeComponent();
         _namespaceRepository = namespaceRepository;
         _eventsRepository = eventsRepository;
         _namespaces = _namespaceRepository.GetAllSyncNamespaces();
+        BindingContext = _eventModel;
 
         AddEvent = new ToolbarItem { Text = "Add event", };
 
         var scheduledEvents = Observable
             .FromEventPattern(AddEvent, nameof(Button.Clicked))
             .Select(x => AddNewSyncEvent())
-            .Do(x => _namespaceRepository.AddSyncNamespace(Namespace.Text))
+            .Do(x => _namespaceRepository.AddSyncNamespace(_eventModel.Namespace))
             .Publish();
 
         _addEventConnection = scheduledEvents.Connect();
@@ -51,34 +42,6 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         _addEventSubscription = ScheduledEvents
             .SelectMany(x => NavigateToCalendar())
             .Subscribe(x => CleanUpElements());
-
-        Namespace = new AutoSuggestBox { PlaceholderText = "Namespace" };
-        Namespace.PropertyChanged += ValidateButtonState;
-        Namespace.TextChanged += OnTextChanged;
-        Namespace.SuggestionChosen += OnSuggestionChosen;
-        Namespace.QuerySubmitted += OnQuerySubmitted;
-        EventTitle = new Entry { Placeholder = "Title" };
-        EventTitle.PropertyChanged += ValidateButtonState;
-
-        IsAllDay = new Switch { IsToggled = false, OnColor = Color.FromRgb(74, 215, 100), ThumbColor = Color.White };
-        IsAllDay.Toggled += OnSwitchToggled;
-        StartsDate = new DatePicker { MinimumDate = _minimumDate, MaximumDate = _maximumDate };
-        StartsTime = new TimePicker { Time = DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(1)) };
-        EndsDate = new DatePicker { MinimumDate = _minimumDate, MaximumDate = _maximumDate };
-        EndsTime = new TimePicker {  Time = DateTime.Now.TimeOfDay.Add(TimeSpan.FromHours(2)) };
-        ConfigureSchedule = new ButtonWithValue<SyncRepeat> { Text = "Does not repeat", };
-        ConfigureSchedule.Clicked += ConfigureSchedule_Clicked;
-
-        ConfigureAlert = new ButtonWithValue<SyncReminder> { Text = "Alert" };
-        ConfigureAlert.Clicked += AlertButton_Clicked;
-
-        var stack = CreatePageLayout();
-        Content = new ScrollView { Content = stack };
-        var cancelEventCreation = new ToolbarItem { Text = "Cancel" };
-        cancelEventCreation.Clicked += OnCancelEventCreationClicked;
-
-        ToolbarItems.Add(AddEvent);
-        ToolbarItems.Add(cancelEventCreation);
     }
 
     private void OnQuerySubmitted(object sender, AutoSuggestBoxQuerySubmittedEventArgs e)
@@ -100,7 +63,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
             var particles = autoSuggest.Text.Split('.');
             //if (particles.Length > 1)
 
-                autoSuggest.Text = $"{e.SelectedItem}.";
+            autoSuggest.Text = $"{e.SelectedItem}.";
         }
     }
 
@@ -116,11 +79,17 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         }
     }
 
-    private async void ConfigureSchedule_Clicked(object sender, EventArgs e) => await Navigation.PushAsync(new EventSchedule(this));
+    private async void OnConfigureScheduleClicked(object sender, EventArgs e) => await Navigation.PushAsync(new EventSchedulePage(_eventModel));
 
-    private async void OnCancelEventCreationClicked(object sender, EventArgs e)
+    private async void OnAlertButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new EventAlertPage(_eventModel));
+
+    public Guid AddNewSyncEvent() => _eventsRepository.AddSyncEvent(_eventModel.SyncEvent);
+
+    private void AddNewSyncEvent(object sender, EventArgs e) => AddNewSyncEvent();
+
+    private async void CancelEvent(object sender, EventArgs e)
     {
-        if (!string.IsNullOrEmpty(Namespace.Text))
+        if (!string.IsNullOrEmpty(_eventModel.Namespace))
         {
             if (!await DisplayAlert(null, "Discard this event?", "Keep editing", "Discard"))
             {
@@ -136,79 +105,31 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         return Unit.Default;
     }
 
-    private void CleanUpElements()
-    {
-        Namespace.Text = string.Empty;
-        EventTitle.Text = string.Empty;
-    }
-
     private void ValidateButtonState(object sender, PropertyChangedEventArgs e)
     {
-        if (!string.IsNullOrEmpty(Namespace.Text))
+        if (!string.IsNullOrEmpty(_eventModel.Namespace) && !string.IsNullOrEmpty(_eventModel.Title))
         {
-            AddEvent.IsEnabled = true;
+            _eventModel.IsAddEvenEnabled = true;
         }
         else
         {
-            AddEvent.IsEnabled = false;
+            _eventModel.IsAddEvenEnabled = false;
         }
-    }
-
-    private StackLayout CreatePageLayout() => new() { Spacing = 20, Children = { CreateHeader(), CreateSchedule(), CreateAlert() } };
-
-    private StackLayout CreateHeader() => new() { Children = { Namespace, EventTitle } };
-
-    private StackLayout CreateSchedule()
-    {
-        var grid = new Grid { Children = { new Label { Text = "All-Day" }, IsAllDay } };
-
-        return new StackLayout()
-        {
-            Children =
-            {
-                grid, ConfigureSchedule,
-                BuildDateLayout("Start date", StartsDate,StartsTime),
-                BuildDateLayout("End date", EndsDate, EndsTime),
-            },
-            Padding = new Thickness(0, 10)
-        };
-    }
-
-    private StackLayout BuildDateLayout(string labelText, DatePicker datepicker, TimePicker timepicker)
-    {
-        return new StackLayout
-        {
-            Children = { new Label { Text = labelText, VerticalTextAlignment = TextAlignment.Center }, datepicker, timepicker },
-            Orientation = StackOrientation.Horizontal
-        };
     }
 
     private void OnSwitchToggled(object sender, ToggledEventArgs e)
     {
         if (e.Value)
         {
-            StartsDate.Date = DateTime.Today.Date;
-            EndsDate.Date = DateTime.Today.Date.AddDays(1).AddTicks(-1);
+            _eventModel.StartDate = DateTime.Today.Date;
+            _eventModel.EndDate = DateTime.Today.Date.AddDays(1).AddTicks(-1);
         }
     }
 
-    private StackLayout CreateAlert() => new() { Children = { new Label { Text = "Alert" }, ConfigureAlert }, Padding = new Thickness(0, 10) };
-
-    private async void AlertButton_Clicked(object sender, EventArgs e) => await Navigation.PushAsync(new EventAlert(this));
-
-    private Guid AddNewSyncEvent()
+    private void CleanUpElements()
     {
-        var newEvent = new SyncEvent(
-            ExternalId: "",
-            Title: EventTitle.Text,
-            Description: "",
-            Namespace: new Namespace(1, Namespace.Text),
-            Schedule: new SyncSchedule(ConfigureSchedule.Value),
-            Alert: new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }),
-            Status: SyncStatus.Active,
-            Start: StartsDate.Date.Add(StartsTime.Time),
-            End: EndsDate.Date.Add(EndsTime.Time));
-        return _eventsRepository.AddSyncEvent(newEvent);
+        _eventModel.Namespace = string.Empty;
+        _eventModel.Title = string.Empty;
     }
 
     public void Dispose()
