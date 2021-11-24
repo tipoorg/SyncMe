@@ -13,6 +13,7 @@ namespace SyncMe.Droid;
 public class MainActivity : FormsAppCompatActivity
 {
     private IDisposable _setAlarmSubscription;
+    private IAndroidAlarmService _androidAlarmService;
 
     protected override void OnCreate(Bundle savedInstanceState)
     {
@@ -24,8 +25,10 @@ public class MainActivity : FormsAppCompatActivity
         var app = Bootstrapper.CreateApp();
         LoadApplication(app);
 
+        _androidAlarmService = Bootstrapper.GetService<IAndroidAlarmService>();
+
         _setAlarmSubscription = Bootstrapper.GetService<CreateEventPage>().ScheduledEvents
-            .Subscribe(x => new AndroidAlarmIntent().SetAlarm(x, this));
+            .Subscribe(x => _androidAlarmService.SetAlarm(x, this));
         App.AuthUIParent = this;
     }
 

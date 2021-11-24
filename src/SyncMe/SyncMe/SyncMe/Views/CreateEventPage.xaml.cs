@@ -28,7 +28,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     public ButtonWithValue<SyncRepeat> ConfigureSchedule { get; init; }
     public ButtonWithValue<SyncReminder> ConfigureAlert { get; init; }
     public ToolbarItem AddEvent { get; init; }
-    public IObservable<SyncEvent> ScheduledEvents { get; }
+    public IObservable<Guid> ScheduledEvents { get; }
 
     public CreateEventPage(ISyncEventsRepository eventsRepository, ISyncNamespaceRepository namespaceRepository)
     {
@@ -63,9 +63,9 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         IsAllDay = new Switch { IsToggled = false, OnColor = Color.FromRgb(74, 215, 100), ThumbColor = Color.White };
         IsAllDay.Toggled += OnSwitchToggled;
         StartsDate = new DatePicker { MinimumDate = _minimumDate, MaximumDate = _maximumDate };
-        StartsTime = new TimePicker();
+        StartsTime = new TimePicker { Time = DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(1)) };
         EndsDate = new DatePicker { MinimumDate = _minimumDate, MaximumDate = _maximumDate };
-        EndsTime = new TimePicker();
+        EndsTime = new TimePicker {  Time = DateTime.Now.TimeOfDay.Add(TimeSpan.FromHours(2)) };
         ConfigureSchedule = new ButtonWithValue<SyncRepeat> { Text = "Does not repeat", };
         ConfigureSchedule.Clicked += ConfigureSchedule_Clicked;
 
@@ -196,9 +196,18 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
 
     private async void AlertButton_Clicked(object sender, EventArgs e) => await Navigation.PushAsync(new EventAlert(this));
 
-    private SyncEvent AddNewSyncEvent()
+    private Guid AddNewSyncEvent()
     {
-        var newEvent = new SyncEvent(Guid.Empty, "", EventTitle.Text, "", new Namespace(1, Namespace.Text), new SyncSchedule(ConfigureSchedule.Value, null), new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }), SyncStatus.Active, StartsDate.Date, EndsDate.Date);
+        var newEvent = new SyncEvent(
+            ExternalId: "",
+            Title: EventTitle.Text,
+            Description: "",
+            Namespace: new Namespace(1, Namespace.Text),
+            Schedule: new SyncSchedule(ConfigureSchedule.Value),
+            Alert: new SyncAlert(new SyncReminder[] { ConfigureAlert.Value }),
+            Status: SyncStatus.Active,
+            Start: StartsDate.Date.Add(StartsTime.Time),
+            End: EndsDate.Date.Add(EndsTime.Time));
         return _eventsRepository.AddSyncEvent(newEvent);
     }
 

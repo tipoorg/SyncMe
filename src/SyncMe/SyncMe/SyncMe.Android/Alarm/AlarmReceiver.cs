@@ -1,15 +1,13 @@
 ﻿using Android.Content;
 using SyncMe.Droid.Extensions;
-using SyncMe.Extensions;
 using SyncMe.Models;
-using SyncMe.Repos;
 
 namespace SyncMe.Droid.Alarm;
 
 [BroadcastReceiver]
 internal class AlarmReceiver : BroadcastReceiver
 {
-    private ISyncEventsRepository _syncEventsRepository = Bootstrapper.GetService<ISyncEventsRepository>();
+    private readonly IAndroidAlarmService _androidAlarmService = Bootstrapper.GetService<IAndroidAlarmService>();
 
     public override void OnReceive(Context context, Intent intent)
     {
@@ -23,8 +21,8 @@ internal class AlarmReceiver : BroadcastReceiver
 
             case AlarmMessage.StopAlarmAction:
                 StopAlarm(intent);
-
                 return;
+
             default:
                 return;
         }
@@ -32,16 +30,10 @@ internal class AlarmReceiver : BroadcastReceiver
 
     private void SetAlarm(Context context, Intent intent)
     {
-        var syncEvent = intent.GetExtra<SyncEvent>();
-        if (_syncEventsRepository.TryGetSyncEvent(syncEvent.Id, out var storedEvent) 
-            && storedEvent.Status == SyncStatus.Active)
-        {
-            return;
-        }
-
+        var pendingAlarm = intent.GetExtra<SyncAlarm>();
         AndroidAlarmPlayer.Instance.PlayAlarm(context);
-        AndroidNotificationManager.Instance.Show(syncEvent, context);
-        new AndroidAlarmIntent().SetAlarm(syncEvent.DecrementRemainingTimes(), context);
+        AndroidNotificationManager.Instance.Show(pendingAlarm, context);
+        _androidAlarmService.SetAlarm(pendingAlarm.EventId, context);
     }
 
     private void StopAlarm(Intent intent)

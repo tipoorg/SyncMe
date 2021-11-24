@@ -14,10 +14,10 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
         return res;
     }
 
-    public SyncEvent AddSyncEvent(SyncEvent syncEvent)
+    public Guid AddSyncEvent(SyncEvent syncEvent)
     {
-        var withId = syncEvent with { Id = Guid.NewGuid() };
-        _events.Add(syncEvent.Id, withId);
-        return withId;
+        var newId = Guid.NewGuid();
+        _events.Add(newId, syncEvent);
+        return newId;
     }
 }

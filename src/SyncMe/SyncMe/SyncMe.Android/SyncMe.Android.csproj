@@ -73,8 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Alarm\AlarmMessage.cs" />
-    <Compile Include="Alarm\AndroidAlarmIntent.cs" />
+    <Compile Include="Alarm\AndroidAlarmService.cs" />
     <Compile Include="Alarm\AndroidAlarmPlayer.cs" />
+    <Compile Include="Alarm\IAndroidAlarmService.cs" />
     <Compile Include="Extensions\IntentExtensions.cs" />
     <Compile Include="IsExternalInit.cs" />
     <Compile Include="Alarm\AndroidNotificationManager.cs" />
@@ -133,7 +134,7 @@
     <AndroidResource Include="Resources\drawable\icon_plus.xml" />
   </ItemGroup>
   <ItemGroup>
-	<AndroidResource Include="Resources\drawable\icon_plus_minor.xml" />
+    <AndroidResource Include="Resources\drawable\icon_plus_minor.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

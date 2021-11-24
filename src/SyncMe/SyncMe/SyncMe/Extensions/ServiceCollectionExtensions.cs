@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SyncMe.Repos;
+using SyncMe.Services;
 using SyncMe.Views;
 
 namespace SyncMe.Extensions;
@@ -30,6 +31,7 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services
+            .AddSingleton<ISyncAlarmService, SyncAlarmService>()
             .AddSingleton<ISyncEventsRepository, SyncEventsRepository>()
             .AddSingleton<ISyncNamespaceRepository, SyncNamespaceRepository>();
 
