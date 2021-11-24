@@ -17,14 +17,22 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
     {
         _existingNamespaces.Add("Test", CreateNamespace("Test"));
         _existingNamespaces.Add("Another.Test", CreateNamespace("Another"));
+        _existingNamespaces.Add("Work1", CreateNamespace("Work1"));
+        _existingNamespaces.Add("Work1.Team1", CreateNamespace("Another"));
+        _existingNamespaces.Add("Work1.Team1.Project1", CreateNamespace("Another"));
+        _existingNamespaces.Add("Work1.Team1.Project2", CreateNamespace("Another"));
+        _existingNamespaces.Add("Work1.Team2", CreateNamespace("Another"));
+        _existingNamespaces.Add("Work2", CreateNamespace("Another", false, DateTime.Now.AddDays(1)));
+        _existingNamespaces.Add("Work2.Team1", CreateNamespace("Another", false, DateTime.Now.AddDays(1)));
+        _existingNamespaces.Add("Work2.Team2", CreateNamespace("Another", false, DateTime.Now.AddDays(1)));
     }
 
     private void Increment(ref int counter) => Interlocked.Increment(ref counter);
 
-    private Namespace CreateNamespace(string title)
+    private Namespace CreateNamespace(string title, bool isActive = true, DateTime turnOnDate = new())
     {
         Increment(ref _idCounter);
-        return new Namespace() { Title = title };
+        return new Namespace() { Title = title, IsActive = isActive, TurnOnDate = turnOnDate};
     }
 
     public Dictionary<string, Namespace> GetAllSyncNamespaces() => 
@@ -32,7 +40,7 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
 
     public void AddSyncNamespace(string name)
     {
-        _existingNamespaces.Add(name, new Namespace { Title = name });
+        _existingNamespaces.Add(name, new Namespace { Title = name, IsActive = true });
     }
 
     public bool TryGetSyncNamespace(string name, out Namespace existingNamespace) =>

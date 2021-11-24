@@ -10,6 +10,7 @@ public enum SyncStatus
 public class SyncEvent
 {
     public string ExternalId { get; set; }
+    public string? ExternalEmail { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public Namespace Namespace { get; set; }
@@ -26,6 +27,8 @@ public class Namespace
 {
     public string Title { get; set; }
     public Guid Id { get; init; }
+    public bool IsActive { get; set; }
+    public DateTime TurnOnDate { get; set; }
 }
 
 public enum SyncRepeat
@@ -34,14 +37,14 @@ public enum SyncRepeat
     None,
     [Description("Daily")]
     Dayly,
-    [Description("Week Days")]
-    WeekDays,
-    [Description("Eveery Month")]
+    [Description("Work Days")]
+    WorkDays,
+    [Description("Every Month")]
     EveryMonth, 
     [Description("Every Year")]
     EveryYear,
-    [Description("Every 10 seconds")]
-    Every10Seconds
+    [Description("Every Minute")]
+    EveryMinute
 }
 
 public class SyncSchedule
@@ -51,7 +54,7 @@ public class SyncSchedule
 
 public class SyncAlert
 {
-    public SyncReminder[] Reminders { get; set; } = new SyncReminder[1];
+    public SyncReminder Reminder { get; set; }
 }
 
 public record SyncAlarm(string Title, Guid EventId, int DelaySeconds);
