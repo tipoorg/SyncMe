@@ -10,11 +10,29 @@ namespace SyncMe.Models
 
         public string FullName { get; private set; }
 
-        private bool _isButtonsVisible;
-        public bool IsButtonsVisible
+
+        private bool _isSuspendButtonsVisible;
+        public bool IsSuspendButtonsVisible
         {
-            get { return _isButtonsVisible; }
-            set { _isButtonsVisible = value; OnPropertyChanged(nameof(IsButtonsVisible)); }
+            get { return _isSuspendButtonsVisible; }
+            set 
+            {
+                if (value == _isSuspendButtonsVisible) return;
+                _isSuspendButtonsVisible = value; 
+                OnPropertyChanged(nameof(IsSuspendButtonsVisible)); 
+            }
+        }
+
+        private bool _isRestoreButtonsVisible;
+        public bool IsRestoreButtonsVisible
+        {
+            get { return _isRestoreButtonsVisible; }
+            set 
+            {
+                if (value == _isRestoreButtonsVisible) return;
+                _isRestoreButtonsVisible = value; 
+                OnPropertyChanged(nameof(IsRestoreButtonsVisible)); 
+            }
         }
 
         private bool _isExpanded;
@@ -26,6 +44,18 @@ namespace SyncMe.Models
                 _isExpanded = value; 
                 OnPropertyChanged(nameof(IsExpanded));
                 OnPropertyChanged(nameof(ArrowRotation));
+            }
+        }
+
+        private bool _hasChildren;
+        public bool HasChildren
+        {
+            get { return _hasChildren; }
+            set
+            {
+                if(value == _hasChildren) return;
+                _hasChildren = value;
+                OnPropertyChanged(nameof(HasChildren));
             }
         }
 
@@ -43,9 +73,22 @@ namespace SyncMe.Models
             get { return IsExpanded ? "180"  : "0"; }
         }
 
+        public string BorderColor { get => IsActive ? "#39c2d7" : "#8e244d"; }
+
         public bool IsVisible { get; set; }
 
-        public bool IsActive { get; set; }
+        private bool _isActive;
+        public bool IsActive
+        {
+            get { return _isActive; }
+            set 
+            {
+                if (_isActive == value) return;
+                _isActive = value;
+                OnPropertyChanged(nameof(IsActive));
+                OnPropertyChanged(nameof(BorderColor)); 
+            }
+        }
 
         public ICommand TomorrowClick { private set; get; }
         public static Subject<NamespaceModel> TomorrowClicked { private set; get; } = new Subject<NamespaceModel>();
@@ -56,11 +99,12 @@ namespace SyncMe.Models
         public ICommand ExpandClick { private set; get; }
         public static Subject<NamespaceModel> ExpandClicked { private set; get; } = new Subject<NamespaceModel>();
 
-        public NamespaceModel(string fullName)
+        public NamespaceModel(string fullName, bool isActive, bool hasChildren)
         {
             FullName = fullName;
-            Name = FullName;
-            IsVisible = !fullName.Contains(".");
+            Name = FullName.Split('.').Last();
+            _isActive = isActive;
+            _hasChildren = hasChildren;
 
             TomorrowClick = new Command(() => TomorrowClicked.OnNext(this));
             RestoreClick = new Command(() => RestoreClicked.OnNext(this));
