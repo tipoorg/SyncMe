@@ -26,6 +26,8 @@ public class Namespace
 {
     public string Title { get; set; }
     public Guid Id { get; init; }
+    public bool IsActive { get; set; }
+    public DateTime TurnOnDate { get; set; }
 }
 
 public enum SyncRepeat
