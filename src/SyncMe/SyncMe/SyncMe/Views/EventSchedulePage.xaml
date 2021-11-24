@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:local="clr-namespace:SyncMe.Controls"
+             x:Class="SyncMe.Views.EventSchedulePage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="StackLayoutStyle" TargetType="StackLayout">
+                <Setter Property="Orientation" Value="Horizontal"></Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout Style="{StaticResource StackLayoutStyle}">
+                <Label Text="Does not repeat"></Label>
+                <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="None"/>
+            </StackLayout>
+            <StackLayout Style="{StaticResource StackLayoutStyle}">
+                <Label Text="Every day"></Label>
+                <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="Dayly"/>
+            </StackLayout>
+            <StackLayout Style="{StaticResource StackLayoutStyle}">
+                <Label Text="Every week"></Label>
+                <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="WeekDays"/>
+            </StackLayout>
+            <StackLayout Style="{StaticResource StackLayoutStyle}">
+                <Label Text="Every month"></Label>
+                <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="EveryMonth"/>
+            </StackLayout>
+            <StackLayout Style="{StaticResource StackLayoutStyle}">
+                <Label Text="Every year"></Label>
+                <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="EveryYear"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

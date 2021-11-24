@@ -18,11 +18,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Views\EventAlert.xaml.cs">
-        <DependentUpon>EventAlert.xaml</DependentUpon>
+      <Compile Update="Views\EventAlertPage.xaml.cs">
+        <DependentUpon>EventAlertPage.xaml</DependentUpon>
       </Compile>
       <Compile Update="Views\CreateEventPage.xaml.cs">
         <DependentUpon>CreateEventPage.xaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\EventSchedulePage.xaml.cs">
+        <DependentUpon>EventSchedulePage.xaml</DependentUpon>
       </Compile>
       <Compile Update="Views\IdentityProvidersPage.xaml.cs">
         <DependentUpon>IdentityProvidersPage.xaml</DependentUpon>
@@ -36,7 +39,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Views\EventSchedule.xaml">
+      <EmbeddedResource Update="Views\EventSchedulePage.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
     </ItemGroup>

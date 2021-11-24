@@ -3,17 +3,14 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:SyncMe"
        xmlns:views="clr-namespace:SyncMe.Views"
-       x:Class="SyncMe.AppShell">
+       x:Class="SyncMe.AppShell"
+       BackgroundColor="#39c2d7">
     <!-- Display a bottom tab bar containing two tabs -->
     <TabBar>
         <ShellContent Title="Calendar"
                       Icon="icon_open_calendar.png"
                       ContentTemplate="{local:DIDataTemplate Type={x:Type views:CalendarPage}}"
                       Route="calendar"/>
-        <ShellContent Title="New Event"
-                      Icon="icon_create_event.png"
-                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:CreateEventPage}}"
-                      Route="newEvent"/>
         <ShellContent Title="Namespaces"
                       Icon="icon_feed.png"
                       ContentTemplate="{local:DIDataTemplate Type={x:Type views:NamespaceManagmentPage}}"/>
