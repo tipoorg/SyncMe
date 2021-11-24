@@ -1,18 +1,15 @@
-﻿using System.Text;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Content.PM;
-using Android.Icu.Text;
-using Android.Icu.Util;
 using Android.OS;
 using Android.Runtime;
-using Android.Widget;
+using Microsoft.Identity.Client;
 using SyncMe.Droid.Alarm;
 using SyncMe.Views;
 using Xamarin.Forms.Platform.Android;
 
 namespace SyncMe.Droid;
-[Activity(Label = "SyncMe", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
+[Activity(Label = "SyncMe", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
 public class MainActivity : FormsAppCompatActivity
 {
     private IDisposable _setAlarmSubscription;
@@ -27,8 +24,9 @@ public class MainActivity : FormsAppCompatActivity
         var app = Bootstrapper.CreateApp();
         LoadApplication(app);
 
-        _setAlarmSubscription = App.GetRequiredService<NotesPage>().SetAlarmClicks
+        _setAlarmSubscription = Bootstrapper.GetService<CreateEventPage>().ScheduledEvents
             .Subscribe(x => new AndroidAlarmIntent().SetAlarm(x, this));
+        App.AuthUIParent = this;
     }
 
     public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
@@ -44,5 +42,12 @@ public class MainActivity : FormsAppCompatActivity
             _setAlarmSubscription.Dispose();
 
         base.Dispose(disposing);
+    }
+
+    protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+    {
+        base.OnActivityResult(requestCode, resultCode, data);
+        AuthenticationContinuationHelper
+            .SetAuthenticationContinuationEventArgs(requestCode, resultCode, data);
     }
 }

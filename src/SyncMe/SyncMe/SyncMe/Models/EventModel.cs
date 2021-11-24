@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace SyncMe.Models;
 
-namespace SyncMe.Models
+internal class EventModel
 {
-    internal class EventModel
-    {
-        public Guid Id { get; set; }    
-        public string Name { get; set; }    
-        public string Description { get; set; }
-
-    }
+    public Guid Id { get; init; }
+    public string Name { get; init; }
+    public string Description { get; init; }
+    public DateTime Start { get; init; }
+    public DateTime End { get; init; }
 }

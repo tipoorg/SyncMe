@@ -5,15 +5,22 @@ namespace SyncMe.Droid;
 
 public static class Bootstrapper
 {
-    public static App CreateApp()
+    private static IServiceProvider _instance;
+    public static IServiceProvider Instance => _instance ??= CreateServiceProvider();
+    public static T GetService<T>() => Instance.GetRequiredService<T>();
+
+    private static IServiceProvider CreateServiceProvider()
     {
         var services = new ServiceCollection()
-            .AddSyncMeLib()
-            .AddSyncMeAndroid();
+          .AddSyncMeLib()
+          .AddSyncMeAndroid();
 
-        var serviceProvider = DIDataTemplate.AppServiceProvider = services.BuildServiceProvider();
+        return DIDataTemplate.AppServiceProvider = services.BuildServiceProvider();
+    }
 
-        var app = new App(serviceProvider);
+    public static App CreateApp()
+    {
+        var app = new App(Instance);
 
         return app;
     }

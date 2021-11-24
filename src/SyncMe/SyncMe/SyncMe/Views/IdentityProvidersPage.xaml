@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SyncMe.Views.IdentityProvidersPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="HorizontalTextAlignment" Value="Start"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="Margin" Value="20,5,0,0"/>
+            </Style>
+            <Style x:Key="IdentityStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="Margin" Value="20,0,0,0" />
+                <Setter Property="Padding" Value="5"/>
+            </Style>
+            <Style x:Key="FloadButtonStyle" TargetType="Button">
+                <Setter Property="CornerRadius" Value="100"/>
+                <Setter Property="HeightRequest" Value="55"/>
+                <Setter Property="WidthRequest" Value="55"/>
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+                <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+                <Setter Property="Padding" Value="15"/>
+                <Setter Property="Margin" Value="0,0,20,20"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <StackLayout>
+                <Label Text="Identities" Style="{StaticResource TitleStyle}" />
+                <ListView ItemsSource="{Binding Identities}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout>
+                                    <Label Text="{Binding Name}" Style="{StaticResource IdentityStyle}"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+                <Button x:Name="AddIdentity"
+                        ImageSource="icon_plus.xml"
+                        AbsoluteLayout.LayoutFlags="PositionProportional"
+                        AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
+                        Style="{StaticResource FloadButtonStyle}"/>
+                <Button x:Name="AddOutlook"
+                        ImageSource="icon_outlook.xml"
+                        IsVisible="False"
+                        AbsoluteLayout.LayoutFlags="PositionProportional"
+                        AbsoluteLayout.LayoutBounds="1, 0.85, AutoSize, AutoSize"
+                        Style="{StaticResource FloadButtonStyle}"/>
+                <Button x:Name="AddGoogle"
+                        ImageSource="icon_google.xml"
+                        IsVisible="False"
+                        IsEnabled="False"
+                        AbsoluteLayout.LayoutFlags="PositionProportional"
+                        AbsoluteLayout.LayoutBounds="1, 0.70, AutoSize, AutoSize"
+                        Style="{StaticResource FloadButtonStyle}"/>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>
