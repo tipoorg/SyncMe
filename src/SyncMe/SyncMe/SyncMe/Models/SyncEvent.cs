@@ -10,6 +10,7 @@ public enum SyncStatus
 public class SyncEvent
 {
     public string ExternalId { get; set; }
+    public string? ExternalEmail { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public Namespace Namespace { get; set; }
@@ -26,12 +27,8 @@ public class Namespace
 {
     public string Title { get; set; }
     public Guid Id { get; init; }
-
-    public Namespace()
-    {
-        Id = Guid.NewGuid();
-        Title = string.Empty;
-    }
+    public bool IsActive { get; set; }
+    public DateTime TurnOnDate { get; set; }
 }
 
 public enum SyncRepeat

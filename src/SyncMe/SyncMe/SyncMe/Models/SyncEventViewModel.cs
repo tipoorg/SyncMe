@@ -15,20 +15,24 @@ public class SyncEventViewModel : INotifyPropertyChanged
             Schedule = new SyncSchedule(),
             Alert = new SyncAlert {  Reminder = SyncReminder.AtEventTime }
         };
+
+        IsAddEventEnabled = false;
+        ScheduleButtonText = "Does Not Repeat";
+        AlertButtonText = "Alert";
     }
 
-    private bool _isAddEvenEnabled;
-    public bool IsAddEvenEnabled
+    private bool _isAddEventEnabled;
+    public bool IsAddEventEnabled
     {
-        get { return _isAddEvenEnabled; }
+        get { return _isAddEventEnabled; }
         set
         {
-            _isAddEvenEnabled = value;
-            OnPropertyChanged(nameof(IsAddEvenEnabled));
+            _isAddEventEnabled = value;
+            OnPropertyChanged(nameof(IsAddEventEnabled));
         }
     }
 
-    private string _scheduleButtonText = "Does Not Repeat";
+    private string _scheduleButtonText;
     public string ScheduleButtonText
     {
         get { return _scheduleButtonText; }
@@ -39,7 +43,7 @@ public class SyncEventViewModel : INotifyPropertyChanged
         }
     }
 
-    private string _alertButtonText = "At Event Time";
+    private string _alertButtonText;
     public string AlertButtonText
     {
         get { return _alertButtonText; }
@@ -50,7 +54,6 @@ public class SyncEventViewModel : INotifyPropertyChanged
         }
     }
 
-    public Guid Id { get; init; }
     public string Name { get; init; }
     public string Description { get; init; }
 
@@ -144,6 +147,7 @@ public class SyncEventViewModel : INotifyPropertyChanged
             }
         }
     }
+
     public string Namespace
     {
         get { return SyncEvent.Namespace.Title; }

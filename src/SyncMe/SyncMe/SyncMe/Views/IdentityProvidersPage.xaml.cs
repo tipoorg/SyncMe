@@ -6,6 +6,7 @@ using System.Threading;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using Xamarin.Forms.Xaml;
+using SyncMe.Extensions;
 
 namespace SyncMe.Views;
 public record Identity(string Name);
@@ -15,6 +16,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 {
     private readonly IDisposable _addIdentitySubsciption;
     private readonly IDisposable _addOutlookIdentity;
+    private readonly IDisposable _addGoogleIdentity;
     private readonly IDisposable _addEventConnection;
     private readonly ISyncEventsRepository _syncEventsRepository;
 
@@ -25,7 +27,14 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
     {
         InitializeComponent();
         BindingContext = this;
-        _syncEventsRepository=syncEventsRepository;
+        _syncEventsRepository = syncEventsRepository;
+
+        var manager = new MicrosoftAuthorizationManager();
+
+        foreach(var account in MicrosoftAuthorizationManager.CurrentAccounts)
+        {
+            Identities.Add(new Identity(account.Username));
+        }
 
         _addIdentitySubsciption = Observable
             .FromEventPattern(AddIdentity, nameof(Button.Clicked))
@@ -44,32 +53,78 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
         ScheduledEvents = scheduledEvents.SelectMany(x => x.newEvents);
         _addOutlookIdentity = scheduledEvents
             .ObserveOn(SynchronizationContext.Current)
-            .Subscribe(x => Identities.Add(new Identity(x.username)));
+            .Subscribe(x =>
+            {
+                Device.BeginInvokeOnMainThread(() => SwitchLayouts());
+
+                if(!Identities.Any(i => i.Name == x.username))
+                    Identities.Add(new Identity(x.username));
+            });
+
+        _addGoogleIdentity = Observable
+            .FromEventPattern(AddGoogle, nameof(Button.Clicked))
+            .SelectMany(async x =>
+            {
+                var manager = new MicrosoftAuthorizationManager();
+                var accountsToResync = MicrosoftAuthorizationManager.CurrentAccounts.Select(a => a.Username).ToList();
+                syncEventsRepository.RemoveEvents(e => accountsToResync.Contains(e.ExternalEmail));
+                foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
+                {
+                    var username = account.Username;
+                    var client = await manager.GetGraphClientAsync(account.Username);
+                    var events = await new OutlookProvider(client, username).GetEventsAsync();
+
+                    var syncEvents = events.Select(e => e.ToSyncEvent(username));
+
+                    foreach (var @event in syncEvents)
+                    {
+                        syncEventsRepository.AddSyncEvent(@event);
+                    }
+                }
+
+                return manager;
+            }) // open browser and await task
+            .Subscribe(x =>
+            {
+                Device.BeginInvokeOnMainThread(() => SwitchLayouts());
+            });
     }
 
-    private async Task<(string username, List<Guid> newEvents)> LoadEventsAsync()
+    private async Task<(string username, List<Guid> newEvents)> LoadEventsAsync(string username = null)
     {
-        var manager = new MicrosoftAuthorizationManager();
-        await manager.SignInAsync(App.AuthUIParent);
-        var client = await manager.GetGraphClientAsync();
-        string username = manager.CurrentAccounts.Last().Username;
-        var events = await new OutlookProvider(client, username).GetEventsAsync();
-        var syncEvents = events.Select(e => new SyncEvent
-        {
-            ExternalId = e.Id,
-            Title = e.Subject,
-            Description = e.Body.Content,
-            Namespace = new Namespace(),
-            Schedule = new SyncSchedule(),
-            Alert = new SyncAlert(),
-            Status = SyncStatus.Active,
-            Start = DateTime.Parse(e.Start.DateTime),
-            End = DateTime.Parse(e.End.DateTime)
-        });
+        var syncEvents = await FetchEventsAsync(username);
+
+        if (Identities.Any(i => i.Name == username))
+            _syncEventsRepository.RemoveEvents(e => username == e.ExternalEmail);
 
         var newEvents = syncEvents.Select(_syncEventsRepository.AddSyncEvent).ToList();
 
         return (username, newEvents);
+    }
+
+    private async Task LoadAllEventsAsync()
+    {
+        var manager = new MicrosoftAuthorizationManager();
+        var accountsToResync = MicrosoftAuthorizationManager.CurrentAccounts.Select(a => a.Username).ToList();
+        _syncEventsRepository.RemoveEvents(e => accountsToResync.Contains(e.ExternalEmail));
+        foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
+        {
+            var syncEvents = await FetchEventsAsync(account.Username);
+
+            foreach (var @event in syncEvents)
+            {
+                _syncEventsRepository.AddSyncEvent(@event);
+            }
+        }
+    }
+
+    private async Task<IEnumerable<SyncEvent>> FetchEventsAsync(string username)
+    {
+        var manager = new MicrosoftAuthorizationManager();
+        username ??= await manager.SignInAsync(App.AuthUIParent);
+        var client = await manager.GetGraphClientAsync(username);
+        var events = await new OutlookProvider(client, username).GetEventsAsync();
+        return events.Select(e => e.ToSyncEvent(username));
     }
 
     private void SwitchLayouts()
@@ -78,14 +133,16 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
         AddGoogle.IsVisible = !AddGoogle.IsVisible;
     }
 
-    private void OnSyncClicked(object sender, EventArgs e)
+    private async void OnSyncClicked(object sender, EventArgs e)
     {
         if (sender is Button { CommandParameter: Identity selectedItem })
         {
-            // sync identity
+            await LoadEventsAsync(selectedItem.Name);
         }
-
-        // sync all
+        else
+        {
+            await LoadAllEventsAsync();
+        }
     }
 
     public void Dispose()
