@@ -33,7 +33,8 @@ public static class ServiceCollectionExtensions
         services
             .AddSingleton<ISyncAlarmService, SyncAlarmService>()
             .AddSingleton<ISyncEventsRepository, SyncEventsRepository>()
-            .AddSingleton<ISyncNamespaceRepository, SyncNamespaceRepository>();
+            .AddSingleton<ISyncNamespaceRepository, SyncNamespaceRepository>()
+            .AddSingleton<ISyncNamespaceService, SyncNamespaceService>();
 
         return services;
     }
