@@ -4,14 +4,14 @@
              xmlns:forms="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
              x:Class="SyncMe.Views.CreateEventPage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add event" Clicked="AddNewSyncEvent" IsEnabled="{Binding IsAddEvenEnabled}"></ToolbarItem>
+        <ToolbarItem x:Name="AddEvent" Text="Add event" IsEnabled="{Binding IsAddEvenEnabled}"></ToolbarItem>
         <ToolbarItem Text="Cancel" Clicked="CancelEvent"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Spacing="20">
                 <StackLayout>
-                    <forms:AutoSuggestBox Text="{Binding Namespace}" PlaceholderText="Namespace" QuerySubmitted="OnQuerySubmitted" SuggestionChosen="OnSuggestionChosen"/>
+                    <forms:AutoSuggestBox PlaceholderText="Namespace" TextChanged="OnTextChanged" QuerySubmitted="OnQuerySubmitted" SuggestionChosen="OnSuggestionChosen"/>
                     <Entry Text="{Binding Title}" Placeholder="Title"></Entry>
                 </StackLayout>
                 <StackLayout Padding="0, 10">

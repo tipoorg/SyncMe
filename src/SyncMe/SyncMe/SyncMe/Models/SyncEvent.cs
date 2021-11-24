@@ -12,18 +12,12 @@ public class SyncEvent
     public string ExternalId { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
-    public Guid InternalId { get; init; }
     public Namespace Namespace { get; set; }
     public SyncSchedule Schedule { get; set; }
     public SyncAlert Alert { get; set; }
     public SyncStatus Status { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
-
-    public SyncEvent()
-    {
-        InternalId = Guid.NewGuid();
-    }
 }
 
 public record NamespaceTree(Dictionary<string, List<Namespace>> Tree);
@@ -70,8 +64,6 @@ public record SyncAlarm(string Title, Guid EventId, int DelaySeconds);
 
 public enum SyncReminder
 {
-    [Description("None")]
-    None = -1,
     [Description("At event time")]
     AtEventTime = 0,
     [Description("1 minutes before")]

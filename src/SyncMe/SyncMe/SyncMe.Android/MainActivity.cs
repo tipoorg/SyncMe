@@ -1,4 +1,6 @@
-﻿using Android.App;
+﻿using System.Reactive.Linq;
+using System.Threading;
+using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
@@ -28,6 +30,8 @@ public class MainActivity : FormsAppCompatActivity
         _androidAlarmService = Bootstrapper.GetService<IAndroidAlarmService>();
 
         _setAlarmSubscription = Bootstrapper.GetService<CreateEventPage>().ScheduledEvents
+            .Merge(Bootstrapper.GetService<IdentityProvidersPage>().ScheduledEvents)
+            .ObserveOn(SynchronizationContext.Current)
             .Subscribe(x => _androidAlarmService.SetAlarm(x, this));
         App.AuthUIParent = this;
     }

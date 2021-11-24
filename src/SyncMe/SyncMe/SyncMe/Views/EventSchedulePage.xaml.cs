@@ -23,7 +23,6 @@ public partial class EventSchedulePage : ContentPage
         {
             _eventModel.Schedule = radio.Tag;
             _eventModel.ScheduleButtonText = radio.Tag.GetDescription();
-            radio.IsChecked = false;
         }
         await Navigation.PopAsync();
     }
