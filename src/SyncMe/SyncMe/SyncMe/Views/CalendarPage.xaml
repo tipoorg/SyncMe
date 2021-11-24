@@ -5,6 +5,42 @@
              xmlns:controls="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar" 
              Title="Calendar"
              >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="NotificationStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="HorizontalTextAlignment" Value="Start"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="Margin" Value="20,5,0,0"/>
+            </Style>
+            <Style x:Key="ToggleButtonStyle" TargetType="Switch">
+                <Setter Property="OnColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="Margin" Value="20,0,15,11"/>
+                <Setter Property="IsToggled" Value="True"/>
+                <Setter Property="ThumbColor" Value="{StaticResource epamGrey}"/>
+            </Style>
+            <Style x:Key="FloadButtonStyle" TargetType="Button">
+                <Setter Property="CornerRadius" Value="100"/>
+                <Setter Property="HeightRequest" Value="55"/>
+                <Setter Property="WidthRequest" Value="55"/>
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+                <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+                <Setter Property="Padding" Value="15"/>
+                <Setter Property="Margin" Value="0,13,10,0"/>
+            </Style>
+            <Style x:Key="CalendarStyle" TargetType="controls:Calendar">
+                <Setter Property="SelectedDateColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="SelectedDayBackgroundColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="DaysTitleColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="EventIndicatorColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="EventIndicatorSelectedColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="YearLabelColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="MonthLabelColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="TodayOutlineColor" Value="{StaticResource epamBlue}"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*" />
@@ -12,11 +48,11 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="8*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="9*"/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" FontAttributes="Bold" Grid.Column="0" FontSize="20" Text="Notifications:" Margin="20"></Label>
-        <Switch Grid.Row="0" Grid.Column="1" IsToggled="True" Margin="20" x:Name="NotificationsSwitcher"></Switch>
+        <Label Grid.Row="0"  Grid.Column="0" Text="Notifications:"  Style="{StaticResource NotificationStyle}"></Label>
+        <Switch Grid.Row="0" Grid.Column="1" x:Name="NotificationsSwitcher" Style="{StaticResource ToggleButtonStyle}"></Switch>
         <controls:Calendar 
             x:Name="Calendar1"
             Grid.Row="1"  
@@ -24,18 +60,14 @@
             Grid.ColumnSpan="2"
             Events="{Binding Events}"
             DayTappedCommand="{Binding DayTappedCommand}"
+            Style="{StaticResource CalendarStyle}"
             >
         </controls:Calendar>
-
-
-        <Button 
-            x:Name="AddEvent"
+        <Button x:Name="AddEvent"
+            ImageSource="icon_plus.xml"
             Grid.Row="2"  
             Grid.Column="1" 
-            FontSize="35" 
-            Text="+" 
-            BackgroundColor="LightPink"
-            />
+            Style="{StaticResource FloadButtonStyle}"/>
     </Grid>
 </ContentPage>
     

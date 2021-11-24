@@ -16,8 +16,8 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
 
     public Guid AddSyncEvent(SyncEvent syncEvent)
     {
-        var guid = Guid.NewGuid();
-        _events.Add(guid, syncEvent);
-        return guid;
+        var newId = Guid.NewGuid();
+        _events.Add(newId, syncEvent);
+        return newId;
     }
 }

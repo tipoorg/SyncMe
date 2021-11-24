@@ -78,6 +78,16 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
         AddGoogle.IsVisible = !AddGoogle.IsVisible;
     }
 
+    private void OnSyncClicked(object sender, EventArgs e)
+    {
+        if (sender is Button { CommandParameter: Identity selectedItem })
+        {
+            // sync identity
+        }
+
+        // sync all
+    }
+
     public void Dispose()
     {
         _addIdentitySubsciption.Dispose();

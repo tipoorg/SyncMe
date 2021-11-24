@@ -58,8 +58,6 @@ public record SyncAlarm(string Title, Guid EventId, int DelaySeconds);
 
 public enum SyncReminder
 {
-    [Description("None")]
-    None = -1,
     [Description("At event time")]
     AtEventTime = 0,
     [Description("1 minutes before")]
