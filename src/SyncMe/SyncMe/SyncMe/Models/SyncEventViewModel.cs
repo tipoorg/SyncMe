@@ -143,16 +143,14 @@ public class SyncEventViewModel : INotifyPropertyChanged
             }
         }
     }
-
-    private string _namespace;
     public string Namespace
     {
-        get { return _namespace; }
+        get { return SyncEvent.Namespace.Title; }
         set
         {
-            if (_namespace != value)
+            if (SyncEvent.Namespace.Title != value)
             {
-                _namespace = SyncEvent.Namespace.Title = value;
+                SyncEvent.Namespace.Title = value;
                 OnPropertyChanged(nameof(Namespace));
             }
         }

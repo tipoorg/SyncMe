@@ -11,7 +11,7 @@
         <ScrollView>
             <StackLayout Spacing="20">
                 <StackLayout>
-                    <forms:AutoSuggestBox Text="{Binding Namespace}" PlaceholderText="Namespace" QuerySubmitted="OnQuerySubmitted" SuggestionChosen="OnSuggestionChosen"/>
+                    <forms:AutoSuggestBox PlaceholderText="Namespace" TextChanged="OnTextChanged" QuerySubmitted="OnQuerySubmitted" SuggestionChosen="OnSuggestionChosen"/>
                     <Entry Text="{Binding Title}" Placeholder="Title"></Entry>
                 </StackLayout>
                 <StackLayout Padding="0, 10">

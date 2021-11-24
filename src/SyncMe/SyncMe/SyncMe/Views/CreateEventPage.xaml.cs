@@ -14,7 +14,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     private readonly Dictionary<string, IReadOnlyCollection<Namespace>> _namespaces;
     private readonly IDisposable _addEventConnection;
     private readonly IDisposable _addEventSubscription;
-    private readonly SyncEventViewModel _eventModel;
+    private SyncEventViewModel _eventModel;
 
     public IObservable<Guid> ScheduledEvents { get; }
 
@@ -29,7 +29,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
 
         var scheduledEvents = Observable
             .FromEventPattern(AddEvent, nameof(Button.Clicked))
-            .Select(x => AddNewSyncEvent())
+            .SelectMany(x => AddNewSyncEvent())
             .Do(x => _namespaceRepository.AddSyncNamespace(_eventModel.Namespace))
             .Publish();
 
@@ -68,6 +68,8 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     {
         if (e.Reason == AutoSuggestionBoxTextChangeReason.UserInput && sender is AutoSuggestBox autoSuggest)
         {
+            _eventModel.Namespace = autoSuggest.Text;
+
             autoSuggest.ItemsSource = _namespaces
                 .Select(x => x.Key)
                 .Where(x => x.StartsWith(autoSuggest.Text, StringComparison.OrdinalIgnoreCase))
@@ -80,7 +82,12 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
 
     private async void OnAlertButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new EventAlertPage(_eventModel));
 
-    private Guid AddNewSyncEvent() => _eventsRepository.AddSyncEvent(_eventModel.SyncEvent);
+    private async Task<Guid> AddNewSyncEvent()
+    {
+        var guid = _eventsRepository.AddSyncEvent(_eventModel.SyncEvent);
+        await NavigateToCalendar();
+        return guid;
+    }
 
     private async void CancelEvent(object sender, EventArgs e)
     {
