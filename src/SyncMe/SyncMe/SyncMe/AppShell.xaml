@@ -3,7 +3,8 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:SyncMe"
        xmlns:views="clr-namespace:SyncMe.Views"
-       x:Class="SyncMe.AppShell">
+       x:Class="SyncMe.AppShell"
+       BackgroundColor="#39c2d7">
     <!-- Display a bottom tab bar containing two tabs -->
     <TabBar>
         <ShellContent Title="Calendar"
