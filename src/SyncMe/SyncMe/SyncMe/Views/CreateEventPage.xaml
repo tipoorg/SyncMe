@@ -4,36 +4,36 @@
              xmlns:forms="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
              x:Class="SyncMe.Views.CreateEventPage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="AddEvent" Text="Add event"></ToolbarItem>
-        <ToolbarItem Text="Cancel" Clicked="CancelEvent"></ToolbarItem>
+        <ToolbarItem x:Name="AddEvent" Text="Add event"/>
+        <ToolbarItem Text="Cancel" Clicked="CancelEvent"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Spacing="20">
                 <StackLayout>
-                    <forms:AutoSuggestBox PlaceholderText="Namespace" TextChanged="OnTextChanged" QuerySubmitted="OnQuerySubmitted" SuggestionChosen="OnSuggestionChosen"/>
-                    <Entry Text="{Binding Title}" Placeholder="Title"></Entry>
+                    <forms:AutoSuggestBox PlaceholderText="Namespace" PropertyChanging="ValidateButtonState" TextChanged="OnTextChanged" QuerySubmitted="OnQuerySubmitted" SuggestionChosen="OnSuggestionChosen"/>
+                    <Entry Text="{Binding Title}" Placeholder="Title" PropertyChanging="ValidateButtonState"/>
                 </StackLayout>
                 <StackLayout Padding="0, 10">
                     <Grid>
-                        <Label Text="All-Day" TextColor="{StaticResource epamGrey}"></Label>
-                        <Switch IsToggled="False" OnColor="#4AD764" ThumbColor="#FFFFFF" Toggled="OnSwitchToggled"></Switch>
+                        <Label Text="All-Day" TextColor="{StaticResource epamGrey}"/>
+                        <Switch IsToggled="False" OnColor="#4AD764" ThumbColor="#FFFFFF" Toggled="OnSwitchToggled"/>
                     </Grid>
-                    <Button Text="{Binding ScheduleButtonText}" Clicked="OnConfigureScheduleClicked" BackgroundColor="{StaticResource epamBlue}"></Button>
+                    <Button Text="{Binding ScheduleButtonText}" Clicked="OnConfigureScheduleClicked" BackgroundColor="{StaticResource epamBlue}"/>
                     <StackLayout>
-                        <Label Text="Starts date" VerticalTextAlignment="Center" TextColor="{StaticResource epamGrey}"></Label>
-                        <DatePicker Date="{Binding StartDate}" MinimumDate="2000/12/1" MaximumDate="2100/12/31"></DatePicker>
-                        <TimePicker Time="{Binding StartTime}"></TimePicker>
+                        <Label Text="Starts date" VerticalTextAlignment="Center" TextColor="{StaticResource epamGrey}"/>
+                        <DatePicker Date="{Binding StartDate}" MinimumDate="2000/12/1" MaximumDate="2100/12/31"/>
+                        <TimePicker Time="{Binding StartTime}"/>
                     </StackLayout>
                     <StackLayout>
-                        <Label Text="Ends date" VerticalTextAlignment="Center" TextColor="{StaticResource epamGrey}"></Label>
-                        <DatePicker Date="{Binding EndDate}" MinimumDate="2000/12/1" MaximumDate="2100/12/31"></DatePicker>
-                        <TimePicker Time="{Binding EndTime}"></TimePicker>
+                        <Label Text="Ends date" VerticalTextAlignment="Center" TextColor="{StaticResource epamGrey}"/>
+                        <DatePicker Date="{Binding EndDate}" MinimumDate="2000/12/1" MaximumDate="2100/12/31"/>
+                        <TimePicker Time="{Binding EndTime}"/>
                     </StackLayout>
                 </StackLayout>
                 <StackLayout Padding="0, 10">
-                    <Label Text="Alert" TextColor="{StaticResource epamGrey}"></Label>
-                    <Button Text="{Binding AlertButtonText}" Clicked="OnAlertButtonClicked" BackgroundColor="{StaticResource epamBlue}"></Button>
+                    <Label Text="Alert" TextColor="{StaticResource epamGrey}"/>
+                    <Button Text="{Binding AlertButtonText}" Clicked="OnAlertButtonClicked" BackgroundColor="{StaticResource epamBlue}"/>
                 </StackLayout>
             </StackLayout>
         </ScrollView>

@@ -109,15 +109,15 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         return Unit.Default;
     }
 
-    private void ValidateButtonState(object sender, PropertyChangedEventArgs e)
+    private void ValidateButtonState(object sender, Xamarin.Forms.PropertyChangingEventArgs e)
     {
         if (!string.IsNullOrEmpty(_eventModel.Namespace) && !string.IsNullOrEmpty(_eventModel.Title))
         {
-            _eventModel.IsAddEventEnabled = true;
+            AddEvent.IsEnabled = true;
         }
         else
         {
-            _eventModel.IsAddEventEnabled = false;
+            AddEvent.IsEnabled = false;
         }
     }
 
