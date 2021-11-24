@@ -5,7 +5,7 @@ namespace SyncMe.Views;
 
 public partial class EventAlert : ContentPage
 {
-    private readonly CreateEvent createEvent;
+    private readonly CreateEventPage createEvent;
     public ButtonWithValue<SyncReminder> None { get; init; }
     public ButtonWithValue<SyncReminder> AtTimeOfEvent { get; init; }
     public ButtonWithValue<SyncReminder> FiveMinBefore { get; init; }
@@ -18,7 +18,7 @@ public partial class EventAlert : ContentPage
     public ButtonWithValue<SyncReminder> TwoDaysBefore { get; init; }
     public ButtonWithValue<SyncReminder> WeekBefore { get; init; }
 
-    public EventAlert(CreateEvent createEvent)
+    public EventAlert(CreateEventPage createEvent)
     {
         InitializeComponent();
 

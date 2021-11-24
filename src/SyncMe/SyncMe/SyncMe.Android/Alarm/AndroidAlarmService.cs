@@ -2,29 +2,38 @@
 using Android.Content;
 using Android.Icu.Util;
 using Android.OS;
+using Android.Widget;
 using SyncMe.Droid.Extensions;
 using SyncMe.Models;
 using SyncMe.Services;
 
 namespace SyncMe.Droid.Alarm;
 
-internal class AndroidAlarmIntent
+internal class AndroidAlarmService : IAndroidAlarmService
 {
-    public void SetAlarm(SyncEvent syncEvent, Context context)
+    private readonly ISyncAlarmService _syncAlarmService;
+
+    public AndroidAlarmService(ISyncAlarmService syncAlarmService)
     {
-        if (new EventCalculator().TryGetNearestAlarm(syncEvent, out var delay))
+        _syncAlarmService = syncAlarmService;
+    }
+
+    public void SetAlarm(Guid eventId, Context context)
+    {
+        if (_syncAlarmService.TryGetNearestAlarm(eventId, out var syncAlarm))
         {
-            var calendarItem = GetCalendarItem(delay);
-            var alarmIntent = GetAlarmIntent(syncEvent, context);
+            var calendarItem = GetCalendarItem(syncAlarm);
+            var alarmIntent = GetAlarmIntent(syncAlarm, context);
 
             SetAlarm(calendarItem, alarmIntent, context);
+            Toast.MakeText(context, $"Scheduled on {DateTime.Now.AddSeconds(syncAlarm.DelaySeconds)}", ToastLength.Long).Show();
         }
     }
 
-    private static Calendar GetCalendarItem(TimeSpan delay)
+    private static Calendar GetCalendarItem(SyncAlarm syncAlarm)
     {
         var calendarItem = Calendar.Instance;
-        calendarItem.Add(CalendarField.Second, (int)delay.TotalSeconds);
+        calendarItem.Add(CalendarField.Second, syncAlarm.DelaySeconds);
         return calendarItem;
     }
 
@@ -37,11 +46,11 @@ internal class AndroidAlarmIntent
             am.SetExact(AlarmType.RtcWakeup, calendarItem.TimeInMillis, alarmIntent);
     }
 
-    private PendingIntent GetAlarmIntent(SyncEvent syncEvent, Context context)
+    private PendingIntent GetAlarmIntent(SyncAlarm syncAlarm, Context context)
     {
         var intent = new Intent(context, typeof(AlarmReceiver))
             .PutExtra(AlarmMessage.ActionKey, AlarmMessage.SetAlarmAction)
-            .PutExtra(syncEvent)
+            .PutExtra(syncAlarm)
             .AddFlags(ActivityFlags.IncludeStoppedPackages)
             .AddFlags(ActivityFlags.ReceiverForeground);
 

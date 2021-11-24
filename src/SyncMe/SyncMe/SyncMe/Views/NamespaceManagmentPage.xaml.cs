@@ -42,24 +42,28 @@ public partial class NamespaceManagmentPage : ContentPage
 
     private void ProccessTapping(ItemTappedEventArgs e, ObservableCollection<NamespaceModel> items)
     {
-        var tappedNamespace = e.Item as NamespaceModel;
-        tappedNamespace.IsVisible = !tappedNamespace.IsVisible;
-        var index = items.IndexOf(tappedNamespace);
-        items.RemoveAt(index);
-        items.Insert(index, tappedNamespace);
+        var tapped = e.Item as NamespaceModel;
+        tapped.IsButtonsVisible = !tapped.IsButtonsVisible;
+        foreach (var item in items.Where(s => !s.Equals(tapped)))
+        {
+            if (item.IsButtonsVisible)
+            {
+                item.IsButtonsVisible = false;
+            }
+        }
     }
 
     private void MoveToSuspended(NamespaceModel item)
     {
         ActiveNamespaces.Remove(item);
-        item.IsVisible = false;
+        item.IsButtonsVisible = false;
         item.IsActive = false;
         SuspendedNamespaces.Add(item);
     }
     private void MoveToActive(NamespaceModel item)
     {
         SuspendedNamespaces.Remove(item);
-        item.IsVisible = false;
+        item.IsButtonsVisible = false;
         item.IsActive = true;
         ActiveNamespaces.Add(item);
     }

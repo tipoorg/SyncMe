@@ -1,7 +1,9 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
+using Microsoft.Identity.Client;
 using SyncMe.Droid.Alarm;
 using SyncMe.Views;
 using Xamarin.Forms.Platform.Android;
@@ -11,6 +13,7 @@ namespace SyncMe.Droid;
 public class MainActivity : FormsAppCompatActivity
 {
     private IDisposable _setAlarmSubscription;
+    private IAndroidAlarmService _androidAlarmService;
 
     protected override void OnCreate(Bundle savedInstanceState)
     {
@@ -22,8 +25,11 @@ public class MainActivity : FormsAppCompatActivity
         var app = Bootstrapper.CreateApp();
         LoadApplication(app);
 
-        _setAlarmSubscription = App.GetRequiredService<NotesPage>().ScheduledEvents
-            .Subscribe(x => new AndroidAlarmIntent().SetAlarm(x, this));
+        _androidAlarmService = Bootstrapper.GetService<IAndroidAlarmService>();
+
+        _setAlarmSubscription = Bootstrapper.GetService<CreateEventPage>().ScheduledEvents
+            .Subscribe(x => _androidAlarmService.SetAlarm(x, this));
+        App.AuthUIParent = this;
     }
 
     public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
@@ -39,5 +45,12 @@ public class MainActivity : FormsAppCompatActivity
             _setAlarmSubscription.Dispose();
 
         base.Dispose(disposing);
+    }
+
+    protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+    {
+        base.OnActivityResult(requestCode, resultCode, data);
+        AuthenticationContinuationHelper
+            .SetAuthenticationContinuationEventArgs(requestCode, resultCode, data);
     }
 }

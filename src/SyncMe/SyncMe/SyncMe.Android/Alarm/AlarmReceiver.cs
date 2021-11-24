@@ -1,6 +1,5 @@
 ﻿using Android.Content;
 using SyncMe.Droid.Extensions;
-using SyncMe.Extensions;
 using SyncMe.Models;
 
 namespace SyncMe.Droid.Alarm;
@@ -8,6 +7,8 @@ namespace SyncMe.Droid.Alarm;
 [BroadcastReceiver]
 internal class AlarmReceiver : BroadcastReceiver
 {
+    private readonly IAndroidAlarmService _androidAlarmService = Bootstrapper.GetService<IAndroidAlarmService>();
+
     public override void OnReceive(Context context, Intent intent)
     {
         var action = intent.GetStringExtra(AlarmMessage.ActionKey);
@@ -20,8 +21,8 @@ internal class AlarmReceiver : BroadcastReceiver
 
             case AlarmMessage.StopAlarmAction:
                 StopAlarm(intent);
-
                 return;
+
             default:
                 return;
         }
@@ -29,10 +30,10 @@ internal class AlarmReceiver : BroadcastReceiver
 
     private void SetAlarm(Context context, Intent intent)
     {
-        var syncEvent = intent.GetExtra<SyncEvent>();
+        var pendingAlarm = intent.GetExtra<SyncAlarm>();
         AndroidAlarmPlayer.Instance.PlayAlarm(context);
-        AndroidNotificationManager.Instance.Show("Alarm", context);
-        new AndroidAlarmIntent().SetAlarm(syncEvent.DecrementRemainingTimes(), context);
+        AndroidNotificationManager.Instance.Show(pendingAlarm, context);
+        _androidAlarmService.SetAlarm(pendingAlarm.EventId, context);
     }
 
     private void StopAlarm(Intent intent)
