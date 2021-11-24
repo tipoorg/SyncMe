@@ -1,40 +1,36 @@
-﻿using SyncMe.Models;
-using SyncMe.Repos;
-using SyncMe.ViewModels;
+﻿using SyncMe.ViewModels;
 using Xamarin.Forms.Xaml;
-using Xamarin.Plugin.Calendar.Models;
 
 namespace SyncMe.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CalendarPage : ContentPage
     {
-        private readonly ISyncEventsRepository _syncEventsRepository;
-        private readonly ISyncNamespaceRepository _syncNamespaceRepository;
+        private readonly CreateEventPage _createEventPage;
+        private readonly NamespaceManagmentPage _namespaceManagmentPage;
 
-        public CalendarPage(ISyncEventsRepository syncEventsRepository, ISyncNamespaceRepository syncNamespaceRepository)
+        public CalendarPage(CreateEventPage createEventPage, NamespaceManagmentPage namespaceManagmentPage)
         {
             InitializeComponent();
             BindingContext = new CalendarPageViewModel();
             AddEvent.Clicked += AddEvent_Clicked;
-            _syncEventsRepository = syncEventsRepository;
-            _syncNamespaceRepository = syncNamespaceRepository;
+            _createEventPage = createEventPage;
+            _namespaceManagmentPage = namespaceManagmentPage;
         }
 
         public async void AddEvent_Clicked(object sender, EventArgs e)
         {
-            var action = await DisplayActionSheet("Create:", "Cancell", null, "Event", "Namespace");
+            var action = await DisplayActionSheet("Create:", "Cancel", null, "Event", "Namespace");
 
             switch (action)
             {
                 case "Event":
-                    await Navigation.PushModalAsync(new CreateEventPage(_syncEventsRepository, _syncNamespaceRepository));
+                    await Navigation.PushAsync(_createEventPage);
                     break;
                 case "Namespace":
-                    await Navigation.PushModalAsync(new NamespaceManagmentPage());
+                    await Navigation.PushAsync(_namespaceManagmentPage);
                     break;
             }
         }
-
     }
 }
