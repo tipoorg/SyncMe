@@ -1,9 +1,11 @@
 ﻿using SyncMe.Models;
 using SyncMe.ViewModels;
+using Xamarin.Forms.Xaml;
 using Xamarin.Plugin.Calendar.Models;
 
 namespace SyncMe.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CalendarPage : ContentPage
     {
         public CalendarPage()
@@ -13,9 +15,20 @@ namespace SyncMe.Views
             AddEvent.Clicked += AddEvent_Clicked;
         }
 
-        private async void AddEvent_Clicked(object sender, EventArgs e)
+        public async void AddEvent_Clicked(object sender, EventArgs e)
         {
-            await DisplayAlert("Notification", "Event created!", "OK");
+            var action = await DisplayActionSheet("Create:", "Cancell", null, "Event", "Namespace");
+
+            switch (action)
+            {
+                case "Event":
+                    await Navigation.PushModalAsync(new CreateEvent());
+                    break;
+                case "Namespace":
+                    await Navigation.PushModalAsync(new NamespaceManagmentPage());
+                    break;
+            }
         }
+
     }
 }
