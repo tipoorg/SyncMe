@@ -84,9 +84,9 @@
                 <Label Grid.Row="1" FontSize="Medium" Style="{StaticResource YearMonthStyle}" Grid.Column="0" Grid.ColumnSpan="2" x:Name="year"  HorizontalOptions="Center" IsVisible="{Binding CalendarSectionShown}">
                     <Label.FormattedText>
                         <FormattedString>
-                            <Span Text="{Binding Year}"/>
-                            <Span Text=" "/>
                             <Span Text="{Binding MonthText}"/>
+                            <Span Text=" "/>
+                            <Span Text="{Binding Year}"/>
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
