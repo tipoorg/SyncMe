@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Text;
-using System.Windows.Input;
 using SyncMe.Models;
 using SyncMe.Repos;
 using Xamarin.Plugin.Calendar.Models;
@@ -18,9 +16,6 @@ public class CalendarPageViewModel : INotifyPropertyChanged
     {
         _syncEventsRepository = syncEventsRepository;
         _notificationsSwitcherRepository = notificationsSwitcherRepository;
-
-        DayTappedCommand = new Command<DateTime>((date) => DayTappedEvent.Invoke(date, this));
-        DayTappedEvent += DayTappedd;
         _syncEventsRepository.OnSyncEventsUpdate += OnSyncEventsUpdate;
         
         NotificationsSwitcher = _notificationsSwitcherRepository.State;
@@ -31,39 +26,6 @@ public class CalendarPageViewModel : INotifyPropertyChanged
     protected virtual void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    public ICommand DayTappedCommand { get; set; }
-
-    private static event EventHandler<CalendarPageViewModel> DayTappedEvent;
-
-    private async void DayTappedd(object sender, CalendarPageViewModel item)
-    {
-        var date = (DateTime)sender;
-        var message = string.Empty;
-        if( _events.TryGetValue(date, out System.Collections.ICollection values))
-        {
-            var builder = new StringBuilder();
-            builder.Append("My events for this date: ");
-            builder.Append($"{Environment.NewLine}");
-            foreach (var value in values)
-            {
-                var syncedEvent = value as SyncEventViewModel;
-                if (syncedEvent != null)
-                {
-                    builder.Append(syncedEvent.Name);
-                    builder.Append($"{Environment.NewLine}");
-                }
-            }
-
-            message = builder.ToString();
-        }
-        else
-        {
-            message = $"Received tap event from date: {date}";
-        }
-
-        await App.Current.MainPage.DisplayAlert("DayTapped", message, "Ok");
     }
 
     private EventCollection GetEventsFromRepository()
