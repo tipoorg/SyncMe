@@ -20,8 +20,8 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
         _existingNamespaces.Add("Work.Team2", CreateNamespace("Team2"));
         _existingNamespaces.Add("Russia", CreateNamespace("Russia", false));
         _existingNamespaces.Add("Russia.Holidays", CreateNamespace("Holidays", false));
-        _existingNamespaces.Add("Personal", CreateNamespace("Another", false));
-        _existingNamespaces.Add("Personal.Birthday", CreateNamespace("Another", false));
+        _existingNamespaces.Add("Personal", CreateNamespace("Personal", false));
+        _existingNamespaces.Add("Personal.Birthday", CreateNamespace("Birthday", false));
         _existingNamespaces.Add("Outlook", CreateNamespace("Outlook"));
     }
 
