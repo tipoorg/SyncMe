@@ -13,6 +13,19 @@
                 <Setter Property="FontSize" Value="Large"/>
                 <Setter Property="Margin" Value="20,5,0,0"/>
             </Style>
+
+            <Style x:Key="TimeStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="HorizontalTextAlignment" Value="Start"/>
+                <Setter Property="FontSize" Value="Small"/>
+                <Setter Property="Margin" Value="5,0,0,0"/>
+            </Style>
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="HorizontalTextAlignment" Value="Start"/>
+                <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="Margin" Value="5,0,0,0"/>
+            </Style>
             <Style x:Key="FloadButtonStyle" TargetType="Button">
                 <Setter Property="HeightRequest" Value="64"/>
                 <Setter Property="WidthRequest" Value="64"/>
@@ -60,6 +73,19 @@
             DayTappedCommand="{Binding DayTappedCommand}"
             Style="{StaticResource CalendarStyle}"
             >
+            <controls:Calendar.EventTemplate>
+                <DataTemplate>
+                    <StackLayout
+                    Padding="15,0,0,0">
+                        <Label Text="{Binding StartDate}"
+                       Style="{StaticResource TimeStyle}"/>
+                        <Label Text="{Binding Name}"
+                       Style="{StaticResource TitleStyle}"/>
+                        <Label Text="{Binding Description}"
+                       Style="{StaticResource NotificationStyle}"/>
+                    </StackLayout>
+                </DataTemplate>
+            </controls:Calendar.EventTemplate>
         </controls:Calendar>
         <Button x:Name="AddEvent"
             ImageSource="icon_add_calendar.png"
