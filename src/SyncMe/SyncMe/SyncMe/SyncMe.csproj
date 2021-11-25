@@ -30,9 +30,6 @@
       <Compile Update="Views\IdentityProvidersPage.xaml.cs">
         <DependentUpon>IdentityProvidersPage.xaml</DependentUpon>
       </Compile>
-      <Compile Update="Views\DayView.xaml.cs">
-        <DependentUpon>DayView.xaml</DependentUpon>
-      </Compile>
       <Compile Update="Views\NamespaceManagmentPage.xaml.cs">
 		 <DependentUpon>NamespaceManagmentPage.xaml</DependentUpon>
 	  </Compile>
