@@ -24,6 +24,7 @@ public partial class NamespaceManagmentPage : ContentPage
         NamespaceModel.TomorrowClicked.Subscribe(MoveToSuspended);
         NamespaceModel.RestoreClicked.Subscribe(MoveToActive);
         NamespaceModel.ExpandClicked.Subscribe(ProcessExpanding);
+        NamespaceModel.NewItemClicked.Subscribe(AddNewNamespace);
         BindingContext = this;
     }
 
@@ -94,6 +95,34 @@ public partial class NamespaceManagmentPage : ContentPage
         var children = _namespaceService.GetFirstChildren(fullName);
         var parentIndex = Namespaces.ToList().FindIndex(s => s.FullName == fullName);
         Namespaces.InsertRange(parentIndex, children.ToList());
+    }
+
+    private async void AddNewNamespace(NamespaceModel parent)
+    {
+        string newName = await DisplayPromptAsync("Enter new namespace name", $"{parent.FullName}.", "Add", "Cancel", null, 10);
+        if (string.IsNullOrWhiteSpace(newName))
+        {
+            return;
+        }
+
+        var newFullName = $"{parent.FullName}.{newName}";
+        _namespaceService.Add(newFullName);
+
+        if (!parent.IsExpanded)
+        {
+            AddFirstLevelChildrenn(parent.FullName);
+            parent.IsExpanded = true;
+        }
+        else
+        {
+            Namespaces.Insert(Namespaces.IndexOf(parent) + 1, new NamespaceModel(
+                fullName: newFullName,
+                isActive: parent.IsActive,
+                hasChildren: false
+                ));
+        }
+        parent.HasChildren = true;
+        parent.IsExpanded = true;
     }
 }
 

@@ -38,9 +38,9 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
     public Dictionary<string, Namespace> GetAllSyncNamespaces() => 
         _existingNamespaces;
 
-    public void AddSyncNamespace(string name)
+    public void AddSyncNamespace(string name, bool isActive = true)
     {
-        _existingNamespaces.Add(name, new Namespace { Title = name, IsActive = true });
+        _existingNamespaces.Add(name, new Namespace { Title = name, IsActive = isActive });
     }
 
     public bool TryGetSyncNamespace(string name, out Namespace existingNamespace) =>

@@ -102,6 +102,10 @@ namespace SyncMe.Models
         public ICommand ExpandClick { private set; get; }
         public static Subject<NamespaceModel> ExpandClicked { private set; get; } = new Subject<NamespaceModel>();
 
+        public ICommand NewItemClick { private set; get; }
+        public static Subject<NamespaceModel> NewItemClicked { private set; get; } = new Subject<NamespaceModel>();
+
+
         public NamespaceModel(string fullName, bool isActive, bool hasChildren)
         {
             FullName = fullName;
@@ -112,6 +116,7 @@ namespace SyncMe.Models
             TomorrowClick = new Command(() => TomorrowClicked.OnNext(this));
             RestoreClick = new Command(() => RestoreClicked.OnNext(this));
             ExpandClick = new Command(() => ExpandClicked.OnNext(this));
+            NewItemClick = new Command(() => NewItemClicked.OnNext(this));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
