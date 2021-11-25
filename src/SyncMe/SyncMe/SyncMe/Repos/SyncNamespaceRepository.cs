@@ -15,21 +15,18 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
 
     private void SeedData()
     {
-        _existingNamespaces.Add("Test", CreateNamespace("Test"));
-        _existingNamespaces.Add("Another", CreateNamespace("Another"));
-        _existingNamespaces.Add("Work1", CreateNamespace("Work1"));
-        _existingNamespaces.Add("Work1.Team1", CreateNamespace("Another"));
-        _existingNamespaces.Add("Work1.Team1.Project1", CreateNamespace("Another"));
-        _existingNamespaces.Add("Work1.Team1.Project2", CreateNamespace("Another"));
-        _existingNamespaces.Add("Work1.Team2", CreateNamespace("Another"));
-        _existingNamespaces.Add("Work2", CreateNamespace("Another", false, DateTime.Now.AddDays(1)));
-        _existingNamespaces.Add("Work2.Team1", CreateNamespace("Another", false, DateTime.Now.AddDays(1)));
-        _existingNamespaces.Add("Work2.Team2", CreateNamespace("Another", false, DateTime.Now.AddDays(1)));
+        _existingNamespaces.Add("Work", CreateNamespace("Work"));
+        _existingNamespaces.Add("Work.Team1", CreateNamespace("Team1"));
+        _existingNamespaces.Add("Work.Team2", CreateNamespace("Team2"));
+        _existingNamespaces.Add("Russia", CreateNamespace("Russia", false));
+        _existingNamespaces.Add("Russia.Holidays", CreateNamespace("Holidays", false));
+        _existingNamespaces.Add("Personal", CreateNamespace("Another", false));
+        _existingNamespaces.Add("Personal.Birthday", CreateNamespace("Another", false));
     }
 
     private void Increment(ref int counter) => Interlocked.Increment(ref counter);
 
-    private Namespace CreateNamespace(string title, bool isActive = true, DateTime turnOnDate = new())
+    private Namespace CreateNamespace(string title, bool isActive = true, DateTime? turnOnDate = null)
     {
         Increment(ref _idCounter);
         return new Namespace 
