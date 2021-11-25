@@ -23,6 +23,7 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
         OnAddSyncEvent?.Invoke(this, newId);
         return newId;
     }
+
     public void RemoveEvents(Func<SyncEvent, bool> predicate)
     {
         _events = _events.Where(p => !predicate(p.Value)).ToDictionary(p => p.Key, p => p.Value);
