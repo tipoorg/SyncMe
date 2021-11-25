@@ -20,16 +20,18 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
     private readonly IDisposable _addIdentitySubsciption;
     private readonly IDisposable _addOutlookIdentitySubscription;
     private readonly ISyncEventsRepository _syncEventsRepository;
+    private readonly ISyncNamespaceRepository _syncNamespaceRepository;
 
     public string Image { get => AddOutlook.IsVisible ? "icon_arrow_major.png" : "icon_plus_minor.xml"; }
 
     public ObservableCollection<Identity> Identities { get; } = new ObservableCollection<Identity>();
 
-    public IdentityProvidersPage(ISyncEventsRepository syncEventsRepository)
+    public IdentityProvidersPage(ISyncEventsRepository syncEventsRepository, ISyncNamespaceRepository syncNamespaceRepository)
     {
         InitializeComponent();
         BindingContext = this;
         _syncEventsRepository = syncEventsRepository;
+        _syncNamespaceRepository = syncNamespaceRepository;
 
         var manager = new MicrosoftAuthorizationManager();
 
@@ -91,6 +93,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
     private async Task<Optional<(string username, IEnumerable<SyncEvent> events)>> FetchEventsAsync(string username)
     {
+        var outlookNamespace = new Namespace { Title = "Outlook", IsActive = true };
         var manager = new MicrosoftAuthorizationManager();
 
         if (username is null)
@@ -105,7 +108,14 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
         var client = await manager.GetGraphClientAsync(username);
         var events = await new OutlookProvider(client, username).GetEventsAsync();
-        return (username, events.Select(e => e.ToSyncEvent(username)));
+
+        if(!_syncNamespaceRepository.GetAllSyncNamespaces().Any(n => n.Value.Title == outlookNamespace.Title))
+        {
+            _syncNamespaceRepository.AddSyncNamespace(outlookNamespace.Title);
+        }
+
+        return (username, events.Select(e => e.ToSyncEvent(username))
+                                .Select(e => e with { Namespace = outlookNamespace }));
     }
 
     private void SwitchLayouts()
