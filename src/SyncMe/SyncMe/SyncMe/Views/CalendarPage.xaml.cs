@@ -21,7 +21,6 @@ namespace SyncMe.Views
             _namespaceRepository = namespaceRepository;
 
             year.BindingContext = Calendar1;
-            monthText.BindingContext = Calendar1;
         }
 
         public async void AddEvent_Clicked(object sender, EventArgs e) => 
