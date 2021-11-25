@@ -85,7 +85,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     {
         if (!string.IsNullOrEmpty(_eventModel.Namespace))
         {
-            if (await DisplayAlert(null, "Discard this event?", "Keep editing", "Discard"))
+            if (await DisplayAlert(null, "Discard this event?", "Discard", "Keep editing"))
             {
                 await NavigateToCalendar();
             }

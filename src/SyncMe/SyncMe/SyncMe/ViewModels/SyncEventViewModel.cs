@@ -17,6 +17,10 @@ public class SyncEventViewModel : INotifyPropertyChanged
             Schedule = new SyncSchedule(),
             Alert = new SyncAlert { Reminder = SyncReminder.AtEventTime }
         };
+
+        var currentHour = TimeSpan.FromHours(DateTime.Now.TimeOfDay.Hours);
+        StartTime = currentHour.Add(TimeSpan.FromHours(1));
+        EndTime = currentHour.Add(TimeSpan.FromHours(2));
         ScheduleButtonText = SyncRepeat.None.GetDescription();
         AlertButtonText = SyncReminder.AtEventTime.GetDescription();
     }
