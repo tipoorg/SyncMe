@@ -8,9 +8,7 @@ namespace SyncMe.Views
     {
         private readonly CreateEventPage _createEventPage;
 
-        public CalendarPage(
-            CalendarPageViewModel viewModel,
-            CreateEventPage createEventPage)
+        public CalendarPage(CalendarPageViewModel viewModel, CreateEventPage createEventPage)
         {
             InitializeComponent();
             BindingContext = viewModel;
@@ -18,16 +16,6 @@ namespace SyncMe.Views
             _createEventPage = createEventPage;
         }
 
-        public async void AddEvent_Clicked(object sender, EventArgs e)
-        {
-            var action = await DisplayActionSheet("Create:", "Cancel", null, "Event");
-
-            switch (action)
-            {
-                case "Event":
-                    await Navigation.PushAsync(_createEventPage);
-                    break;
-            }
-        }
+        public async void AddEvent_Clicked(object sender, EventArgs e) => await Navigation.PushAsync(_createEventPage);
     }
 }

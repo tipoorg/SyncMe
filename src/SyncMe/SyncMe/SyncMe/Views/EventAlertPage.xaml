@@ -7,7 +7,7 @@
              Title="Event Alert">
     <ContentPage.Content>
         <StackLayout>
-            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="At time of event" Clicked="OnClicked" Tag="AtEventTime"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="At event time" Clicked="OnClicked" Tag="AtEventTime"/>
             <local:TagButton x:TypeArguments="x1:SyncReminder" Text="1 minute before" Clicked="OnClicked" Tag="Before1Min"/>
             <local:TagButton x:TypeArguments="x1:SyncReminder" Text="5 minutes before" Clicked="OnClicked" Tag="Before5Min"/>
             <local:TagButton x:TypeArguments="x1:SyncReminder" Text="10 minutes before" Clicked="OnClicked" Tag="Before10Min"/>

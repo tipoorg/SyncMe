@@ -3,6 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:forms="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
              x:Class="SyncMe.Views.CreateEventPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="LabelStyle" TargetType="Label">
+                <Setter Property="Margin" Value="5,5,0,0"/>
+                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+            </Style>
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="Margin" Value="5,0,5,0"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource epamBlue}"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="AddEvent" Text="Add event"/>
         <ToolbarItem Text="Cancel" Clicked="CancelEvent"/>
@@ -11,29 +23,41 @@
         <ScrollView>
             <StackLayout Spacing="20">
                 <StackLayout>
-                    <forms:AutoSuggestBox PlaceholderText="Namespace" PropertyChanged="ValidateButtonState" TextChanged="OnTextChanged" QuerySubmitted="OnQuerySubmitted" SuggestionChosen="OnSuggestionChosen"/>
-                    <Entry Text="{Binding Title}" Placeholder="Title" PropertyChanged="ValidateButtonState"/>
+                    <forms:AutoSuggestBox PlaceholderText="Namespace" PropertyChanged="ValidateButtonState" TextChanged="OnTextChanged" QuerySubmitted="OnQuerySubmitted" SuggestionChosen="OnSuggestionChosen" Margin="5,0,5,0"/>
+                    <Entry Text="{Binding Title}" Placeholder="Title" PropertyChanged="ValidateButtonState" Margin="5,0,5,0"/>
                 </StackLayout>
-                <StackLayout Padding="0, 10">
+                <StackLayout>
                     <Grid>
-                        <Label Text="All-Day" TextColor="{StaticResource epamGrey}"/>
+                        <Label Text="All-Day" Style="{StaticResource LabelStyle}"/>
                         <Switch IsToggled="False" Toggled="OnSwitchToggled" Style="{StaticResource ToggleButtonStyle}"/>
                     </Grid>
-                    <Button Text="{Binding ScheduleButtonText}" Clicked="OnConfigureScheduleClicked" BackgroundColor="{StaticResource epamBlue}"/>
+                    <Button Text="{Binding ScheduleButtonText}" Clicked="OnConfigureScheduleClicked" Style="{StaticResource ButtonStyle}"/>
                     <StackLayout>
-                        <Label Text="Starts date" VerticalTextAlignment="Center" TextColor="{StaticResource epamGrey}"/>
-                        <DatePicker Date="{Binding StartDate}" MinimumDate="2000/12/1" MaximumDate="2100/12/31"/>
-                        <TimePicker Time="{Binding StartTime}"/>
+                        <Label Text="Starts date" VerticalTextAlignment="Center" Style="{StaticResource LabelStyle}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <DatePicker Date="{Binding StartDate}" MinimumDate="2000/12/1" MaximumDate="2100/12/31" Grid.Column="0" Margin="5,0,5,0"/>
+                            <TimePicker Time="{Binding StartTime}" Grid.Column="1" Margin="5,0,5,0"/>
+                        </Grid>
                     </StackLayout>
                     <StackLayout>
-                        <Label Text="Ends date" VerticalTextAlignment="Center" TextColor="{StaticResource epamGrey}"/>
-                        <DatePicker Date="{Binding EndDate}" MinimumDate="2000/12/1" MaximumDate="2100/12/31"/>
-                        <TimePicker Time="{Binding EndTime}"/>
+                        <Label Text="Ends date" VerticalTextAlignment="Center" Style="{StaticResource LabelStyle}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <DatePicker Date="{Binding EndDate}" MinimumDate="2000/12/1" MaximumDate="2100/12/31" Grid.Column="0" Margin="5,0,5,0"/>
+                            <TimePicker Time="{Binding EndTime}" Grid.Column="1" Margin="5,0,5,0"/>
+                        </Grid>
                     </StackLayout>
                 </StackLayout>
-                <StackLayout Padding="0, 10">
-                    <Label Text="Event Alert" TextColor="{StaticResource epamGrey}"/>
-                    <Button Text="{Binding AlertButtonText}" Clicked="OnAlertButtonClicked" BackgroundColor="{StaticResource epamBlue}"/>
+                <StackLayout>
+                    <Label Text="Event Alert" Style="{StaticResource LabelStyle}"/>
+                    <Button Text="{Binding AlertButtonText}" Clicked="OnAlertButtonClicked" Style="{StaticResource ButtonStyle}"/>
                 </StackLayout>
             </StackLayout>
         </ScrollView>
