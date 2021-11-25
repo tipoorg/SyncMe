@@ -70,6 +70,15 @@ public class SyncNamespaceService : ISyncNamespaceService
         return !_namespaceRepository.GetAllSyncNamespaces()[parentKey].IsActive;
     }
 
+    public void RemoveWithChildren(string fullName)
+    {
+        var namespaces = _namespaceRepository.GetAllSyncNamespaces();
+        while (namespaces.Any(s => s.Key.Contains(fullName)))
+        {
+            namespaces.Remove(namespaces.First(s => s.Key.Contains(fullName)).Key);
+        }
+    }
+
     public bool IsNamespaceActive(string fullName)
     {
         if (_namespaceRepository.TryGetSyncNamespace(fullName, out var syncNamespace))

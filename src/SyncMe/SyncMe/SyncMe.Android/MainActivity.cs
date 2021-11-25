@@ -10,7 +10,7 @@ using Xamarin.Forms.Platform.Android;
 
 namespace SyncMe.Droid;
 
-[Activity(Label = "SyncMe", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
+[Activity(Label = "SyncMe", Icon = "@mipmap/SyncMeApp", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
 public class MainActivity : FormsAppCompatActivity
 {
     private IAndroidAlarmService _androidAlarmService;
