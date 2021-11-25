@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
+using SyncMe.Models;
 
-namespace SyncMe.Models;
+namespace SyncMe.ViewModels;
 
 public class SyncEventViewModel : INotifyPropertyChanged
 {
@@ -13,7 +14,7 @@ public class SyncEventViewModel : INotifyPropertyChanged
             End = DateTime.Now.AddHours(1),
             Namespace = new Namespace(),
             Schedule = new SyncSchedule(),
-            Alert = new SyncAlert {  Reminder = SyncReminder.AtEventTime }
+            Alert = new SyncAlert { Reminder = SyncReminder.AtEventTime }
         };
         ScheduleButtonText = "Does Not Repeat";
         AlertButtonText = "Alert";
