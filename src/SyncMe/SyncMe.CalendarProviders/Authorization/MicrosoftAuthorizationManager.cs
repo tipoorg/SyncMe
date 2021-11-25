@@ -55,22 +55,17 @@ namespace SyncMe.CalendarProviders.Authorization
 
         public async Task<GraphServiceClient> GetGraphClientAsync(string username)
         {
-            if (CurrentAccounts.Count() > 0)
-            {
-                // Initialize Graph client
-                return new GraphServiceClient(new DelegateAuthenticationProvider(
-                    async (requestMessage) =>
-                    {
-                        var currentAccount = CurrentAccounts.FirstOrDefault(a => a.Username == username);
-                        var result = await PCA.AcquireTokenSilent(Scopes, currentAccount)
-                            .ExecuteAsync();
+            // Initialize Graph client
+            return new GraphServiceClient(new DelegateAuthenticationProvider(
+                async (requestMessage) =>
+                {
+                    var currentAccount = CurrentAccounts.FirstOrDefault(a => a.Username == username);
+                    var result = await PCA.AcquireTokenSilent(Scopes, currentAccount)
+                        .ExecuteAsync();
 
-                        requestMessage.Headers.Authorization =
-                            new AuthenticationHeaderValue("Bearer", result.AccessToken);
-                    }));
-            }
-
-            return null;
+                    requestMessage.Headers.Authorization =
+                        new AuthenticationHeaderValue("Bearer", result.AccessToken);
+                }));
         }
     }
 }
