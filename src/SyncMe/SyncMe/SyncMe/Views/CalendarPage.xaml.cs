@@ -1,4 +1,5 @@
-﻿using SyncMe.ViewModels;
+﻿using SyncMe.Repos;
+using SyncMe.ViewModels;
 using Xamarin.Forms.Xaml;
 
 namespace SyncMe.Views
@@ -6,16 +7,21 @@ namespace SyncMe.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CalendarPage : ContentPage
     {
-        private readonly CreateEventPage _createEventPage;
+        private readonly ISyncEventsRepository _eventsRepository;
+        private readonly ISyncNamespaceRepository _namespaceRepository;
 
-        public CalendarPage(CalendarPageViewModel viewModel, CreateEventPage createEventPage)
+        public CalendarPage(CalendarPageViewModel viewModel,
+                            ISyncEventsRepository eventsRepository,
+                            ISyncNamespaceRepository namespaceRepository)
         {
             InitializeComponent();
             BindingContext = viewModel;
             AddEvent.Clicked += AddEvent_Clicked;
-            _createEventPage = createEventPage;
+            _eventsRepository = eventsRepository;
+            _namespaceRepository = namespaceRepository;
         }
 
-        public async void AddEvent_Clicked(object sender, EventArgs e) => await Navigation.PushAsync(_createEventPage);
+        public async void AddEvent_Clicked(object sender, EventArgs e) => 
+            await Navigation.PushAsync(new CreateEventPage(_eventsRepository, _namespaceRepository));
     }
 }
