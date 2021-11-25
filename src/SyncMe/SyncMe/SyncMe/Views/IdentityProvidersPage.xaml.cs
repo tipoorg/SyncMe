@@ -89,10 +89,16 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
     private async Task<Optional<(string username, IEnumerable<SyncEvent> events)>> FetchEventsAsync(string username)
     {
         var manager = new MicrosoftAuthorizationManager();
-        var optional = await manager.TrySignInAsync(App.AuthUIParent);
 
-        if (!optional.HasValue)
-            return default;
+        if (username is null)
+        {
+            var optional = await manager.TrySignInAsync(App.AuthUIParent);
+
+            if (!optional.HasValue)
+                return default;
+
+            username = optional.Value;
+        }
 
         var client = await manager.GetGraphClientAsync(username);
         var events = await new OutlookProvider(client, username).GetEventsAsync();
