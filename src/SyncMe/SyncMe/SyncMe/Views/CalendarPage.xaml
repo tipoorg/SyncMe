@@ -45,7 +45,7 @@
             <RowDefinition Height="9*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0"  Grid.Column="0" Text="Notifications:"  Style="{StaticResource NotificationStyle}"></Label>
+        <Label Grid.Row="0"  Grid.Column="0" Text="Alarm sound:"  Style="{StaticResource NotificationStyle}"></Label>
         <Switch 
             Grid.Row="0" 
             Grid.Column="1"
