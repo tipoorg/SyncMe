@@ -24,7 +24,7 @@
                 <Setter Property="FontSize" Value="Micro"/>
                 <Setter Property="WidthRequest" Value="90"/>
                 <Setter Property="HeightRequest" Value="30"/>
-                <Setter Property="BackgroundColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="BackgroundColor" Value="#7f39c2d7"/>
                 <Setter Property="Margin" Value="0,0,0,5"/>
             </Style>
             <Style x:Key="FrameStyle" TargetType="Frame">

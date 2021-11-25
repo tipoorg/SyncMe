@@ -8,6 +8,7 @@ using SyncMe.Extensions;
 using SyncMe.Common;
 using SyncMe.CalendarProviders.Authorization;
 using SyncMe.CalendarProviders.Outlook;
+using System.ComponentModel;
 
 namespace SyncMe.Views;
 
@@ -19,6 +20,8 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
     private readonly IDisposable _addIdentitySubsciption;
     private readonly IDisposable _addOutlookIdentitySubscription;
     private readonly ISyncEventsRepository _syncEventsRepository;
+
+    public string Image { get => AddOutlook.IsVisible ? "icon_arrow_major.png" : "icon_plus_minor.xml"; }
 
     public ObservableCollection<Identity> Identities { get; } = new ObservableCollection<Identity>();
 
@@ -109,6 +112,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
     {
         AddOutlook.IsVisible = !AddOutlook.IsVisible;
         AddGoogle.IsVisible = !AddGoogle.IsVisible;
+        OnPropertyChanged(nameof(Image));
     }
 
     private async void OnSyncClicked(object sender, EventArgs e)
