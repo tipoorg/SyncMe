@@ -18,7 +18,7 @@ public class SyncAlarmService : ISyncAlarmService
         {
             if (TryGetNearestAlarmDelay(syncEvent, out var alarmDelay))
             {
-                syncALarm = new SyncAlarm(syncEvent.Title, eventId, (int)alarmDelay.TotalSeconds);
+                syncALarm = new SyncAlarm(syncEvent.Title, eventId, syncEvent.Namespace.Title, (int)alarmDelay.TotalSeconds);
                 return true;
             }
         }

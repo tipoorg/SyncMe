@@ -43,7 +43,7 @@ public class SyncNamespaceService : ISyncNamespaceService
         return _namespaceRepository.GetAllSyncNamespaces().Any(n => n.Key.Contains($"{fullName}."));
     }
 
-    public bool UpdateStatusWithChildrens(string fullName, bool isActive, DateTime turnOnDate = default)
+    public bool UpdateStatusWithChildrens(string fullName, bool isActive, DateTime? turnOnDate = default)
     {
         if (ParentIsSuspended(fullName) && isActive) return false;
 
@@ -68,6 +68,25 @@ public class SyncNamespaceService : ISyncNamespaceService
 
         var parentKey = fullname.Substring(0, lastDotIndex);
         return !_namespaceRepository.GetAllSyncNamespaces()[parentKey].IsActive;
+    }
+
+    public void RemoveWithChildren(string fullName)
+    {
+        var namespaces = _namespaceRepository.GetAllSyncNamespaces();
+        while (namespaces.Any(s => s.Key.Contains(fullName)))
+        {
+            namespaces.Remove(namespaces.First(s => s.Key.Contains(fullName)).Key);
+        }
+    }
+
+    public bool IsNamespaceActive(string fullName)
+    {
+        if (_namespaceRepository.TryGetSyncNamespace(fullName, out var syncNamespace))
+        {
+            return syncNamespace.IsActive || DateTime.Now > syncNamespace.TurnOnDate;
+        }
+
+        return true;
     }
 }
 
