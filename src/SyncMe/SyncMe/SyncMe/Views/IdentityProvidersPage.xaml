@@ -55,20 +55,18 @@
             <Button x:Name="AddIdentity"
                         ImageSource="icon_plus.xml"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
-                        Style="{StaticResource RoundButtonStyle}"/>
+                        AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"/>
             <Button x:Name="AddOutlook"
-                        ImageSource="icon_outlook.xml"
+                        ImageSource="icon_outlook_provider.png"
                         IsVisible="False"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="1, 0.85, AutoSize, AutoSize"
-                        Style="{StaticResource RoundButtonStyle}"/>
+                        AbsoluteLayout.LayoutBounds="1, 0.85, AutoSize, AutoSize"/>
             <Button x:Name="AddGoogle"
                         ImageSource="icon_google.xml"
                         IsVisible="False"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
                         AbsoluteLayout.LayoutBounds="1, 0.70, AutoSize, AutoSize"
-                        Style="{StaticResource RoundButtonStyle}"/>
+                        BackgroundColor="White"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

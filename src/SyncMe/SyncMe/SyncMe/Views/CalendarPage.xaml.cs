@@ -7,28 +7,23 @@ namespace SyncMe.Views
     public partial class CalendarPage : ContentPage
     {
         private readonly CreateEventPage _createEventPage;
-        private readonly NamespaceManagmentPage _namespaceManagmentPage;
 
-        public CalendarPage(CreateEventPage createEventPage, NamespaceManagmentPage namespaceManagmentPage)
+        public CalendarPage(CreateEventPage createEventPage)
         {
             InitializeComponent();
             BindingContext = new CalendarPageViewModel();
             AddEvent.Clicked += AddEvent_Clicked;
             _createEventPage = createEventPage;
-            _namespaceManagmentPage = namespaceManagmentPage;
         }
 
         public async void AddEvent_Clicked(object sender, EventArgs e)
         {
-            var action = await DisplayActionSheet("Create:", "Cancel", null, "Event", "Namespace");
+            var action = await DisplayActionSheet("Create:", "Cancel", null, "Event");
 
             switch (action)
             {
                 case "Event":
                     await Navigation.PushAsync(_createEventPage);
-                    break;
-                case "Namespace":
-                    await Navigation.PushAsync(_namespaceManagmentPage);
                     break;
             }
         }

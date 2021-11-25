@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SyncMe.Providers.OutlookProvider
-{ 
+namespace SyncMe.CalendarProviders.Outlook
+{
     public class OutlookProvider
     {
         private readonly GraphServiceClient _graphClient;
@@ -24,9 +24,9 @@ namespace SyncMe.Providers.OutlookProvider
 
             var nextRequest = events.NextPageRequest;
             var isLastBatch = false;
-            while(true)
+            while (true)
             {
-                foreach(var @event in events)
+                foreach (var @event in events)
                 {
                     if (DateTime.Parse(@event.Start.DateTime) < now)
                     {

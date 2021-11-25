@@ -3,6 +3,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 using dotMorten.Xamarin.Forms;
+using SyncMe.Extensions;
 using SyncMe.Models;
 using SyncMe.Repos;
 
@@ -79,7 +80,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
 
     private async Task<Guid> AddNewSyncEvent()
     {
-        var guid = _eventsRepository.AddSyncEvent(_eventModel.SyncEvent);
+        var guid = _eventsRepository.AddSyncEvent(_eventModel.SyncEvent.TrimNamespaceEnd());
         await NavigateToCalendar();
         return guid;
     }
