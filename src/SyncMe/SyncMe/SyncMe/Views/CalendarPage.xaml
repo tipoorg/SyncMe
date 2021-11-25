@@ -11,7 +11,14 @@
                 <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
                 <Setter Property="FontSize" Value="Large"/>
-                <Setter Property="Margin" Value="20,5,0,0"/>
+                <Setter Property="Margin" Value="10,0,0,0"/>
+                
+            </Style>
+            <Style x:Key="ThemeStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="HorizontalTextAlignment" Value="End"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="Margin" Value="0,0,10,0"/>
             </Style>
 
             <Style x:Key="TimeStyle" TargetType="Label">
@@ -44,51 +51,53 @@
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
-    
+
     <AbsoluteLayout>
+       
         <StackLayout>
-        <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="7*" />
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="9*"/>
-        </Grid.RowDefinitions>
-        <Label Grid.Row="0"  Grid.Column="0" Text="Alarm sound:"  Style="{StaticResource NotificationStyle}"></Label>
-        <Switch 
-            Grid.Row="0" 
-            Grid.Column="1"
-            x:Name="NotificationsSwitcher" 
-            Style="{StaticResource ToggleButtonStyle}"
-            IsToggled="{Binding NotificationsSwitcher}"/>
-            <controls:Calendar 
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="20*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0"  Grid.Column="0" Text="Sound"  Style="{StaticResource NotificationStyle}"></Label>
+                <Label Grid.Row="0"  Grid.Column="1" Text="Theme"  Style="{StaticResource ThemeStyle}"></Label>
+
+                <Label Style="{StaticResource TitleStyle}" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="2" x:Name="year" Text="{Binding Year}" HorizontalOptions="Center" IsVisible="{Binding CalendarSectionShown}"/>
+                <Label Style="{StaticResource TitleStyle}" Grid.Row="2"  Grid.Column="0" Grid.ColumnSpan="2" x:Name="monthText" Text="{Binding MonthText}" HorizontalOptions="Center"  IsVisible="{Binding CalendarSectionShown}"/>
+                <controls:Calendar 
             x:Name="Calendar1"
-            Grid.Row="1"  
+            Grid.Row="2"  
             Grid.Column="0" 
             Grid.ColumnSpan="2"
             Events="{Binding Events}"
             DayTappedCommand="{Binding DayTappedCommand}"
             Style="{StaticResource CalendarStyle}"
+            ShowMonthPicker="False"
+            ShowYearPicker="False"
+            HorizontalOptions="Center" 
             >
-                <controls:Calendar.EventTemplate>
-                    <DataTemplate>
-                        <StackLayout
-                    Padding="15,0,0,0">
-                            <Label Text="{Binding StartDate}"
+                    <controls:Calendar.EventTemplate>
+                        <DataTemplate>
+                            <StackLayout
+                       Padding="15,0,0,0">
+                                <Label Text="{Binding StartDate}"
                        Style="{StaticResource TimeStyle}"/>
-                            <Label Text="{Binding Name}"
+                                <Label Text="{Binding Name}"
                        Style="{StaticResource TitleStyle}"/>
-                            <Label Text="{Binding Description}"
+                                <Label Text="{Binding Description}"
                        Style="{StaticResource TitleStyle}"/>
-                        </StackLayout>
-                    </DataTemplate>
-                </controls:Calendar.EventTemplate>
-            </controls:Calendar>
-        </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </controls:Calendar.EventTemplate>
+                </controls:Calendar>
+            </Grid>
         </StackLayout>
-
         <Button x:Name="AddEvent"
             ImageSource="icon_add_calendar.png"
             BackgroundColor="White"
@@ -96,6 +105,29 @@
             AbsoluteLayout.LayoutBounds="0.93, 0.94, 50, 50"
             AbsoluteLayout.LayoutFlags="PositionProportional"  
                 />
+        <Switch 
+            AbsoluteLayout.LayoutBounds="1, 0, 0.2, 0.1"
+            AbsoluteLayout.LayoutFlags="SizeProportional"        
+            x:Name="NotificationsSwitcher" 
+            VerticalOptions="End"
+            Style="{StaticResource ToggleButtonStyle}"
+            IsToggled="{Binding NotificationsSwitcher}"
+            IsVisible="{Binding CalendarSectionShown}"                    
+                    />
+        <Switch 
+            AbsoluteLayout.LayoutBounds="1, 0, 0.2, 0.1"
+            AbsoluteLayout.LayoutFlags="All"        
+            x:Name="ThemeSwitcher" 
+            VerticalOptions="End"
+            Style="{StaticResource ToggleButtonStyle}"
+            IsToggled="{Binding NotificationsSwitcher}"
+            IsVisible="{Binding CalendarSectionShown}"                    
+                    />
+
+
+
+
     </AbsoluteLayout>
+
 
 </ContentPage>
