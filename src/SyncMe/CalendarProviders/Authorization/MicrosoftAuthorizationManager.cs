@@ -48,6 +48,7 @@ namespace CalendarProviders.Authorization
 
         public async Task<GraphServiceClient> GetGraphClientAsync(string username)
         {
+            CurrentAccounts = await PCA.GetAccountsAsync();
             if (CurrentAccounts.Count() > 0)
             {
                 // Initialize Graph client
