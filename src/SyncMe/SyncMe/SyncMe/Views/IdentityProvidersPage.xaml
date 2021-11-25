@@ -64,20 +64,26 @@
                 </FlexLayout>
             </StackLayout>
             <Button x:Name="AddIdentity"
-                        ImageSource="icon_plus.xml"
+                        ImageSource="{Binding Image}"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"/>
+                        AbsoluteLayout.LayoutBounds="0.93, 0.97, 65, 65"
+                        CornerRadius="200"
+                        Rotation="180"
+                        BackgroundColor="#7f39c2d7"/>
             <Button x:Name="AddOutlook"
                         ImageSource="icon_outlook_provider.png"
                         IsVisible="False"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="1, 0.85, AutoSize, AutoSize"/>
+                        AbsoluteLayout.LayoutBounds="0.94, 0.82, 70, 70"
+                        BackgroundColor="White"
+                        CornerRadius="200"/>
             <Button x:Name="AddGoogle"
-                        ImageSource="icon_google.xml"
+                        ImageSource="icon_google.png"
                         IsVisible="False"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="1, 0.70, AutoSize, AutoSize"
-                        BackgroundColor="White"/>
+                        AbsoluteLayout.LayoutBounds="0.94, 0.67, 70, 70"
+                        IsEnabled="False"
+                        CornerRadius="200"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

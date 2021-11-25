@@ -19,7 +19,7 @@ namespace SyncMe.CalendarProviders.Outlook
         public async Task<List<Event>> GetEventsAsync()
         {
             var events = await _graphClient.Users[_email].Calendar.Events.Request().GetAsync();
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var result = new List<Event>();
 
             var nextRequest = events.NextPageRequest;
@@ -31,9 +31,11 @@ namespace SyncMe.CalendarProviders.Outlook
                     if (DateTime.Parse(@event.Start.DateTime) < now)
                     {
                         isLastBatch = true;
-                        break;
                     }
-                    result.Add(@event);
+                    else
+                    {
+                        result.Add(@event);
+                    }
                 }
 
                 if (nextRequest is null || isLastBatch) break;
