@@ -10,6 +10,11 @@ public class SyncNamespaceService : ISyncNamespaceService
         _namespaceRepository = namespaceRepository;
     }
 
+    public void Add(string fullName)
+    {
+        _namespaceRepository.AddSyncNamespace(fullName, !ParentIsSuspended(fullName));
+    }
+
     public IReadOnlyCollection<(string FullName, bool IsActive, bool HasChildren)> GetAll(string namespaceName)
     {
         return _namespaceRepository.GetAllSyncNamespaces().Select(s => (s.Key, s.Value.IsActive, HasChildren(s.Key))).ToList();
@@ -55,7 +60,7 @@ public class SyncNamespaceService : ISyncNamespaceService
         return true;
     }
 
-    private bool ParentIsSuspended(string fullname)
+    public bool ParentIsSuspended(string fullname)
     {
         var lastDotIndex = fullname.LastIndexOf('.');
 
