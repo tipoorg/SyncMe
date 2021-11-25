@@ -1,42 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:SyncMe.Controls"
+             xmlns:x1="clr-namespace:SyncMe.Models"
              x:Class="SyncMe.Views.EventSchedulePage"
              Title="Event Schedule">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style x:Key="StackLayoutStyle" TargetType="StackLayout">
-                <Setter Property="Orientation" Value="Horizontal"></Setter>
-            </Style>
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <StackLayout Style="{StaticResource StackLayoutStyle}">
-                <Label Text="Does not repeat"></Label>
-                <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="None"/>
-            </StackLayout>
-            <StackLayout Style="{StaticResource StackLayoutStyle}">
-                <Label Text="Every minute"></Label>
-                <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="EveryMinute"/>
-            </StackLayout>
-            <StackLayout Style="{StaticResource StackLayoutStyle}">
-                <Label Text="Every day"></Label>
-                <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="Dayly"/>
-            </StackLayout>
-            <StackLayout Style="{StaticResource StackLayoutStyle}">
-                <Label Text="Every week"></Label>
-                <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="WorkDays"/>
-            </StackLayout>
-            <StackLayout Style="{StaticResource StackLayoutStyle}">
-                <Label Text="Every month"></Label>
-                <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="EveryMonth"/>
-            </StackLayout>
-            <StackLayout Style="{StaticResource StackLayoutStyle}">
-                <Label Text="Every year"></Label>
-                <local:TagRadioButton CheckedChanged="OnCheckedChanged" Tag="EveryYear"/>
-            </StackLayout>
+            <local:TagButton x:TypeArguments="x1:SyncRepeat" Text="Does not repeat" Clicked="OnClicked" Tag="None"/>
+            <local:TagButton x:TypeArguments="x1:SyncRepeat" Text="Every minute" Clicked="OnClicked" Tag="EveryMinute"/>
+            <local:TagButton x:TypeArguments="x1:SyncRepeat" Text="Every day" Clicked="OnClicked" Tag="Dayly"/>
+            <local:TagButton x:TypeArguments="x1:SyncRepeat" Text="Work days" Clicked="OnClicked" Tag="WorkDays"/>
+            <local:TagButton x:TypeArguments="x1:SyncRepeat" Text="Every week" Clicked="OnClicked" Tag="EveryWeek"/>
+            <local:TagButton x:TypeArguments="x1:SyncRepeat" Text="Every month" Clicked="OnClicked" Tag="EveryMonth"/>
+            <local:TagButton x:TypeArguments="x1:SyncRepeat" Text="Every year" Clicked="OnClicked" Tag="EveryYear"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

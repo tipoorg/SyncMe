@@ -1,12 +1,10 @@
-﻿using SyncMe.Models;
+﻿namespace SyncMe.Controls;
 
-namespace SyncMe.Controls;
-
-public class TagButton : Button
+public class TagButton<T> : Button
 {
-    public static readonly BindableProperty TagProperty = BindableProperty.Create("Tag", typeof(SyncReminder), typeof(TagButton), SyncReminder.AtEventTime, BindingMode.OneTime);
+    public static readonly BindableProperty TagProperty = BindableProperty.Create("Tag", typeof(T), typeof(TagButton<T>), default(T), BindingMode.OneTime);
 
-    public SyncReminder Tag
+    public T Tag
     {
         set
         {
@@ -14,7 +12,7 @@ public class TagButton : Button
         }
         get
         {
-            return (SyncReminder)GetValue(TagProperty);
+            return (T)GetValue(TagProperty);
         }
     }
 }
