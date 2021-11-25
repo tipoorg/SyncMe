@@ -1,4 +1,5 @@
 ﻿using Android.Content;
+using Android.Widget;
 using SyncMe.Droid.Extensions;
 using SyncMe.Models;
 
@@ -25,6 +26,7 @@ internal class AlarmReceiver : BroadcastReceiver
                 return;
 
             default:
+                Toast.MakeText(context, "OnReceive is unhandled", ToastLength.Long).Show();
                 return;
         }
     }
