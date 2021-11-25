@@ -16,36 +16,47 @@
                 <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
                 <Setter Property="VerticalTextAlignment" Value="Center"/>
                 <Setter Property="VerticalOptions" Value="Center"/>
-                <Setter Property="Margin" Value="20,7,0,0" />
+                <Setter Property="Margin" Value="20,7,0,0"/>
                 <Setter Property="Padding" Value="5"/>
             </Style>
             <Style x:Key="SyncButton" TargetType="Button">
                 <Setter Property="CornerRadius" Value="100"/>
-                <Setter Property="HeightRequest" Value="20"/>
-                <Setter Property="WidthRequest" Value="20"/>
-                <Setter Property="Margin" Value="0,12,20,0" />
+                <Setter Property="HeightRequest" Value="35"/>
+                <Setter Property="WidthRequest" Value="35"/>
+                <Setter Property="Margin" Value="0,12,20,0"/>
+                <Setter Property="BackgroundColor" Value="White"/>
+                <Setter Property="ImageSource" Value="icon_profile_sync.png"/>
+            </Style>
+            <Style x:Key="FrameStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="Padding" Value="10"/>
+                <Setter Property="WidthRequest" Value="200"/>
+                <Setter Property="Margin" Value="8,8,8,8"/>
+                <Setter Property="BorderColor" Value="{StaticResource epamBlue}"/>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="icon_plus_minor.xml" Clicked="OnSyncClicked" CommandParameter="{Binding .}" />
+        <ToolbarItem IconImageSource="icon_all_profiles_sync.png" Clicked="OnSyncClicked" CommandParameter="{Binding .}" />
     </ContentPage.ToolbarItems>
     
     <ContentPage.Content>
         <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <StackLayout>
-                <FlexLayout Direction="Column">
-                    <ListView ItemsSource="{Binding Identities}">
+                <FlexLayout Direction="Column" JustifyContent="Center">
+                    <ListView ItemsSource="{Binding Identities}" SelectionMode="None" HasUnevenRows="True">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
-                                    <StackLayout>
-                                        <FlexLayout JustifyContent="SpaceBetween">
-                                            <Label Text="{Binding Name}" Style="{StaticResource IdentityStyle}"/>
-                                            <Button Clicked="OnSyncClicked" CommandParameter="{Binding .}" Style="{StaticResource SyncButton}" />
-                                        </FlexLayout>
-                                    </StackLayout>
+                                    <Frame Style="{StaticResource FrameStyle}">
+                                        <StackLayout>
+                                            <FlexLayout JustifyContent="SpaceBetween">
+                                                <Label Text="{Binding Name}" Style="{StaticResource IdentityStyle}"/>
+                                                <Button Clicked="OnSyncClicked" CommandParameter="{Binding .}" Style="{StaticResource SyncButton}" />
+                                            </FlexLayout>
+                                        </StackLayout>
+                                    </Frame>
                                 </ViewCell>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -55,20 +66,18 @@
             <Button x:Name="AddIdentity"
                         ImageSource="icon_plus.xml"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
-                        Style="{StaticResource RoundButtonStyle}"/>
+                        AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"/>
             <Button x:Name="AddOutlook"
-                        ImageSource="icon_outlook.xml"
+                        ImageSource="icon_outlook_provider.png"
                         IsVisible="False"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="1, 0.85, AutoSize, AutoSize"
-                        Style="{StaticResource RoundButtonStyle}"/>
+                        AbsoluteLayout.LayoutBounds="1, 0.85, AutoSize, AutoSize"/>
             <Button x:Name="AddGoogle"
                         ImageSource="icon_google.xml"
                         IsVisible="False"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
                         AbsoluteLayout.LayoutBounds="1, 0.70, AutoSize, AutoSize"
-                        Style="{StaticResource RoundButtonStyle}"/>
+                        BackgroundColor="White"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -1,6 +1,7 @@
 ﻿using SyncMe.Controls;
 using SyncMe.Extensions;
 using SyncMe.Models;
+using SyncMe.ViewModels;
 using Xamarin.Forms.Xaml;
 
 namespace SyncMe.Views;
@@ -17,12 +18,12 @@ public partial class EventSchedulePage : ContentPage
         BindingContext = _eventModel;
     }
 
-    private async void OnCheckedChanged(object sender, CheckedChangedEventArgs e)
+    private async void OnClicked(object sender, EventArgs e)
     {
-        if (sender is TagRadioButton radio)
+        if (sender is TagButton<SyncRepeat> button)
         {
-            _eventModel.Schedule = radio.Tag;
-            _eventModel.ScheduleButtonText = radio.Tag.GetDescription();
+            _eventModel.Schedule = button.Tag;
+            _eventModel.ScheduleButtonText = button.Tag.GetDescription();
         }
         await Navigation.PopAsync();
     }

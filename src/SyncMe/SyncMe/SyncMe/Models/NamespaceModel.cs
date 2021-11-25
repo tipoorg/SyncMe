@@ -40,8 +40,10 @@ namespace SyncMe.Models
         {
             get { return _isExpanded; }
             set 
-            { 
-                _isExpanded = value; 
+            {
+                if(value == _isExpanded) return;
+                _isExpanded = value;
+                
                 OnPropertyChanged(nameof(IsExpanded));
                 OnPropertyChanged(nameof(ArrowRotation));
             }
@@ -85,6 +87,7 @@ namespace SyncMe.Models
             {
                 if (_isActive == value) return;
                 _isActive = value;
+
                 OnPropertyChanged(nameof(IsActive));
                 OnPropertyChanged(nameof(BorderColor)); 
             }
@@ -99,6 +102,13 @@ namespace SyncMe.Models
         public ICommand ExpandClick { private set; get; }
         public static Subject<NamespaceModel> ExpandClicked { private set; get; } = new Subject<NamespaceModel>();
 
+        public ICommand NewItemClick { private set; get; }
+        public static Subject<NamespaceModel> NewItemClicked { private set; get; } = new Subject<NamespaceModel>();
+
+        public ICommand RemoveClick { private set; get; }
+        public static Subject<NamespaceModel> RemoveClicked { private set; get; } = new Subject<NamespaceModel>();
+
+
         public NamespaceModel(string fullName, bool isActive, bool hasChildren)
         {
             FullName = fullName;
@@ -109,16 +119,12 @@ namespace SyncMe.Models
             TomorrowClick = new Command(() => TomorrowClicked.OnNext(this));
             RestoreClick = new Command(() => RestoreClicked.OnNext(this));
             ExpandClick = new Command(() => ExpandClicked.OnNext(this));
+            NewItemClick = new Command(() => NewItemClicked.OnNext(this));
+            RemoveClick = new Command(() => RemoveClicked.OnNext(this));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(string prop = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-            }
-        }
+        private void OnPropertyChanged(string prop = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
     }
 }

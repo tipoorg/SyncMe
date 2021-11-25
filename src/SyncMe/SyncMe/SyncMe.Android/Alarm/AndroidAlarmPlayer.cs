@@ -1,35 +1,38 @@
 ﻿using Android.Content;
 using Android.Media;
+using SyncMe.Repos;
 
 namespace SyncMe.Droid.Alarm;
 
-internal sealed class AndroidAlarmPlayer
+internal sealed class AndroidAlarmPlayer : IAndroidAlarmPlayer
 {
     private readonly MediaPlayer _mediaPlayer;
+    private readonly INotificationsSwitcherRepository _notificationsSwitcherRepository;
 
-    private static AndroidAlarmPlayer _instance;
-    public static AndroidAlarmPlayer Instance => _instance ??= new AndroidAlarmPlayer();
-
-    private AndroidAlarmPlayer()
+    public AndroidAlarmPlayer(INotificationsSwitcherRepository notificationsSwitcherRepository)
     {
         _mediaPlayer = new MediaPlayer();
+        _notificationsSwitcherRepository = notificationsSwitcherRepository;
     }
 
     public void PlayAlarm(Context context)
     {
-        var soundUri = RingtoneManager.GetActualDefaultRingtoneUri(context, RingtoneType.Alarm);
+        if (_notificationsSwitcherRepository.State)
+        {
+            var soundUri = RingtoneManager.GetActualDefaultRingtoneUri(context, RingtoneType.Alarm);
 
-        try
-        {
-            _mediaPlayer.Reset();
-            _mediaPlayer.SetDataSource(context, soundUri);
-            _mediaPlayer.SetAudioAttributes(GetAudio());
-            _mediaPlayer.Prepare();
-            _mediaPlayer.Start();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
+            try
+            {
+                _mediaPlayer.Reset();
+                _mediaPlayer.SetDataSource(context, soundUri);
+                _mediaPlayer.SetAudioAttributes(GetAudio());
+                _mediaPlayer.Prepare();
+                _mediaPlayer.Start();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
     }
 

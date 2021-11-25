@@ -1,6 +1,5 @@
 ﻿using Android.Content;
-using SyncMe.Droid.Extensions;
-using SyncMe.Models;
+using Android.Widget;
 
 namespace SyncMe.Droid.Alarm;
 
@@ -15,31 +14,17 @@ internal class AlarmReceiver : BroadcastReceiver
 
         switch (action)
         {
-            case AlarmMessage.SetAlarmAction:
-                SetAlarm(context, intent);
+            case AlarmMessage.ProcessAlarmAction:
+                _androidAlarmService.ProcessAlarm(context, intent);
                 return;
 
             case AlarmMessage.StopAlarmAction:
-                StopAlarm(intent);
+                _androidAlarmService.StopPlayingAlarm(intent);
                 return;
 
             default:
+                Toast.MakeText(context, "OnReceive is unhandled", ToastLength.Long).Show();
                 return;
         }
-    }
-
-    private void SetAlarm(Context context, Intent intent)
-    {
-        var pendingAlarm = intent.GetExtra<SyncAlarm>();
-        AndroidAlarmPlayer.Instance.PlayAlarm(context);
-        AndroidNotificationManager.Instance.Show(pendingAlarm, context);
-        _androidAlarmService.SetAlarm(pendingAlarm.EventId, context);
-    }
-
-    private void StopAlarm(Intent intent)
-    {
-        AndroidAlarmPlayer.Instance.StopPlaying();
-        var id = intent.GetIntExtra(AlarmMessage.NotificationIdKey, -1);
-        AndroidNotificationManager.Instance.Cancel(id);
     }
 }

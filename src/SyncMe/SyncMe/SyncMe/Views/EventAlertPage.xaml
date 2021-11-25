@@ -2,20 +2,22 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:SyncMe.Controls"
+             xmlns:x1="clr-namespace:SyncMe.Models"
              x:Class="SyncMe.Views.EventAlertPage"
-             Title="Event Alarm">
+             Title="Event Alert">
     <ContentPage.Content>
         <StackLayout>
-            <local:TagButton Text="At time of event" Clicked="OnClicked" Tag="AtEventTime"/>
-            <local:TagButton Text="5 minutes before" Clicked="OnClicked" Tag="Before1Min"/>
-            <local:TagButton Text="10 minutes before" Clicked="OnClicked" Tag="Before5Min"/>
-            <local:TagButton Text="15 minutes before" Clicked="OnClicked" Tag="Before10Min"/>
-            <local:TagButton Text="30 minutes before" Clicked="OnClicked" Tag="Before15Min"/>
-            <local:TagButton Text="1 hour before" Clicked="OnClicked" Tag="Before30Min"/>
-            <local:TagButton Text="2 hours before" Clicked="OnClicked" Tag="Before1Hour"/>
-            <local:TagButton Text="1 day before" Clicked="OnClicked" Tag="DayBefore"/>
-            <local:TagButton Text="2 days before" Clicked="OnClicked" Tag="TwoDaysBefore"/>
-            <local:TagButton Text="1 week before" Clicked="OnClicked" Tag="OneWeekBefore"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="At time of event" Clicked="OnClicked" Tag="AtEventTime"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="1 minute before" Clicked="OnClicked" Tag="Before1Min"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="5 minutes before" Clicked="OnClicked" Tag="Before5Min"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="10 minutes before" Clicked="OnClicked" Tag="Before10Min"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="15 minutes before" Clicked="OnClicked" Tag="Before15Min"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="30 minutes before" Clicked="OnClicked" Tag="Before30Min"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="1 hour before" Clicked="OnClicked" Tag="Before1Hour"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="2 hours before" Clicked="OnClicked" Tag="Before2Hour"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="1 day before" Clicked="OnClicked" Tag="DayBefore"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="2 days before" Clicked="OnClicked" Tag="TwoDaysBefore"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="1 week before" Clicked="OnClicked" Tag="OneWeekBefore"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

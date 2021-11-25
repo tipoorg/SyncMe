@@ -1,12 +1,12 @@
 ﻿using Microsoft.Graph;
 using Microsoft.Identity.Client;
-using System;
+using SyncMe.Common;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace CalendarProviders.Authorization
+namespace SyncMe.CalendarProviders.Authorization
 {
     public class MicrosoftAuthorizationManager
     {
@@ -30,7 +30,7 @@ namespace CalendarProviders.Authorization
             CurrentAccounts = PCA.GetAccountsAsync().Result;
         }
 
-        public async Task<string> SignInAsync(object AuthUIParent)
+        public async Task<Optional<string>> TrySignInAsync(object AuthUIParent)
         {
             // This exception is thrown when an interactive sign-in is required.
             // Prompt the user to sign-in
@@ -42,29 +42,32 @@ namespace CalendarProviders.Authorization
                     .WithParentActivityOrWindow(AuthUIParent);
             }
 
-            var result = await interactiveRequest.ExecuteAsync();
-            return result.Account.Username;
+            try
+            {
+                var result = await interactiveRequest.ExecuteAsync();
+                return new Optional<string>(result.Account.Username);
+            }
+            catch (MsalClientException ex) when (ex.Message.StartsWith("User canceled authentication."))
+            {
+                return new Optional<string>(default);
+            }
         }
 
         public async Task<GraphServiceClient> GetGraphClientAsync(string username)
         {
             CurrentAccounts = await PCA.GetAccountsAsync();
-            if (CurrentAccounts.Count() > 0)
-            {
-                // Initialize Graph client
-                return new GraphServiceClient(new DelegateAuthenticationProvider(
-                    async (requestMessage) =>
-                    {
-                        var currentAccount = CurrentAccounts.FirstOrDefault(a => a.Username == username);
-                        var result = await PCA.AcquireTokenSilent(Scopes, currentAccount)
-                            .ExecuteAsync();
 
-                        requestMessage.Headers.Authorization =
-                            new AuthenticationHeaderValue("Bearer", result.AccessToken);
-                    }));
-            }
+            // Initialize Graph client
+            return new GraphServiceClient(new DelegateAuthenticationProvider(
+                async (requestMessage) =>
+                {
+                    var currentAccount = CurrentAccounts.FirstOrDefault(a => a.Username == username);
+                    var result = await PCA.AcquireTokenSilent(Scopes, currentAccount)
+                        .ExecuteAsync();
 
-            return null;
+                    requestMessage.Headers.Authorization =
+                        new AuthenticationHeaderValue("Bearer", result.AccessToken);
+                }));
         }
     }
 }

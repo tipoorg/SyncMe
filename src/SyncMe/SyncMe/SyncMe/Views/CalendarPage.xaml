@@ -13,16 +13,9 @@
                 <Setter Property="FontSize" Value="Large"/>
                 <Setter Property="Margin" Value="20,5,0,0"/>
             </Style>
-            <Style x:Key="ToggleButtonStyle" TargetType="Switch">
-                <Setter Property="OnColor" Value="{StaticResource epamBlue}"/>
-                <Setter Property="Margin" Value="20,0,15,11"/>
-                <Setter Property="IsToggled" Value="True"/>
-                <Setter Property="ThumbColor" Value="{StaticResource epamGrey}"/>
-            </Style>
             <Style x:Key="FloadButtonStyle" TargetType="Button">
-                <Setter Property="CornerRadius" Value="100"/>
-                <Setter Property="HeightRequest" Value="55"/>
-                <Setter Property="WidthRequest" Value="55"/>
+                <Setter Property="HeightRequest" Value="64"/>
+                <Setter Property="WidthRequest" Value="64"/>
                 <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
                 <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
                 <Setter Property="Padding" Value="15"/>
@@ -51,8 +44,13 @@
             <RowDefinition Height="9*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0"  Grid.Column="0" Text="Notifications:"  Style="{StaticResource NotificationStyle}"></Label>
-        <Switch Grid.Row="0" Grid.Column="1" x:Name="NotificationsSwitcher" Style="{StaticResource ToggleButtonStyle}"></Switch>
+        <Label Grid.Row="0"  Grid.Column="0" Text="Alarm sound:"  Style="{StaticResource NotificationStyle}"></Label>
+        <Switch 
+            Grid.Row="0" 
+            Grid.Column="1"
+            x:Name="NotificationsSwitcher" 
+            Style="{StaticResource ToggleButtonStyle}"
+            IsToggled="{Binding NotificationsSwitcher}"/>
         <controls:Calendar 
             x:Name="Calendar1"
             Grid.Row="1"  
@@ -64,9 +62,10 @@
             >
         </controls:Calendar>
         <Button x:Name="AddEvent"
-            ImageSource="icon_plus.xml"
+            ImageSource="icon_add_calendar.png"
             Grid.Row="2"  
-            Grid.Column="1" 
+            Grid.Column="1"
+            BackgroundColor="White"
             Style="{StaticResource FloadButtonStyle}"/>
     </Grid>
 </ContentPage>

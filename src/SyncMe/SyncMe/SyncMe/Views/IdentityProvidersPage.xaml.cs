@@ -1,26 +1,26 @@
-﻿using CalendarProviders.Authorization;
-using SyncMe.Models;
-using SyncMe.Providers.OutlookProvider;
+﻿using SyncMe.Models;
 using SyncMe.Repos;
 using System.Threading;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using Xamarin.Forms.Xaml;
 using SyncMe.Extensions;
+using SyncMe.Common;
+using SyncMe.CalendarProviders.Authorization;
+using SyncMe.CalendarProviders.Outlook;
 
 namespace SyncMe.Views;
+
 public record Identity(string Name);
 
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 {
     private readonly IDisposable _addIdentitySubsciption;
-    private readonly IDisposable _addOutlookIdentity;
-    private readonly IDisposable _addEventConnection;
+    private readonly IDisposable _addOutlookIdentitySubscription;
     private readonly ISyncEventsRepository _syncEventsRepository;
 
     public ObservableCollection<Identity> Identities { get; } = new ObservableCollection<Identity>();
-    public IObservable<Guid> ScheduledEvents { get; }
 
     public IdentityProvidersPage(ISyncEventsRepository syncEventsRepository)
     {
@@ -37,20 +37,12 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
         _addIdentitySubsciption = Observable
             .FromEventPattern(AddIdentity, nameof(Button.Clicked))
-            .Subscribe(x =>
-            {
-                SwitchLayouts();
-            });
+            .Subscribe(x => SwitchLayouts());
 
-        var scheduledEvents = Observable
+        _addOutlookIdentitySubscription = Observable
             .FromEventPattern(AddOutlook, nameof(Button.Clicked))
             .Do(_ => SwitchLayouts())
             .SelectMany(_ => LoadEventsAsync())
-            .Publish();
-
-        _addEventConnection = scheduledEvents.Connect();
-        ScheduledEvents = scheduledEvents.SelectMany(x => x.newEvents);
-        _addOutlookIdentity = scheduledEvents
             .ObserveOn(SynchronizationContext.Current)
             .Subscribe(x =>
             {
@@ -61,9 +53,11 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
     private async Task<(string username, List<Guid> newEvents)> LoadEventsAsync(string username = null)
     {
-        var fetchResult = await FetchEventsAsync(username);
-        username = fetchResult.username;
-        var syncEvents = fetchResult.events;
+        var optional = await FetchEventsAsync(username);
+        if (!optional.HasValue)
+            return default;
+        username = optional.Value.username;
+        var syncEvents = optional.Value.events;
 
         if (Identities.Any(i => i.Name == username))
             _syncEventsRepository.RemoveEvents(e => username == e.ExternalEmail);
@@ -80,19 +74,32 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
         _syncEventsRepository.RemoveEvents(e => accountsToResync.Contains(e.ExternalEmail));
         foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
         {
-            var (_, syncEvents) = await FetchEventsAsync(account.Username);
+            var optional = await FetchEventsAsync(account.Username);
 
-            foreach (var @event in syncEvents)
+            if (!optional.HasValue)
+                return;
+
+            foreach (var @event in optional.Value.events)
             {
                 _syncEventsRepository.AddSyncEvent(@event);
             }
         }
     }
 
-    private async Task<(string username, IEnumerable<SyncEvent> events)> FetchEventsAsync(string username)
+    private async Task<Optional<(string username, IEnumerable<SyncEvent> events)>> FetchEventsAsync(string username)
     {
         var manager = new MicrosoftAuthorizationManager();
-        username ??= await manager.SignInAsync(App.AuthUIParent);
+
+        if (username is null)
+        {
+            var optional = await manager.TrySignInAsync(App.AuthUIParent);
+
+            if (!optional.HasValue)
+                return default;
+
+            username = optional.Value;
+        }
+
         var client = await manager.GetGraphClientAsync(username);
         var events = await new OutlookProvider(client, username).GetEventsAsync();
         return (username, events.Select(e => e.ToSyncEvent(username)));
@@ -119,7 +126,6 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
     public void Dispose()
     {
         _addIdentitySubsciption.Dispose();
-        _addOutlookIdentity.Dispose();
-        _addEventConnection.Dispose();
+        _addOutlookIdentitySubscription.Dispose();
     }
 }

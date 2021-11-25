@@ -18,7 +18,7 @@ public class SyncAlarmService : ISyncAlarmService
         {
             if (TryGetNearestAlarmDelay(syncEvent, out var alarmDelay))
             {
-                syncALarm = new SyncAlarm(syncEvent.Title, eventId, (int)alarmDelay.TotalSeconds);
+                syncALarm = new SyncAlarm(syncEvent.Title, eventId, syncEvent.Namespace.Title, (int)alarmDelay.TotalSeconds);
                 return true;
             }
         }
@@ -37,13 +37,14 @@ public class SyncAlarmService : ISyncAlarmService
             SyncRepeat.None => DelayAgainstNow(eventDateTime),
             SyncRepeat.Dayly => FirstAvailable(DateTime.Today.Add(eventTime), Dayly),
             SyncRepeat.WorkDays => FirstAvailable(DateTime.Today.Add(eventTime), WorkDays),
+            SyncRepeat.EveryWeek => FirstAvailable(DateTime.Today.Add(eventTime), EveryWeek),
             SyncRepeat.EveryMonth => FirstAvailable(DateTime.Today.Add(eventTime), EveryMonth),
             SyncRepeat.EveryYear => FirstAvailable(DateTime.Today.Add(eventTime), EveryYear),
             SyncRepeat.EveryMinute => FirstAvailable(DateTime.Today.Add(eventTime), EveryMinute),
             _ => TimeSpan.Zero,
         };
 
-        return delay.Ticks > 0;
+        return delay.Ticks > 100;
     }
 
     private TimeSpan FirstAvailable(DateTime since, Func<DateTime, DateTime> next)
@@ -60,8 +61,9 @@ public class SyncAlarmService : ISyncAlarmService
         }
     }
 
+    private static TimeSpan DelayAgainstNow(DateTime eventDateTime) => eventDateTime - DateTime.Now;
     private static DateTime Dayly(DateTime date) => date.AddDays(1);
-    private static TimeSpan DelayAgainstNow(DateTime current) => current.Subtract(DateTime.Now);
+    private static DateTime EveryWeek(DateTime date) => date.AddDays(7);
     private static DateTime EveryMonth(DateTime date) => date.AddMonths(1);
     private static DateTime EveryYear(DateTime date) => date.AddYears(1);
     private static DateTime EveryMinute(DateTime date) => date.AddMinutes(1);

@@ -7,7 +7,7 @@ public enum SyncStatus
     Active, Stopped
 }
 
-public class SyncEvent
+public record SyncEvent
 {
     public string ExternalId { get; set; }
     public string? ExternalEmail { get; set; }
@@ -23,22 +23,23 @@ public class SyncEvent
 
 public record NamespaceTree(Dictionary<string, List<Namespace>> Tree);
 
-public class Namespace
+public record Namespace
 {
     public string Title { get; set; }
-    public Guid Id { get; init; }
     public bool IsActive { get; set; }
-    public DateTime TurnOnDate { get; set; }
+    public DateTime? TurnOnDate { get; set; }
 }
 
 public enum SyncRepeat
 {
-    [Description("None")]
+    [Description("Does not repeat")]
     None,
     [Description("Daily")]
     Dayly,
     [Description("Work Days")]
     WorkDays,
+    [Description("Every week")]
+    EveryWeek,
     [Description("Every Month")]
     EveryMonth, 
     [Description("Every Year")]
@@ -47,17 +48,17 @@ public enum SyncRepeat
     EveryMinute
 }
 
-public class SyncSchedule
+public record SyncSchedule
 {
     public SyncRepeat Repeat { get; set; }
 }
 
-public class SyncAlert
+public record SyncAlert
 {
     public SyncReminder Reminder { get; set; }
 }
 
-public record SyncAlarm(string Title, Guid EventId, int DelaySeconds);
+public record SyncAlarm(string Title, Guid EventId, string NamespaceFullName, int DelaySeconds);
 
 public enum SyncReminder
 {
@@ -75,6 +76,8 @@ public enum SyncReminder
     Before30Min = 30,
     [Description("1 hour before")]
     Before1Hour = 60,
+    [Description("2 hours before")]
+    Before2Hour = 120,
     [Description("1 day before")]
     DayBefore = 1440,
     [Description("2 days before")]

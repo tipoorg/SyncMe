@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CalendarProviders.Authorization
+namespace SyncMe.CalendarProviders.Authorization
 {
     public static class OAuthSettings
     {
