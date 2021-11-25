@@ -7,14 +7,20 @@
             <Color x:Key="epamBlue">#39c2d7</Color>
             <Color x:Key="epamGrey">#464547</Color>
         </ResourceDictionary>
-    <Style x:Key="RoundButtonStyle" TargetType="Button">
-        <Setter Property="CornerRadius" Value="100"/>
-        <Setter Property="HeightRequest" Value="55"/>
-        <Setter Property="WidthRequest" Value="55"/>
-        <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
-        <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
-        <Setter Property="Padding" Value="15"/>
-        <Setter Property="Margin" Value="0,0,20,20"/>
-    </Style>
+        <Style x:Key="RoundButtonStyle" TargetType="Button">
+            <Setter Property="CornerRadius" Value="100"/>
+            <Setter Property="HeightRequest" Value="55"/>
+            <Setter Property="WidthRequest" Value="55"/>
+            <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+            <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="Margin" Value="0,0,20,20"/>
+        </Style>
+        <Style x:Key="ToggleButtonStyle" TargetType="Switch">
+            <Setter Property="OnColor" Value="{StaticResource epamBlue}"/>
+            <Setter Property="Margin" Value="20,0,15,11"/>
+            <Setter Property="IsToggled" Value="True"/>
+            <Setter Property="ThumbColor" Value="{StaticResource epamGrey}"/>
+        </Style>
     </Application.Resources>
 </Application>

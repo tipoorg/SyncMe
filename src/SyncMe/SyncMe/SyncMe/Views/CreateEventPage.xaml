@@ -11,13 +11,13 @@
         <ScrollView>
             <StackLayout Spacing="20">
                 <StackLayout>
-                    <forms:AutoSuggestBox PlaceholderText="Namespace" PropertyChanging="ValidateButtonState" TextChanged="OnTextChanged" QuerySubmitted="OnQuerySubmitted" SuggestionChosen="OnSuggestionChosen"/>
-                    <Entry Text="{Binding Title}" Placeholder="Title" PropertyChanging="ValidateButtonState"/>
+                    <forms:AutoSuggestBox PlaceholderText="Namespace" PropertyChanged="ValidateButtonState" TextChanged="OnTextChanged" QuerySubmitted="OnQuerySubmitted" SuggestionChosen="OnSuggestionChosen"/>
+                    <Entry Text="{Binding Title}" Placeholder="Title" PropertyChanged="ValidateButtonState"/>
                 </StackLayout>
                 <StackLayout Padding="0, 10">
                     <Grid>
                         <Label Text="All-Day" TextColor="{StaticResource epamGrey}"/>
-                        <Switch IsToggled="False" OnColor="#4AD764" ThumbColor="#FFFFFF" Toggled="OnSwitchToggled"/>
+                        <Switch IsToggled="False" Toggled="OnSwitchToggled" Style="{StaticResource ToggleButtonStyle}"/>
                     </Grid>
                     <Button Text="{Binding ScheduleButtonText}" Clicked="OnConfigureScheduleClicked" BackgroundColor="{StaticResource epamBlue}"/>
                     <StackLayout>
@@ -32,7 +32,7 @@
                     </StackLayout>
                 </StackLayout>
                 <StackLayout Padding="0, 10">
-                    <Label Text="Alert" TextColor="{StaticResource epamGrey}"/>
+                    <Label Text="Event Alert" TextColor="{StaticResource epamGrey}"/>
                     <Button Text="{Binding AlertButtonText}" Clicked="OnAlertButtonClicked" BackgroundColor="{StaticResource epamBlue}"/>
                 </StackLayout>
             </StackLayout>
