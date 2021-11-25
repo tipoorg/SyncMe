@@ -80,7 +80,7 @@ public class CalendarPageViewModel : INotifyPropertyChanged
         return result;
     }
 
-    private static SyncEventViewModel Convert(SyncEvent e) => new() { Description = e.Description, Name = e.Title };
+    private static SyncEventViewModel Convert(SyncEvent e) => new() { Description = e.Namespace.Title, Name = e.Title, StartDate = e.Start };
 
     private EventCollection _events;
 
