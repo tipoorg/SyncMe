@@ -51,6 +51,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\CalendarProviders\CalendarProviders.csproj" />
+      <ProjectReference Include="..\..\SyncMe.CalendarProviders\SyncMe.CalendarProviders.csproj" />
+      <ProjectReference Include="..\..\SyncMe.Common\SyncMe.Common.csproj" />
     </ItemGroup>
 </Project>

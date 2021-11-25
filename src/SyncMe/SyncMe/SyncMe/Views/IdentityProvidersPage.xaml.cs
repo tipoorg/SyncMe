@@ -1,12 +1,13 @@
-﻿using CalendarProviders.Authorization;
-using SyncMe.Models;
-using SyncMe.Providers.OutlookProvider;
+﻿using SyncMe.Models;
 using SyncMe.Repos;
 using System.Threading;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using Xamarin.Forms.Xaml;
 using SyncMe.Extensions;
+using SyncMe.Common;
+using SyncMe.CalendarProviders.Authorization;
+using SyncMe.CalendarProviders.Outlook;
 
 namespace SyncMe.Views;
 
@@ -52,9 +53,11 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
     private async Task<(string username, List<Guid> newEvents)> LoadEventsAsync(string username = null)
     {
-        var fetchResult = await FetchEventsAsync(username);
-        username = fetchResult.username;
-        var syncEvents = fetchResult.events;
+        var optional = await FetchEventsAsync(username);
+        if (!optional.HasValue)
+            return default;
+        username = optional.Value.username;
+        var syncEvents = optional.Value.events;
 
         if (Identities.Any(i => i.Name == username))
             _syncEventsRepository.RemoveEvents(e => username == e.ExternalEmail);
@@ -71,19 +74,32 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
         _syncEventsRepository.RemoveEvents(e => accountsToResync.Contains(e.ExternalEmail));
         foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
         {
-            var (_, syncEvents) = await FetchEventsAsync(account.Username);
+            var optional = await FetchEventsAsync(account.Username);
 
-            foreach (var @event in syncEvents)
+            if (!optional.HasValue)
+                return;
+
+            foreach (var @event in optional.Value.events)
             {
                 _syncEventsRepository.AddSyncEvent(@event);
             }
         }
     }
 
-    private async Task<(string username, IEnumerable<SyncEvent> events)> FetchEventsAsync(string username)
+    private async Task<Optional<(string username, IEnumerable<SyncEvent> events)>> FetchEventsAsync(string username)
     {
         var manager = new MicrosoftAuthorizationManager();
-        username ??= await manager.SignInAsync(App.AuthUIParent);
+
+        if (username is null)
+        {
+            var optional = await manager.TrySignInAsync(App.AuthUIParent);
+
+            if (!optional.HasValue)
+                return default;
+
+            username = optional.Value;
+        }
+
         var client = await manager.GetGraphClientAsync(username);
         var events = await new OutlookProvider(client, username).GetEventsAsync();
         return (username, events.Select(e => e.ToSyncEvent(username)));
