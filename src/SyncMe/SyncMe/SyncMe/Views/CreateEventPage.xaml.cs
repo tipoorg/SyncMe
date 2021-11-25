@@ -9,16 +9,11 @@ namespace SyncMe.Views;
 
 public sealed partial class CreateEventPage : ContentPage, IDisposable
 {
-    private static readonly TimeSpan _defaultTime = new TimeSpan(12, 0, 0);
-
     private readonly ISyncNamespaceRepository _namespaceRepository;
     private readonly ISyncEventsRepository _eventsRepository;
     private readonly Dictionary<string, Namespace> _namespaces;
-    private readonly IDisposable _addEventConnection;
     private readonly IDisposable _addEventSubscription;
-    private SyncEventViewModel _eventModel;
-
-    public IObservable<Guid> ScheduledEvents { get; }
+    private readonly SyncEventViewModel _eventModel;
 
     public CreateEventPage(ISyncEventsRepository eventsRepository, ISyncNamespaceRepository namespaceRepository)
     {
@@ -29,18 +24,11 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         _namespaces = _namespaceRepository.GetAllSyncNamespaces();
         BindingContext = _eventModel;
 
-        var scheduledEvents = Observable
+        _addEventSubscription = Observable
             .FromEventPattern(AddEvent, nameof(Button.Clicked))
             .SelectMany(x => AddNewSyncEvent())
             .Do(x => _namespaceRepository.AddSyncNamespace(_eventModel.Namespace))
-            .Publish();
-
-        _addEventConnection = scheduledEvents.Connect();
-        ScheduledEvents = scheduledEvents;
-
-        _addEventSubscription = scheduledEvents
-            .SelectMany(x => NavigateToCalendar())
-            .Subscribe(x => CleanUpElements());
+            .Subscribe(async x => await NavigateToCalendar());
     }
 
     private void OnQuerySubmitted(object sender, AutoSuggestBoxQuerySubmittedEventArgs e)
@@ -95,12 +83,11 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     {
         if (!string.IsNullOrEmpty(_eventModel.Namespace))
         {
-            if (!await DisplayAlert(null, "Discard this event?", "Keep editing", "Discard"))
+            if (await DisplayAlert(null, "Discard this event?", "Keep editing", "Discard"))
             {
-                CleanUpElements();
+                await NavigateToCalendar();
             }
         }
-        await NavigateToCalendar();
     }
 
     private static async Task<Unit> NavigateToCalendar()
@@ -113,11 +100,11 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     {
         if (!string.IsNullOrEmpty(_eventModel.Namespace) && !string.IsNullOrEmpty(_eventModel.Title))
         {
-            _eventModel.IsAddEventEnabled = true;
+            AddEvent.IsEnabled = true;
         }
         else
         {
-            _eventModel.IsAddEventEnabled = false;
+            AddEvent.IsEnabled = false;
         }
     }
 
@@ -130,21 +117,8 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         }
     }
 
-    private void CleanUpElements()
-    {
-        _eventModel.Namespace = string.Empty;
-        _eventModel.Title = string.Empty;
-        _eventModel.StartDate = DateTime.Today;
-        _eventModel.StartTime = _defaultTime;
-        _eventModel.EndDate = DateTime.Today;
-        _eventModel.EndTime = _defaultTime;
-        _eventModel.ScheduleButtonText = "Does Not Repeat";
-        _eventModel.AlertButtonText = "Alert";
-    }
-
     public void Dispose()
     {
         _addEventSubscription.Dispose();
-        _addEventConnection.Dispose();
     }
 }

@@ -15,21 +15,8 @@ public class SyncEventViewModel : INotifyPropertyChanged
             Schedule = new SyncSchedule(),
             Alert = new SyncAlert {  Reminder = SyncReminder.AtEventTime }
         };
-
-        IsAddEventEnabled = false;
         ScheduleButtonText = "Does Not Repeat";
         AlertButtonText = "Alert";
-    }
-
-    private bool _isAddEventEnabled;
-    public bool IsAddEventEnabled
-    {
-        get { return _isAddEventEnabled; }
-        set
-        {
-            _isAddEventEnabled = value;
-            OnPropertyChanged(nameof(IsAddEventEnabled));
-        }
     }
 
     private string _scheduleButtonText;
