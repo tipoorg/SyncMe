@@ -13,6 +13,7 @@ internal sealed class AndroidAlarmPlayer : IAndroidAlarmPlayer
     {
         _mediaPlayer = new MediaPlayer();
         _notificationsSwitcherRepository = notificationsSwitcherRepository;
+        _notificationsSwitcherRepository.OnStateChanged += OnStateChanged;
     }
 
     public void PlayAlarm(Context context)
@@ -46,5 +47,11 @@ internal sealed class AndroidAlarmPlayer : IAndroidAlarmPlayer
         return new AudioAttributes.Builder()
             .SetUsage(AudioUsageKind.Alarm)
             .Build();
+    }
+
+    private void OnStateChanged(object sender, bool newState)
+    {
+        if (newState is false)
+            _mediaPlayer.Stop();
     }
 }

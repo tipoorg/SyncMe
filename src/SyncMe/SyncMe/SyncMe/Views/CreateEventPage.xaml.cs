@@ -33,26 +33,12 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
             .Subscribe(async x => await NavigateToCalendar());
     }
 
-    private void OnQuerySubmitted(object sender, AutoSuggestBoxQuerySubmittedEventArgs e)
-    {
-        if (e.ChosenSuggestion != null)
-        {
-            // User selected an item from the suggestion list, take an action on it here.
-        }
-        else
-        {
-            // User hit Enter from the search box. Use args.QueryText to determine what to do.
-        }
-    }
-
     private void OnSuggestionChosen(object sender, AutoSuggestBoxSuggestionChosenEventArgs e)
     {
         if (sender is AutoSuggestBox autoSuggest)
         {
-            var particles = autoSuggest.Text.Split('.');
-            //if (particles.Length > 1)
-
-            autoSuggest.Text = $"{e.SelectedItem}.";
+            autoSuggest.Text = $"{e.SelectedItem}";
+            ValidateButtonState();
         }
     }
 
@@ -60,13 +46,15 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     {
         if (e.Reason == AutoSuggestionBoxTextChangeReason.UserInput && sender is AutoSuggestBox autoSuggest)
         {
-            _eventModel.Namespace = autoSuggest.Text;
+           _eventModel.Namespace = autoSuggest.Text;
 
             autoSuggest.ItemsSource = _namespaces
                 .Select(x => x.Key)
                 .Where(x => x.StartsWith(autoSuggest.Text, StringComparison.OrdinalIgnoreCase))
                 .Distinct()
                 .ToArray();
+
+            ValidateButtonState();
         }
     }
 
@@ -98,7 +86,9 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         return Unit.Default;
     }
 
-    private void ValidateButtonState(object sender, PropertyChangedEventArgs e)
+    private void ValidateButtonState(object sender, PropertyChangedEventArgs e) => ValidateButtonState();
+
+    private void ValidateButtonState()
     {
         if (!string.IsNullOrEmpty(_eventModel.Namespace) && !string.IsNullOrEmpty(_eventModel.Title))
         {
@@ -110,17 +100,5 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         }
     }
 
-    private void OnSwitchToggled(object sender, ToggledEventArgs e)
-    {
-        if (e.Value)
-        {
-            _eventModel.StartDate = DateTime.Today.Date;
-            _eventModel.EndDate = DateTime.Today.Date.AddDays(1).AddTicks(-1);
-        }
-    }
-
-    public void Dispose()
-    {
-        _addEventSubscription.Dispose();
-    }
+    public void Dispose() => _addEventSubscription.Dispose();
 }
