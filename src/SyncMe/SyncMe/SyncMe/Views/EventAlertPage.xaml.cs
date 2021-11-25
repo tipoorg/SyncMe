@@ -16,7 +16,7 @@ public partial class EventAlertPage : ContentPage
 
     private async void OnClicked(object sender, EventArgs e)
     {
-        if (sender is TagButton button)
+        if (sender is TagButton<SyncReminder> button)
         {
             _eventModel.Notification = button.Tag;
             _eventModel.AlertButtonText = button.Tag.GetDescription();

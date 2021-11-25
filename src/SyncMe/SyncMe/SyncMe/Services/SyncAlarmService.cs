@@ -37,6 +37,7 @@ public class SyncAlarmService : ISyncAlarmService
             SyncRepeat.None => DelayAgainstNow(eventDateTime),
             SyncRepeat.Dayly => FirstAvailable(DateTime.Today.Add(eventTime), Dayly),
             SyncRepeat.WorkDays => FirstAvailable(DateTime.Today.Add(eventTime), WorkDays),
+            SyncRepeat.EveryWeek => FirstAvailable(DateTime.Today.Add(eventTime), EveryWeek),
             SyncRepeat.EveryMonth => FirstAvailable(DateTime.Today.Add(eventTime), EveryMonth),
             SyncRepeat.EveryYear => FirstAvailable(DateTime.Today.Add(eventTime), EveryYear),
             SyncRepeat.EveryMinute => FirstAvailable(DateTime.Today.Add(eventTime), EveryMinute),
@@ -62,6 +63,7 @@ public class SyncAlarmService : ISyncAlarmService
 
     private static DateTime Dayly(DateTime date) => date.AddDays(1);
     private static TimeSpan DelayAgainstNow(DateTime current) => current.Subtract(DateTime.Now);
+    private static DateTime EveryWeek(DateTime date) => date.AddDays(7);
     private static DateTime EveryMonth(DateTime date) => date.AddMonths(1);
     private static DateTime EveryYear(DateTime date) => date.AddYears(1);
     private static DateTime EveryMinute(DateTime date) => date.AddMinutes(1);
