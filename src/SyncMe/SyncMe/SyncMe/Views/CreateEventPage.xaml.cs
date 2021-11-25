@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Threading;
 using dotMorten.Xamarin.Forms;
 using SyncMe.Extensions;
 using SyncMe.Models;
@@ -11,8 +10,6 @@ namespace SyncMe.Views;
 
 public sealed partial class CreateEventPage : ContentPage, IDisposable
 {
-    private static readonly TimeSpan _defaultTime = new TimeSpan(12, 0, 0);
-
     private readonly ISyncNamespaceRepository _namespaceRepository;
     private readonly ISyncEventsRepository _eventsRepository;
     private readonly Dictionary<string, Namespace> _namespaces;
@@ -32,9 +29,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
             .FromEventPattern(AddEvent, nameof(Button.Clicked))
             .SelectMany(x => AddNewSyncEvent())
             .Do(x => _namespaceRepository.AddSyncNamespace(_eventModel.Namespace))
-            .SelectMany(x => NavigateToCalendar())
-            .ObserveOn(SynchronizationContext.Current)
-            .Subscribe(x => CleanUpElements());
+            .Subscribe(async x => await NavigateToCalendar());
     }
 
     private void OnQuerySubmitted(object sender, AutoSuggestBoxQuerySubmittedEventArgs e)
@@ -89,12 +84,11 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     {
         if (!string.IsNullOrEmpty(_eventModel.Namespace))
         {
-            if (!await DisplayAlert(null, "Discard this event?", "Keep editing", "Discard"))
+            if (await DisplayAlert(null, "Discard this event?", "Keep editing", "Discard"))
             {
-                CleanUpElements();
+                await NavigateToCalendar();
             }
         }
-        await NavigateToCalendar();
     }
 
     private static async Task<Unit> NavigateToCalendar()
@@ -122,18 +116,6 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
             _eventModel.StartDate = DateTime.Today.Date;
             _eventModel.EndDate = DateTime.Today.Date.AddDays(1).AddTicks(-1);
         }
-    }
-
-    private void CleanUpElements()
-    {
-        _eventModel.Namespace = string.Empty;
-        _eventModel.Title = string.Empty;
-        _eventModel.StartDate = DateTime.Today;
-        _eventModel.StartTime = _defaultTime;
-        _eventModel.EndDate = DateTime.Today;
-        _eventModel.EndTime = _defaultTime;
-        _eventModel.ScheduleButtonText = "Does Not Repeat";
-        _eventModel.AlertButtonText = "Alert";
     }
 
     public void Dispose()

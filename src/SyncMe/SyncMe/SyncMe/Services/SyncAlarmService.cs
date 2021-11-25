@@ -44,7 +44,7 @@ public class SyncAlarmService : ISyncAlarmService
             _ => TimeSpan.Zero,
         };
 
-        return delay.Ticks > 0;
+        return delay.Ticks > 100;
     }
 
     private TimeSpan FirstAvailable(DateTime since, Func<DateTime, DateTime> next)
@@ -61,8 +61,8 @@ public class SyncAlarmService : ISyncAlarmService
         }
     }
 
+    private static TimeSpan DelayAgainstNow(DateTime eventDateTime) => eventDateTime - DateTime.Now;
     private static DateTime Dayly(DateTime date) => date.AddDays(1);
-    private static TimeSpan DelayAgainstNow(DateTime current) => current.Subtract(DateTime.Now);
     private static DateTime EveryWeek(DateTime date) => date.AddDays(7);
     private static DateTime EveryMonth(DateTime date) => date.AddMonths(1);
     private static DateTime EveryYear(DateTime date) => date.AddYears(1);

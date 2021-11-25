@@ -45,7 +45,12 @@
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0"  Grid.Column="0" Text="Notifications:"  Style="{StaticResource NotificationStyle}"></Label>
-        <Switch Grid.Row="0" Grid.Column="1" x:Name="NotificationsSwitcher" Style="{StaticResource ToggleButtonStyle}"></Switch>
+        <Switch 
+            Grid.Row="0" 
+            Grid.Column="1"
+            x:Name="NotificationsSwitcher" 
+            Style="{StaticResource ToggleButtonStyle}"
+            IsToggled="{Binding NotificationsSwitcher}"/>
         <controls:Calendar 
             x:Name="Calendar1"
             Grid.Row="1"  

@@ -8,10 +8,12 @@ namespace SyncMe.Views
     {
         private readonly CreateEventPage _createEventPage;
 
-        public CalendarPage(CreateEventPage createEventPage)
+        public CalendarPage(
+            CalendarPageViewModel viewModel,
+            CreateEventPage createEventPage)
         {
             InitializeComponent();
-            BindingContext = new CalendarPageViewModel();
+            BindingContext = viewModel;
             AddEvent.Clicked += AddEvent_Clicked;
             _createEventPage = createEventPage;
         }
