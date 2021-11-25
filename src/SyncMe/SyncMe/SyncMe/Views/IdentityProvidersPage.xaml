@@ -24,8 +24,8 @@
                 <Setter Property="HeightRequest" Value="35"/>
                 <Setter Property="WidthRequest" Value="35"/>
                 <Setter Property="Margin" Value="0,12,20,0"/>
-                <Setter Property="ImageSource" Value="icon_profile_sync.png"/>
                 <Setter Property="BackgroundColor" Value="White"/>
+                <Setter Property="ImageSource" Value="icon_profile_sync.png"/>
             </Style>
             <Style x:Key="FrameStyle" TargetType="Frame">
                 <Setter Property="CornerRadius" Value="10"/>
@@ -38,7 +38,7 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="icon_plus_minor.xml" Clicked="OnSyncClicked" CommandParameter="{Binding .}" />
+        <ToolbarItem IconImageSource="icon_all_profiles_sync.png" Clicked="OnSyncClicked" CommandParameter="{Binding .}" />
     </ContentPage.ToolbarItems>
     
     <ContentPage.Content>
