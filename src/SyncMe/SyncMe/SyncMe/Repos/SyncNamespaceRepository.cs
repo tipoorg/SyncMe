@@ -22,6 +22,7 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
         _existingNamespaces.Add("Russia.Holidays", CreateNamespace("Holidays", false));
         _existingNamespaces.Add("Personal", CreateNamespace("Another", false));
         _existingNamespaces.Add("Personal.Birthday", CreateNamespace("Another", false));
+        _existingNamespaces.Add("Outlook", CreateNamespace("Outlook"));
     }
 
     private void Increment(ref int counter) => Interlocked.Increment(ref counter);
