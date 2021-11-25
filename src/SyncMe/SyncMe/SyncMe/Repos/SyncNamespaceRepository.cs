@@ -16,7 +16,7 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
     private void SeedData()
     {
         _existingNamespaces.Add("Test", CreateNamespace("Test"));
-        _existingNamespaces.Add("Another.Test", CreateNamespace("Another"));
+        _existingNamespaces.Add("Another", CreateNamespace("Another"));
         _existingNamespaces.Add("Work1", CreateNamespace("Work1"));
         _existingNamespaces.Add("Work1.Team1", CreateNamespace("Another"));
         _existingNamespaces.Add("Work1.Team1.Project1", CreateNamespace("Another"));
