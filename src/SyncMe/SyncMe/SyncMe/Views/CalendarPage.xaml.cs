@@ -1,4 +1,5 @@
 ﻿using SyncMe.Repos;
+using SyncMe.Services;
 using SyncMe.ViewModels;
 using Xamarin.Forms.Xaml;
 
@@ -12,7 +13,9 @@ namespace SyncMe.Views
 
         public CalendarPage(CalendarPageViewModel viewModel,
                             ISyncEventsRepository eventsRepository,
-                            ISyncNamespaceRepository namespaceRepository)
+                            ISyncNamespaceRepository namespaceRepository,
+                            NamespaceManagmentPage namespaceManagmentPage,
+                            IdentityProvidersPage identityProvidersPage)
         {
             InitializeComponent();
             BindingContext = viewModel;
@@ -22,6 +25,7 @@ namespace SyncMe.Views
 
             year.BindingContext = Calendar1;
             monthText.BindingContext = Calendar1;
+            viewModel.BackgroundColorService = new BackgroundColorService(this, namespaceManagmentPage, identityProvidersPage);
         }
 
         public async void AddEvent_Clicked(object sender, EventArgs e) => 

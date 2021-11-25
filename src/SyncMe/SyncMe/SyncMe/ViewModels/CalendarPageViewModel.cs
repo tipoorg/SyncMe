@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using SyncMe.Models;
 using SyncMe.Repos;
+using SyncMe.Services;
+using SyncMe.Views;
 using Xamarin.Plugin.Calendar.Models;
 
 namespace SyncMe.ViewModels;
@@ -9,6 +11,7 @@ public class CalendarPageViewModel : INotifyPropertyChanged
 {
     private readonly ISyncEventsRepository _syncEventsRepository;
     private readonly INotificationsSwitcherRepository _notificationsSwitcherRepository;
+    public IBackgroundColorService BackgroundColorService { get; set; }
 
     public CalendarPageViewModel(
         ISyncEventsRepository syncEventsRepository,
@@ -17,8 +20,10 @@ public class CalendarPageViewModel : INotifyPropertyChanged
         _syncEventsRepository = syncEventsRepository;
         _notificationsSwitcherRepository = notificationsSwitcherRepository;
         _syncEventsRepository.OnSyncEventsUpdate += OnSyncEventsUpdate;
-        
+
+
         NotificationsSwitcher = _notificationsSwitcherRepository.State;
+        ThemeSwitcher = true;
         Events = GetEventsFromRepository();
     }
 
@@ -72,6 +77,22 @@ public class CalendarPageViewModel : INotifyPropertyChanged
                 _notificationsSwitcherRepository.State = value;
                 _notificationsSwitcher = value;
                 OnPropertyChanged("NotificationsSwitcher");
+            }
+        }
+    }
+
+    private bool _themeSwitcher;
+
+    public bool ThemeSwitcher
+    {
+        get => _themeSwitcher;
+        set
+        {
+            if (_themeSwitcher != value)
+            {
+                _themeSwitcher = value;
+                BackgroundColorService?.ChangeTheme(value);
+                OnPropertyChanged(nameof(ThemeSwitcher));
             }
         }
     }

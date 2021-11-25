@@ -8,14 +8,14 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="NotificationStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
                 <Setter Property="FontSize" Value="Large"/>
                 <Setter Property="Margin" Value="10,0,0,0"/>
                 
             </Style>
             <Style x:Key="ThemeStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
                 <Setter Property="HorizontalTextAlignment" Value="End"/>
                 <Setter Property="FontSize" Value="Large"/>
                 <Setter Property="Margin" Value="0,0,10,0"/>
@@ -43,12 +43,21 @@
                 <Setter Property="SelectedDateColor" Value="{StaticResource epamBlue}"/>
                 <Setter Property="SelectedDayBackgroundColor" Value="{StaticResource epamBlue}"/>
                 <Setter Property="DaysTitleColor" Value="{StaticResource epamBlue}"/>
-                <Setter Property="EventIndicatorColor" Value="{StaticResource epamGrey}"/>
-                <Setter Property="EventIndicatorSelectedColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="EventIndicatorColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="EventIndicatorSelectedColor" Value="{StaticResource epamBlue}"/>
                 <Setter Property="YearLabelColor" Value="{StaticResource epamBlue}"/>
                 <Setter Property="MonthLabelColor" Value="{StaticResource epamBlue}"/>
                 <Setter Property="TodayOutlineColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="ArrowsColor" Value="{StaticResource epamBlue}"/>
             </Style>
+            <Style x:Key="FrameStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="Padding" Value="10"/>
+                <Setter Property="WidthRequest" Value="200"/>
+                <Setter Property="BorderColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="Margin" Value="8,8,8,8"/>
+            </Style>
+
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -84,15 +93,13 @@
             >
                     <controls:Calendar.EventTemplate>
                         <DataTemplate>
-                            <StackLayout
-                       Padding="15,0,0,0">
-                                <Label Text="{Binding StartDate}"
-                       Style="{StaticResource TimeStyle}"/>
-                                <Label Text="{Binding Name}"
-                       Style="{StaticResource TitleStyle}"/>
-                                <Label Text="{Binding Description}"
-                       Style="{StaticResource TitleStyle}"/>
-                            </StackLayout>
+                            <Frame Style="{StaticResource FrameStyle}">
+                                <StackLayout Padding="15,0,0,0">
+                                    <Label Text="{Binding StartDate}" Style="{StaticResource TimeStyle}"/>
+                                    <Label Text="{Binding Name}" Style="{StaticResource TitleStyle}"/>
+                                    <Label Text="{Binding Description}" Style="{StaticResource TitleStyle}"/>
+                                </StackLayout>
+                            </Frame>
                         </DataTemplate>
                     </controls:Calendar.EventTemplate>
                 </controls:Calendar>
@@ -100,7 +107,7 @@
         </StackLayout>
         <Button x:Name="AddEvent"
             ImageSource="icon_add_calendar.png"
-            BackgroundColor="White"
+            BackgroundColor="Transparent"
             Style="{StaticResource FloadButtonStyle}"
             AbsoluteLayout.LayoutBounds="0.93, 0.94, 50, 50"
             AbsoluteLayout.LayoutFlags="PositionProportional"  
@@ -120,7 +127,7 @@
             x:Name="ThemeSwitcher" 
             VerticalOptions="End"
             Style="{StaticResource ToggleButtonStyle}"
-            IsToggled="{Binding NotificationsSwitcher}"
+            IsToggled="{Binding ThemeSwitcher}"
             IsVisible="{Binding CalendarSectionShown}"                    
                     />
 

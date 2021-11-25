@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SyncMe.Views.IdentityProvidersPage"
-             Title="Identities">
+             Title="Identities"
+             BackgroundImageSource="background_white.png">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -75,15 +76,17 @@
                         IsVisible="False"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
                         AbsoluteLayout.LayoutBounds="0.94, 0.82, 70, 70"
-                        BackgroundColor="White"
+                        BackgroundColor="Transparent"
                         CornerRadius="200"/>
             <Button x:Name="AddGoogle"
                         ImageSource="icon_google.png"
                         IsVisible="False"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
                         AbsoluteLayout.LayoutBounds="0.94, 0.67, 70, 70"
-                        IsEnabled="False"
-                        CornerRadius="200"/>
+                        IsEnabled="False"   
+                        CornerRadius="200"
+                        BackgroundColor="Transparent"
+                    />
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
