@@ -9,18 +9,17 @@ using Xamarin.Forms.Xaml;
 using SyncMe.Extensions;
 
 namespace SyncMe.Views;
+
 public record Identity(string Name);
 
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 {
     private readonly IDisposable _addIdentitySubsciption;
-    private readonly IDisposable _addOutlookIdentity;
-    private readonly IDisposable _addEventConnection;
+    private readonly IDisposable _addOutlookIdentitySubscription;
     private readonly ISyncEventsRepository _syncEventsRepository;
 
     public ObservableCollection<Identity> Identities { get; } = new ObservableCollection<Identity>();
-    public IObservable<Guid> ScheduledEvents { get; }
 
     public IdentityProvidersPage(ISyncEventsRepository syncEventsRepository)
     {
@@ -37,20 +36,12 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
         _addIdentitySubsciption = Observable
             .FromEventPattern(AddIdentity, nameof(Button.Clicked))
-            .Subscribe(x =>
-            {
-                SwitchLayouts();
-            });
+            .Subscribe(x => SwitchLayouts());
 
-        var scheduledEvents = Observable
+        _addOutlookIdentitySubscription = Observable
             .FromEventPattern(AddOutlook, nameof(Button.Clicked))
             .Do(_ => SwitchLayouts())
             .SelectMany(_ => LoadEventsAsync())
-            .Publish();
-
-        _addEventConnection = scheduledEvents.Connect();
-        ScheduledEvents = scheduledEvents.SelectMany(x => x.newEvents);
-        _addOutlookIdentity = scheduledEvents
             .ObserveOn(SynchronizationContext.Current)
             .Subscribe(x =>
             {
@@ -119,7 +110,6 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
     public void Dispose()
     {
         _addIdentitySubsciption.Dispose();
-        _addOutlookIdentity.Dispose();
-        _addEventConnection.Dispose();
+        _addOutlookIdentitySubscription.Dispose();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading;
 using dotMorten.Xamarin.Forms;
 using SyncMe.Models;
 using SyncMe.Repos;
@@ -14,11 +15,8 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     private readonly ISyncNamespaceRepository _namespaceRepository;
     private readonly ISyncEventsRepository _eventsRepository;
     private readonly Dictionary<string, Namespace> _namespaces;
-    private readonly IDisposable _addEventConnection;
     private readonly IDisposable _addEventSubscription;
-    private SyncEventViewModel _eventModel;
-
-    public IObservable<Guid> ScheduledEvents { get; }
+    private readonly SyncEventViewModel _eventModel;
 
     public CreateEventPage(ISyncEventsRepository eventsRepository, ISyncNamespaceRepository namespaceRepository)
     {
@@ -29,17 +27,12 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         _namespaces = _namespaceRepository.GetAllSyncNamespaces();
         BindingContext = _eventModel;
 
-        var scheduledEvents = Observable
+        _addEventSubscription = Observable
             .FromEventPattern(AddEvent, nameof(Button.Clicked))
             .SelectMany(x => AddNewSyncEvent())
             .Do(x => _namespaceRepository.AddSyncNamespace(_eventModel.Namespace))
-            .Publish();
-
-        _addEventConnection = scheduledEvents.Connect();
-        ScheduledEvents = scheduledEvents;
-
-        _addEventSubscription = scheduledEvents
             .SelectMany(x => NavigateToCalendar())
+            .ObserveOn(SynchronizationContext.Current)
             .Subscribe(x => CleanUpElements());
     }
 
@@ -145,6 +138,5 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
     public void Dispose()
     {
         _addEventSubscription.Dispose();
-        _addEventConnection.Dispose();
     }
 }
