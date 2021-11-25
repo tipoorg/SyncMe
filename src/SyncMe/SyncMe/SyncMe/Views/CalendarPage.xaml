@@ -14,9 +14,8 @@
                 <Setter Property="Margin" Value="20,5,0,0"/>
             </Style>
             <Style x:Key="FloadButtonStyle" TargetType="Button">
-                <Setter Property="CornerRadius" Value="100"/>
-                <Setter Property="HeightRequest" Value="55"/>
-                <Setter Property="WidthRequest" Value="55"/>
+                <Setter Property="HeightRequest" Value="64"/>
+                <Setter Property="WidthRequest" Value="64"/>
                 <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
                 <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
                 <Setter Property="Padding" Value="15"/>
@@ -63,9 +62,10 @@
             >
         </controls:Calendar>
         <Button x:Name="AddEvent"
-            ImageSource="icon_plus.xml"
+            ImageSource="icon_add_calendar.png"
             Grid.Row="2"  
-            Grid.Column="1" 
+            Grid.Column="1"
+            BackgroundColor="White"
             Style="{StaticResource FloadButtonStyle}"/>
     </Grid>
 </ContentPage>
