@@ -8,14 +8,20 @@ namespace SyncMe.ViewModels;
 
 public class CalendarPageViewModel : INotifyPropertyChanged
 {
+    private readonly ISyncEventsRepository _syncEventsRepository;
     private readonly INotificationsSwitcherRepository _notificationsSwitcherRepository;
 
-    public CalendarPageViewModel(INotificationsSwitcherRepository notificationsSwitcherRepository)
+    public CalendarPageViewModel(
+        ISyncEventsRepository syncEventsRepository,
+        INotificationsSwitcherRepository notificationsSwitcherRepository)
     {
         DayTappedCommand = new Command<DateTime>((date) => DayTappedEvent.Invoke(date, this));
         DayTappedEvent += DayTappedd;
+        _syncEventsRepository = syncEventsRepository;
         _notificationsSwitcherRepository = notificationsSwitcherRepository;
         NotificationsSwitcher = _notificationsSwitcherRepository.State;
+        _events = GetEventsFromRepository();
+        _syncEventsRepository.OnAddSyncEvent +=OnAddSyncEvent;
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -28,31 +34,6 @@ public class CalendarPageViewModel : INotifyPropertyChanged
 
     private static event EventHandler<CalendarPageViewModel> DayTappedEvent;
 
-    public EventCollection Events
-    {
-        get => events;
-        set => events = value;
-    }
-
-    EventCollection events = new EventCollection()
-    {
-        [DateTime.Now] = new List<SyncEventViewModel>
-        {
-            new SyncEventViewModel { Description = "Happy day", Name = "Birthday"},
-            new SyncEventViewModel { Description = "Very happy day", Name = "New year"}
-        },
-        [DateTime.Now.AddDays(5)] = new List<SyncEventViewModel>
-        {
-            new SyncEventViewModel { Name = "Win", Description = "Our win day" },
-            new SyncEventViewModel { Name = "Winter", Description = "Very cold time day" }
-        },
-        // 3 days ago
-        [DateTime.Now.AddDays(-4)] = new List<SyncEventViewModel>
-        {
-            new SyncEventViewModel { Name = "Key", Description = "Very amazing key day" }
-        },
-    };
-
     private async void DayTappedd(object sender, CalendarPageViewModel item)
     {
         var date = (DateTime)sender;
@@ -60,10 +41,45 @@ public class CalendarPageViewModel : INotifyPropertyChanged
         await App.Current.MainPage.DisplayAlert("DayTapped", message, "Ok");
     }
 
+    private EventCollection GetEventsFromRepository()
+    {
+        var now = DateTime.Now;
+        var events = _syncEventsRepository.GetAllSyncEvents()
+            .Where(x => x.Start.Year == now.Year && x.Start.Month == now.Month)
+            .ToLookup(k => k.Start.Date, Convert);
+
+        var result = new EventCollection();
+        foreach (var e in events)
+        {
+            result.Add(e.Key, e.ToList());
+        }
+
+        return result;
+    }
+
+    private static SyncEventViewModel Convert(SyncEvent e) => new() { Description = e.Description, Name = e.Title };
+
+    private EventCollection _events;
+
+    public EventCollection Events
+    {
+        get => _events;
+        set
+        {
+            if (_events != value)
+            {
+                _events = value;
+                OnPropertyChanged("Events");
+            }
+            _events = value;
+        }
+    }
+
     private bool _notificationsSwitcher;
 
     public bool NotificationsSwitcher
     {
+        get => _notificationsSwitcher;
         set
         {
             if (_notificationsSwitcher != value)
@@ -73,9 +89,29 @@ public class CalendarPageViewModel : INotifyPropertyChanged
                 OnPropertyChanged("NotificationsSwitcher");
             }
         }
-        get
+    }
+
+    private void OnAddSyncEvent(object sender, Guid e)
+    {
+        if (_syncEventsRepository.TryGetSyncEvent(e, out var syncEvent))
         {
-            return _notificationsSwitcher;
+            var key = syncEvent.Start.Date;
+
+            if (Events.TryGetValue(key, out var dayEvents))
+            {
+                Events[key] = dayEvents
+                    .OfType<SyncEventViewModel>()
+                    .Append(Convert(syncEvent))
+                    .ToList();
+            }
+            else
+            {
+                Events.Add(syncEvent.Start.Date, new List<SyncEventViewModel>
+                {
+                    Convert(syncEvent)
+                });
+            }
+
         }
     }
 }
