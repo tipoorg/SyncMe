@@ -12,5 +12,7 @@ public interface ISyncNamespaceService
 
     public IReadOnlyCollection<(string FullName, bool IsActive, bool HasChilde)> GetFirstLevel();
     public IReadOnlyCollection<(string FullName, bool IsActive, bool HasChildren)> GetFirstChildren(string fullName);
+
+    public void RemoveWithChildren(string fullName);
 }
 
