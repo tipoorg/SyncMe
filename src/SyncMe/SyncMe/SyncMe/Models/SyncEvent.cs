@@ -7,7 +7,7 @@ public enum SyncStatus
     Active, Stopped
 }
 
-public class SyncEvent
+public record SyncEvent
 {
     public string ExternalId { get; set; }
     public string? ExternalEmail { get; set; }
@@ -23,7 +23,7 @@ public class SyncEvent
 
 public record NamespaceTree(Dictionary<string, List<Namespace>> Tree);
 
-public class Namespace
+public record Namespace
 {
     public string Title { get; set; }
     public Guid Id { get; init; }
@@ -49,12 +49,12 @@ public enum SyncRepeat
     EveryMinute
 }
 
-public class SyncSchedule
+public record SyncSchedule
 {
     public SyncRepeat Repeat { get; set; }
 }
 
-public class SyncAlert
+public record SyncAlert
 {
     public SyncReminder Reminder { get; set; }
 }

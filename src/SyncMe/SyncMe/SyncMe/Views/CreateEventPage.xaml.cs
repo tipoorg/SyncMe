@@ -75,7 +75,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
 
     private async Task<Guid> AddNewSyncEvent()
     {
-        var guid = _eventsRepository.AddSyncEvent(_eventModel.SyncEvent.TrimNamespaceEnd());
+        var guid = _eventsRepository.AddSyncEvent(_eventModel.SyncEvent.TrimNamespaceEnd() with { });
         await NavigateToCalendar();
         return guid;
     }
