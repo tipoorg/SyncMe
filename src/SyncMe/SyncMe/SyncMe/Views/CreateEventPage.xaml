@@ -23,14 +23,10 @@
         <ScrollView>
             <StackLayout Spacing="20">
                 <StackLayout>
-                    <forms:AutoSuggestBox PlaceholderText="Namespace" PropertyChanged="ValidateButtonState" TextChanged="OnTextChanged" QuerySubmitted="OnQuerySubmitted" SuggestionChosen="OnSuggestionChosen" Margin="5,0,5,0"/>
+                    <forms:AutoSuggestBox PlaceholderText="Namespace" PropertyChanged="ValidateButtonState" TextChanged="OnTextChanged" SuggestionChosen="OnSuggestionChosen" Margin="5,0,5,0"/>
                     <Entry Text="{Binding Title}" Placeholder="Title" PropertyChanged="ValidateButtonState" Margin="5,0,5,0"/>
                 </StackLayout>
                 <StackLayout>
-                    <Grid>
-                        <Label Text="All-Day" Style="{StaticResource LabelStyle}"/>
-                        <Switch IsToggled="False" Toggled="OnSwitchToggled" Style="{StaticResource ToggleButtonStyle}"/>
-                    </Grid>
                     <Button Text="{Binding ScheduleButtonText}" Clicked="OnConfigureScheduleClicked" Style="{StaticResource ButtonStyle}"/>
                     <StackLayout>
                         <Label Text="Starts date" VerticalTextAlignment="Center" Style="{StaticResource LabelStyle}"/>
