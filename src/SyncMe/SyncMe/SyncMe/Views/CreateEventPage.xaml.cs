@@ -5,6 +5,7 @@ using dotMorten.Xamarin.Forms;
 using SyncMe.Extensions;
 using SyncMe.Models;
 using SyncMe.Repos;
+using SyncMe.ViewModels;
 
 namespace SyncMe.Views;
 

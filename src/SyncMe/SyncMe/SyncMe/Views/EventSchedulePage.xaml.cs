@@ -1,6 +1,7 @@
 ﻿using SyncMe.Controls;
 using SyncMe.Extensions;
 using SyncMe.Models;
+using SyncMe.ViewModels;
 using Xamarin.Forms.Xaml;
 
 namespace SyncMe.Views;

@@ -1,5 +1,4 @@
-﻿using SyncMe.Models;
-using SyncMe.Repos;
+﻿using SyncMe.Repos;
 using System.ComponentModel;
 using System.Windows.Input;
 using Xamarin.Plugin.Calendar.Models;

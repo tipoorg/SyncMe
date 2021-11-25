@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
+using SyncMe.Models;
 
-namespace SyncMe.Models;
+namespace SyncMe.ViewModels;
 
 public class SyncEventViewModel : INotifyPropertyChanged
 {
@@ -13,7 +14,7 @@ public class SyncEventViewModel : INotifyPropertyChanged
             End = DateTime.Now.AddHours(1),
             Namespace = new Namespace(),
             Schedule = new SyncSchedule(),
-            Alert = new SyncAlert {  Reminder = SyncReminder.AtEventTime }
+            Alert = new SyncAlert { Reminder = SyncReminder.AtEventTime }
         };
         ScheduleButtonText = "Does Not Repeat";
         AlertButtonText = "Alert";
@@ -57,14 +58,16 @@ public class SyncEventViewModel : INotifyPropertyChanged
         }
     }
 
+    private TimeSpan _startTime;
     public TimeSpan StartTime
     {
-        get { return SyncEvent.Start.TimeOfDay; }
+        get { return _startTime; }
         set
         {
-            if (SyncEvent.Start.TimeOfDay != value)
+            if (_startTime != value)
             {
-                SyncEvent.Start = SyncEvent.Start.Date + value;
+                _startTime = value;
+                SyncEvent.Start = SyncEvent.Start.Date.Add(value);
                 OnPropertyChanged(nameof(StartTime));
             }
         }
@@ -83,14 +86,16 @@ public class SyncEventViewModel : INotifyPropertyChanged
         }
     }
 
+    private TimeSpan _endTime;
     public TimeSpan EndTime
     {
-        get { return SyncEvent.End.TimeOfDay; }
+        get { return _endTime; }
         set
         {
-            if (SyncEvent.End.TimeOfDay != value)
+            if (_endTime != value)
             {
-                SyncEvent.End = SyncEvent.End.Date + value;
+                _endTime = value;
+                SyncEvent.End = SyncEvent.End.Date.Add(value);
                 OnPropertyChanged(nameof(EndTime));
             }
         }
