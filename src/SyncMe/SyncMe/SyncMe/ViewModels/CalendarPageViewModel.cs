@@ -1,7 +1,8 @@
-﻿using SyncMe.Models;
-using SyncMe.Repos;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Text;
 using System.Windows.Input;
+using SyncMe.Models;
+using SyncMe.Repos;
 using Xamarin.Plugin.Calendar.Models;
 
 namespace SyncMe.ViewModels;
@@ -37,7 +38,29 @@ public class CalendarPageViewModel : INotifyPropertyChanged
     private async void DayTappedd(object sender, CalendarPageViewModel item)
     {
         var date = (DateTime)sender;
-        var message = $"Received tap event from date: {date}";
+        var message = string.Empty;
+        if( _events.TryGetValue(date, out System.Collections.ICollection values))
+        {
+            var builder = new StringBuilder();
+            builder.Append("My events for this date: ");
+            builder.Append($"{Environment.NewLine}");
+            foreach (var value in values)
+            {
+                var syncedEvent = value as SyncEventViewModel;
+                if (syncedEvent != null)
+                {
+                    builder.Append(syncedEvent.Name);
+                    builder.Append($"{Environment.NewLine}");
+                }
+            }
+
+            message = builder.ToString();
+        }
+        else
+        {
+            message = $"Received tap event from date: {date}";
+        }
+
         await App.Current.MainPage.DisplayAlert("DayTapped", message, "Ok");
     }
 

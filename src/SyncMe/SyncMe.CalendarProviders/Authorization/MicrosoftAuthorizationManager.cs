@@ -55,6 +55,8 @@ namespace SyncMe.CalendarProviders.Authorization
 
         public async Task<GraphServiceClient> GetGraphClientAsync(string username)
         {
+            CurrentAccounts = await PCA.GetAccountsAsync();
+
             // Initialize Graph client
             return new GraphServiceClient(new DelegateAuthenticationProvider(
                 async (requestMessage) =>
