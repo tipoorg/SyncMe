@@ -16,13 +16,15 @@ public class CalendarPageViewModel : INotifyPropertyChanged
         ISyncEventsRepository syncEventsRepository,
         INotificationsSwitcherRepository notificationsSwitcherRepository)
     {
-        DayTappedCommand = new Command<DateTime>((date) => DayTappedEvent.Invoke(date, this));
-        DayTappedEvent += DayTappedd;
         _syncEventsRepository = syncEventsRepository;
         _notificationsSwitcherRepository = notificationsSwitcherRepository;
+
+        DayTappedCommand = new Command<DateTime>((date) => DayTappedEvent.Invoke(date, this));
+        DayTappedEvent += DayTappedd;
+        _syncEventsRepository.OnSyncEventsUpdate += OnSyncEventsUpdate;
+        
         NotificationsSwitcher = _notificationsSwitcherRepository.State;
-        _events = GetEventsFromRepository();
-        _syncEventsRepository.OnAddSyncEvent +=OnAddSyncEvent;
+        Events = GetEventsFromRepository();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -66,9 +68,7 @@ public class CalendarPageViewModel : INotifyPropertyChanged
 
     private EventCollection GetEventsFromRepository()
     {
-        var now = DateTime.Now;
         var events = _syncEventsRepository.GetAllSyncEvents()
-            .Where(x => x.Start.Year == now.Year && x.Start.Month == now.Month)
             .ToLookup(k => k.Start.Date, Convert);
 
         var result = new EventCollection();
@@ -114,27 +114,8 @@ public class CalendarPageViewModel : INotifyPropertyChanged
         }
     }
 
-    private void OnAddSyncEvent(object sender, Guid e)
+    private void OnSyncEventsUpdate(object sender, EventArgs e)
     {
-        if (_syncEventsRepository.TryGetSyncEvent(e, out var syncEvent))
-        {
-            var key = syncEvent.Start.Date;
-
-            if (Events.TryGetValue(key, out var dayEvents))
-            {
-                Events[key] = dayEvents
-                    .OfType<SyncEventViewModel>()
-                    .Append(Convert(syncEvent))
-                    .ToList();
-            }
-            else
-            {
-                Events.Add(syncEvent.Start.Date, new List<SyncEventViewModel>
-                {
-                    Convert(syncEvent)
-                });
-            }
-
-        }
+        Events = GetEventsFromRepository();
     }
 }
