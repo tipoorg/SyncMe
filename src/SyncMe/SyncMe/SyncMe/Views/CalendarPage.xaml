@@ -65,9 +65,8 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="20*"/>
                 </Grid.RowDefinitions>
-                <Label Grid.Row="0"  Grid.Column="0" Text="Alarm sound"  Style="{StaticResource NotificationStyle}"></Label>
+                <Label Grid.Row="0"  Grid.Column="0" Text="Sound"  Style="{StaticResource NotificationStyle}"></Label>
                 <Label Grid.Row="0"  Grid.Column="1" Text="Theme"  Style="{StaticResource ThemeStyle}"></Label>
-
 
                 <Label Style="{StaticResource TitleStyle}" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="2" x:Name="year" Text="{Binding Year}" HorizontalOptions="Center" IsVisible="{Binding CalendarSectionShown}"/>
                 <Label Style="{StaticResource TitleStyle}" Grid.Row="2"  Grid.Column="0" Grid.ColumnSpan="2" x:Name="monthText" Text="{Binding MonthText}" HorizontalOptions="Center"  IsVisible="{Binding CalendarSectionShown}"/>
