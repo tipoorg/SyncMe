@@ -19,11 +19,13 @@ public class SyncEventViewModel : INotifyPropertyChanged
         };
 
         var currentHour = TimeSpan.FromHours(DateTime.Now.TimeOfDay.Hours);
-        StartTime = currentHour.Add(TimeSpan.FromHours(1));
-        EndTime = currentHour.Add(TimeSpan.FromHours(2));
+        StartTime = Trim(currentHour.Add(TimeSpan.FromHours(1)));
+        EndTime = Trim(currentHour.Add(TimeSpan.FromHours(2)));
         ScheduleButtonText = SyncRepeat.None.GetDescription();
         AlertButtonText = SyncReminder.AtEventTime.GetDescription();
     }
+
+    private TimeSpan Trim(TimeSpan timeSpan) => timeSpan.Days > 0 ? TimeSpan.FromHours(23) : timeSpan;
 
     private string _scheduleButtonText;
     public string ScheduleButtonText
