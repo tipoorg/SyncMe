@@ -32,17 +32,27 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
     private Namespace CreateNamespace(string title, bool isActive = true, DateTime turnOnDate = new())
     {
         Increment(ref _idCounter);
-        return new Namespace() { Title = title, IsActive = isActive, TurnOnDate = turnOnDate};
+        return new Namespace 
+        { 
+            Title = title, 
+            IsActive = isActive, 
+            TurnOnDate = turnOnDate 
+        };
     }
 
-    public Dictionary<string, Namespace> GetAllSyncNamespaces() => 
+    public Dictionary<string, Namespace> GetAllSyncNamespaces() =>
         _existingNamespaces;
 
     public void AddSyncNamespace(string name, bool isActive = true)
     {
+        if (_existingNamespaces.ContainsKey(name))
+            return;
+
         _existingNamespaces.Add(name, new Namespace { Title = name, IsActive = isActive });
     }
 
-    public bool TryGetSyncNamespace(string name, out Namespace existingNamespace) =>
-        _existingNamespaces.TryGetValue(name, out existingNamespace);
+    public bool TryGetSyncNamespace(string name, out Namespace existingNamespace)
+    {
+        return _existingNamespaces.TryGetValue(name, out existingNamespace);
+    }
 }

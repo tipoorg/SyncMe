@@ -26,9 +26,8 @@ public record NamespaceTree(Dictionary<string, List<Namespace>> Tree);
 public class Namespace
 {
     public string Title { get; set; }
-    public Guid Id { get; init; }
     public bool IsActive { get; set; }
-    public DateTime TurnOnDate { get; set; }
+    public DateTime? TurnOnDate { get; set; }
 }
 
 public enum SyncRepeat
@@ -59,7 +58,7 @@ public class SyncAlert
     public SyncReminder Reminder { get; set; }
 }
 
-public record SyncAlarm(string Title, Guid EventId, int DelaySeconds);
+public record SyncAlarm(string Title, Guid EventId, string NamespaceFullName, int DelaySeconds);
 
 public enum SyncReminder
 {
