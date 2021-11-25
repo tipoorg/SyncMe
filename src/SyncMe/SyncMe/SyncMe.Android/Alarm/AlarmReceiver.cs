@@ -1,5 +1,5 @@
 ﻿using Android.Content;
-using Android.Widget;
+using Android.Util;
 
 namespace SyncMe.Droid.Alarm;
 
@@ -10,21 +10,29 @@ internal class AlarmReceiver : BroadcastReceiver
 
     public override void OnReceive(Context context, Intent intent)
     {
-        var action = intent.GetStringExtra(AlarmMessage.ActionKey);
-
-        switch (action)
+        try
         {
-            case AlarmMessage.ProcessAlarmAction:
-                _androidAlarmService.ProcessAlarm(context, intent);
-                return;
+            var action = intent.GetStringExtra(AlarmMessage.ActionKey);
+            Log.Debug(MainActivity.Tag, $"AlarmReceiver.OnReceive {action}");
 
-            case AlarmMessage.StopAlarmAction:
-                _androidAlarmService.StopPlayingAlarm(intent);
-                return;
+            switch (action)
+            {
+                case AlarmMessage.ProcessAlarmAction:
+                    _androidAlarmService.ProcessAlarm(context, intent);
+                    return;
 
-            default:
-                Toast.MakeText(context, "OnReceive is unhandled", ToastLength.Long).Show();
-                return;
+                case AlarmMessage.StopAlarmAction:
+                    _androidAlarmService.StopPlayingAlarm(intent);
+                    return;
+
+                default:
+                    Log.Debug(MainActivity.Tag, "AlarmReceiver.OnReceive default");
+                    return;
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(MainActivity.Tag, ex.Message);
         }
     }
 }
