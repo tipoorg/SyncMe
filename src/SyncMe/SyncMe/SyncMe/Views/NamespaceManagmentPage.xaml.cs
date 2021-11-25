@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using SyncMe.Extensions;
 using SyncMe.Models;
 using SyncMe.Services;
 using Xamarin.Forms.Xaml;
@@ -25,6 +26,7 @@ public partial class NamespaceManagmentPage : ContentPage
         NamespaceModel.RestoreClicked.Subscribe(MoveToActive);
         NamespaceModel.ExpandClicked.Subscribe(ProcessExpanding);
         NamespaceModel.NewItemClicked.Subscribe(AddNewNamespace);
+        NamespaceModel.RemoveClicked.Subscribe(RemoveItemWithChildrens);
         BindingContext = this;
     }
 
@@ -74,7 +76,7 @@ public partial class NamespaceManagmentPage : ContentPage
 
     private void SuspendAllChildren(NamespaceModel item)
     {
-        if(!_namespaceService.UpdateStatusWithChildrens(item.FullName, false, DateTime.Now.AddDays(1)))
+        if (!_namespaceService.UpdateStatusWithChildrens(item.FullName, false, DateTime.Now.AddDays(1)))
             return;
 
         item.IsActive = false;
@@ -123,6 +125,31 @@ public partial class NamespaceManagmentPage : ContentPage
         }
         parent.HasChildren = true;
         parent.IsExpanded = true;
+    }
+
+    private async void RemoveItemWithChildrens(NamespaceModel item)
+    {
+        var result = await DisplayAlert("Remove namespace", $"Delete {item.FullName} and all nested Namespaces?", "Yes", "No");
+        if (!result) return;
+
+        _namespaceService.RemoveWithChildren(item.FullName);
+        Namespaces.RemoveAllChildren(item.FullName);
+        Namespaces.Remove(item);
+
+        ProcessParentHasChildren(item);
+    }
+
+    public void ProcessParentHasChildren(NamespaceModel item)
+    {
+        if (!item.FullName.Contains('.'))
+            return;
+
+        var parentName = item.FullName.Split('.').Where(n => n != item.Name).FeedTo(s => string.Join(".", s));
+
+        if (!_namespaceService.HasChildren(parentName))
+        {
+            var parentItem = Namespaces.FirstOrDefault(s => s.FullName == parentName).HasChildren = false;
+        }
     }
 }
 

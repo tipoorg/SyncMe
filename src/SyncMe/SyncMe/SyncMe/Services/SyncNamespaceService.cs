@@ -69,5 +69,14 @@ public class SyncNamespaceService : ISyncNamespaceService
         var parentKey = fullname.Substring(0, lastDotIndex);
         return !_namespaceRepository.GetAllSyncNamespaces()[parentKey].IsActive;
     }
+
+    public void RemoveWithChildren(string fullName)
+    {
+        var namespaces = _namespaceRepository.GetAllSyncNamespaces();
+        while (namespaces.Any(s => s.Key.Contains(fullName)))
+        {
+            namespaces.Remove(namespaces.First(s => s.Key.Contains(fullName)).Key);
+        }
+    }
 }
 
