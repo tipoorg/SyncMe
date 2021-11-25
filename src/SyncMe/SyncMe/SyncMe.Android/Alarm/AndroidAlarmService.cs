@@ -45,7 +45,10 @@ internal class AndroidAlarmService : IAndroidAlarmService
             var alarmIntent = GetAlarmIntent(syncAlarm, context);
 
             SetAlarm(calendarItem, alarmIntent, context);
-            Toast.MakeText(context, $"Scheduled on {DateTime.Now.AddSeconds(syncAlarm.DelaySeconds)}", ToastLength.Long).Show();
+            Toast.MakeText(
+                context, 
+                $"{syncAlarm.Title} Scheduled on {DateTime.Now.AddSeconds(syncAlarm.DelaySeconds)}", 
+                ToastLength.Long).Show();
         }
     }
 
