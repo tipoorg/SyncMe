@@ -16,8 +16,8 @@ namespace SyncMe.Extensions
             Schedule = new SyncSchedule { Repeat = SyncRepeat.None },
             Alert = new SyncAlert { Reminder = SyncReminder.AtEventTime },
             Status = SyncStatus.Active,
-            Start = DateTime.Parse(e.Start.DateTime),
-            End = DateTime.Parse(e.End.DateTime)
+            Start = DateTime.Parse(e.Start.DateTime).ToLocalTime(),
+            End = DateTime.Parse(e.End.DateTime).ToLocalTime()
         };
     }
 }
