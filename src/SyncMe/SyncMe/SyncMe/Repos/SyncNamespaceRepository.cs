@@ -6,7 +6,7 @@ namespace SyncMe.Repos;
 public class SyncNamespaceRepository : ISyncNamespaceRepository
 {
     private static int _idCounter = 0;
-    private readonly Dictionary<string, IReadOnlyCollection<Namespace>> _existingNamespaces = new();
+    private readonly Dictionary<string, Namespace> _existingNamespaces = new();
 
     public SyncNamespaceRepository()
     {
@@ -15,49 +15,42 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
 
     private void SeedData()
     {
-        _existingNamespaces.Add("Test", new List<Namespace> { CreateNamespace("Test") });
-        _existingNamespaces.Add("Another.Test", new List<Namespace> { CreateNamespace("Another"), CreateNamespace("Test") });
+        _existingNamespaces.Add("Work", CreateNamespace("Work"));
+        _existingNamespaces.Add("Work.Team1", CreateNamespace("Team1"));
+        _existingNamespaces.Add("Work.Team2", CreateNamespace("Team2"));
+        _existingNamespaces.Add("Russia", CreateNamespace("Russia", false));
+        _existingNamespaces.Add("Russia.Holidays", CreateNamespace("Holidays", false));
+        _existingNamespaces.Add("Personal", CreateNamespace("Personal", false));
+        _existingNamespaces.Add("Personal.Birthday", CreateNamespace("Birthday", false));
+        _existingNamespaces.Add("Outlook", CreateNamespace("Outlook"));
     }
 
     private void Increment(ref int counter) => Interlocked.Increment(ref counter);
 
-    private Namespace CreateNamespace(string title)
+    private Namespace CreateNamespace(string title, bool isActive = true, DateTime? turnOnDate = null)
     {
         Increment(ref _idCounter);
-        return new Namespace(_idCounter, title);
+        return new Namespace 
+        { 
+            Title = title, 
+            IsActive = isActive, 
+            TurnOnDate = turnOnDate 
+        };
     }
 
-    public Dictionary<string, IReadOnlyCollection<Namespace>> GetAllSyncNamespaces() => 
+    public Dictionary<string, Namespace> GetAllSyncNamespaces() =>
         _existingNamespaces;
 
-    private IReadOnlyCollection<Namespace> GetAllSyncNamespaces(Dictionary<int, Namespace> existingNamespaces, List<Namespace> namespaces)
+    public void AddSyncNamespace(string name, bool isActive = true)
     {
-        foreach (var space in existingNamespaces)
-        {
-            namespaces.Add(new Namespace(space.Key, space.Value.Title));
-        }
+        if (_existingNamespaces.ContainsKey(name))
+            return;
 
-        return namespaces;
+        _existingNamespaces.Add(name, new Namespace { Title = name, IsActive = isActive });
     }
 
-    public void AddSyncNamespace(string name)
+    public bool TryGetSyncNamespace(string name, out Namespace existingNamespace)
     {
-        _existingNamespaces.Add(name, GenerateSubNamespaces(name.Split('.')));
+        return _existingNamespaces.TryGetValue(name, out existingNamespace);
     }
-
-    private IReadOnlyCollection<Namespace> GenerateSubNamespaces(params string[] subspaces)
-    {
-        var namespaces = new List<Namespace>();
-        foreach (var subspace in subspaces)
-        {
-            Increment(ref _idCounter);
-            var newNamespace = new Namespace(_idCounter, subspace);
-            namespaces.Add(newNamespace);
-        }
-
-        return namespaces;
-    }
-
-    public bool TryGetSyncNamespace(string name, out IReadOnlyCollection<Namespace> existingNamespaces) =>
-        _existingNamespaces.TryGetValue(name, out existingNamespaces);
 }

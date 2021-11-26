@@ -4,14 +4,9 @@ namespace SyncMe.Extensions;
 
 public static class SyncEventExtensions
 {
-    public static SyncEvent DecrementRemainingTimes(this SyncEvent syncEvent)
+    public static SyncEvent TrimNamespaceEnd(this SyncEvent syncEvent)
     {
-        var remainingTimes = syncEvent.Schedule.Times - 1;
-        return syncEvent with { Schedule = syncEvent.Schedule with { Times = remainingTimes } };
-    }
-
-    public static SyncEvent Activate(this SyncEvent syncEvent)
-    {
-        return syncEvent with { Status = SyncStatus.Active };
+        syncEvent.Namespace.Title = syncEvent.Namespace.Title.TrimEnd('.');
+        return syncEvent;
     }
 }

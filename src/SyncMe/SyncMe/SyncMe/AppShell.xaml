@@ -5,20 +5,31 @@
        xmlns:views="clr-namespace:SyncMe.Views"
        x:Class="SyncMe.AppShell">
     <!-- Display a bottom tab bar containing two tabs -->
+    <Shell.Resources>
+        <Style x:Key="BaseStyle" TargetType="Element">
+            <Setter Property="Shell.BackgroundColor" Value="{StaticResource epamBlue}" />
+            <Setter Property="Shell.ForegroundColor" Value="White" />
+            <Setter Property="Shell.TitleColor" Value="{StaticResource epamGrey}" />
+            <Setter Property="Shell.DisabledColor" Value="{StaticResource epamGrey}" />
+            <Setter Property="Shell.UnselectedColor" Value="{StaticResource epamGrey}" />
+            <Setter Property="Shell.TabBarUnselectedColor" Value="White" />
+        </Style>
+    </Shell.Resources>
     <TabBar>
         <ShellContent Title="Calendar"
                       Icon="icon_open_calendar.png"
                       ContentTemplate="{local:DIDataTemplate Type={x:Type views:CalendarPage}}"
-                      Route="calendar"/>
-        <ShellContent Title="New Event"
-                      Icon="icon_create_event.png"
-                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:CreateEventPage}}"
-                      Route="newEvent"/>
+                      Route="calendar"
+                      Style="{StaticResource BaseStyle}"/>
         <ShellContent Title="Namespaces"
-                      Icon="icon_feed.png"
-                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:NamespaceManagmentPage}}"/>
+                      Icon="icon_namespaces.png"
+                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:NamespaceManagmentPage}}"
+                      Route="namespace"
+                      Style="{StaticResource BaseStyle}"/>
         <ShellContent Title="Identities"
-                      Icon="icon_feed.png"
-                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:IdentityProvidersPage}}"/>
+                      Icon="icon_identities.png"
+                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:IdentityProvidersPage}}"
+                      Route="identities"
+                      Style="{StaticResource BaseStyle}"/>
     </TabBar>
 </Shell>

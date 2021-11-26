@@ -7,43 +7,81 @@ public enum SyncStatus
     Active, Stopped
 }
 
-public record SyncEvent(Guid Id, string ExternalId, string Title, string Description, Namespace Namespace, SyncSchedule Schedule, SyncAlert Alert, SyncStatus Status, DateTime Start, DateTime End);
+public record SyncEvent
+{
+    public string ExternalId { get; set; }
+    public string? ExternalEmail { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public Namespace Namespace { get; set; }
+    public SyncSchedule Schedule { get; set; }
+    public SyncAlert Alert { get; set; }
+    public SyncStatus Status { get; set; }
+    public DateTime Start { get; set; }
+    public DateTime End { get; set; }
+}
 
 public record NamespaceTree(Dictionary<string, List<Namespace>> Tree);
 
-public record Namespace(int Id, string Title);
+public record Namespace
+{
+    public string Title { get; set; }
+    public bool IsActive { get; set; }
+    public DateTime? TurnOnDate { get; set; }
+}
 
 public enum SyncRepeat
 {
-    None, Dayly, WeekDays, EveryMonth, EveryYear, Every10Seconds
+    [Description("Does not repeat")]
+    None,
+    [Description("Daily")]
+    Dayly,
+    [Description("Work Days")]
+    WorkDays,
+    [Description("Every week")]
+    EveryWeek,
+    [Description("Every Month")]
+    EveryMonth, 
+    [Description("Every Year")]
+    EveryYear,
+    [Description("Every Minute")]
+    EveryMinute
 }
 
-public record SyncSchedule(SyncRepeat Repeat, int? Times);
+public record SyncSchedule
+{
+    public SyncRepeat Repeat { get; set; }
+}
 
-public record SyncAlert(SyncReminder[] Reminders);
+public record SyncAlert
+{
+    public SyncReminder Reminder { get; set; }
+}
+
+public record SyncAlarm(string Title, Guid EventId, string NamespaceFullName, int DelaySeconds);
 
 public enum SyncReminder
 {
-    [Description("None")]
-    None,
     [Description("At event time")]
-    AtEventTime,
+    AtEventTime = 0,
     [Description("1 minutes before")]
-    Before1Min,
+    Before1Min = 1,
     [Description("5 minutes before")]
-    Before5Min,
+    Before5Min = 5,
     [Description("10 minutes before")]
-    Before10Min,
+    Before10Min = 10,
     [Description("15 minutes before")]
-    Before15Min,
+    Before15Min = 15,
     [Description("30 minutes before")]
-    Before30Min,
+    Before30Min = 30,
     [Description("1 hour before")]
-    Before1Hour,
+    Before1Hour = 60,
+    [Description("2 hours before")]
+    Before2Hour = 120,
     [Description("1 day before")]
-    DayBefore,
+    DayBefore = 1440,
     [Description("2 days before")]
-    TwoDaysBefore,
+    TwoDaysBefore = 2880,
     [Description("1 week before")]
-    OneWeekBefore
+    OneWeekBefore = 10080
 }

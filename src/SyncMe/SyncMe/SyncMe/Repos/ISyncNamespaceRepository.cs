@@ -4,7 +4,7 @@ namespace SyncMe.Repos;
 
 public interface ISyncNamespaceRepository
 {
-    Dictionary<string, IReadOnlyCollection<Namespace>> GetAllSyncNamespaces();
-    void AddSyncNamespace(string name);
-    bool TryGetSyncNamespace(string name, out IReadOnlyCollection<Namespace> existingNamespaces);
+    Dictionary<string, Namespace> GetAllSyncNamespaces();
+    void AddSyncNamespace(string name, bool isActive = true);
+    bool TryGetSyncNamespace(string name, out Namespace existingNamespace);
 }

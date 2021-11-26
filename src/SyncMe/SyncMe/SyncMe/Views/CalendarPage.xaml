@@ -3,42 +3,150 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SyncMe.Views.CalendarPage"
              xmlns:controls="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar" 
-             xmlns:local1="clr-namespace:SyncMe.ViewModels"
              Title="Calendar"
              >
-    
-    <ContentPage.BindingContext>
-        <local1:CalendarPageViewModel/>
-    </ContentPage.BindingContext>
-    
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="7*" />
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="8*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Label Grid.Row="0" FontAttributes="Bold" Grid.Column="0" FontSize="20" Text="Notifications:" Margin="20"></Label>
-        <Switch Grid.Row="0" Grid.Column="1" IsToggled="True" Margin="20" x:Name="NotificationsSwitcher"></Switch>
-        <controls:Calendar 
-            Grid.Row="1"  
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="NotificationStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="HorizontalTextAlignment" Value="Start"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="Margin" Value="10,0,0,0"/>
+
+            </Style>
+            <Style x:Key="ThemeStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="HorizontalTextAlignment" Value="End"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="Margin" Value="0,0,10,0"/>
+            </Style>
+
+            <Style x:Key="TimeStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="HorizontalTextAlignment" Value="Start"/>
+                <Setter Property="FontSize" Value="Small"/>
+                <Setter Property="Margin" Value="5,0,0,0"/>
+            </Style>
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="HorizontalTextAlignment" Value="Start"/>
+                <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="Margin" Value="5,0,0,0"/>
+            </Style>
+            <Style x:Key="YearMonthStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="HorizontalTextAlignment" Value="Start"/>
+            </Style>
+            <Style x:Key="FloadButtonStyle" TargetType="Button">
+                <Setter Property="HeightRequest" Value="64"/>
+                <Setter Property="WidthRequest" Value="64"/>
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+                <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+            </Style>
+            <Style x:Key="CalendarStyle" TargetType="controls:Calendar">
+                <Setter Property="SelectedDateColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="SelectedDayBackgroundColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="DaysTitleColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="EventIndicatorColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="EventIndicatorSelectedColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="YearLabelColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="MonthLabelColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="TodayOutlineColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="ArrowsColor" Value="{StaticResource epamBlue}"/>
+            </Style>
+            <Style x:Key="FrameStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="Padding" Value="10"/>
+                <Setter Property="WidthRequest" Value="200"/>
+                <Setter Property="BorderColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="Margin" Value="8,8,8,8"/>
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <AbsoluteLayout>
+
+        <StackLayout>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="20*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0"  Grid.Column="0" Text="Sound"  Style="{StaticResource NotificationStyle}"></Label>
+                <Label Grid.Row="0"  Grid.Column="1" Text="Theme"  Style="{StaticResource ThemeStyle}"></Label>
+
+                <Label Grid.Row="1" FontSize="Medium" Style="{StaticResource YearMonthStyle}" Grid.Column="0" Grid.ColumnSpan="2" x:Name="year"  HorizontalOptions="Center" IsVisible="{Binding CalendarSectionShown}">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding MonthText}"/>
+                            <Span Text=" "/>
+                            <Span Text="{Binding Year}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <controls:Calendar 
+            x:Name="Calendar1"
+            Grid.Row="2"  
             Grid.Column="0" 
             Grid.ColumnSpan="2"
-            Events="{Binding Events}">
-        </controls:Calendar>
-        <Button 
-            x:Name="AddEvent"
-            Grid.Row="2"  
-            Grid.Column="1" 
-            FontSize="35" 
-            Text="+" 
-            BackgroundColor="LightPink"
-            />
-    </Grid>
+            Events="{Binding Events}"
+            DayTappedCommand="{Binding DayTappedCommand}"
+            Style="{StaticResource CalendarStyle}"
+            ShowMonthPicker="False"
+            ShowYearPicker="False"
+            HorizontalOptions="Center" 
+            >
+                    <controls:Calendar.EventTemplate>
+                        <DataTemplate>
+                            <Frame Style="{StaticResource FrameStyle}">
+                                <StackLayout Padding="15,0,0,0">
+                                    <Label Text="{Binding StartDate}" Style="{StaticResource TimeStyle}"/>
+                                    <Label Text="{Binding Name}" Style="{StaticResource TitleStyle}"/>
+                                    <Label Text="{Binding Description}" Style="{StaticResource TitleStyle}"/>
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </controls:Calendar.EventTemplate>
+                </controls:Calendar>
+            </Grid>
+        </StackLayout>
+        <Button x:Name="AddEvent"
+            ImageSource="icon_add_calendar.png"
+            BackgroundColor="Transparent"
+            Style="{StaticResource FloadButtonStyle}"
+            AbsoluteLayout.LayoutBounds="0.93, 0.94, 50, 50"
+            AbsoluteLayout.LayoutFlags="PositionProportional"  
+                />
+        <Switch 
+            AbsoluteLayout.LayoutBounds="1, 0, 0.2, 0.1"
+            AbsoluteLayout.LayoutFlags="SizeProportional"        
+            x:Name="NotificationsSwitcher" 
+            VerticalOptions="End"
+            Style="{StaticResource ToggleButtonStyle}"
+            IsToggled="{Binding NotificationsSwitcher}"
+            IsVisible="{Binding CalendarSectionShown}"                    
+                    />
+        <Switch 
+            AbsoluteLayout.LayoutBounds="1, 0, 0.2, 0.1"
+            AbsoluteLayout.LayoutFlags="All"        
+            x:Name="ThemeSwitcher" 
+            VerticalOptions="End"
+            Style="{StaticResource ToggleButtonStyle}"
+            IsToggled="{Binding ThemeSwitcher}"
+            IsVisible="{Binding CalendarSectionShown}"                    
+                    />
+
+
+
+
+    </AbsoluteLayout>
+
+
 </ContentPage>
-    
-    
-    

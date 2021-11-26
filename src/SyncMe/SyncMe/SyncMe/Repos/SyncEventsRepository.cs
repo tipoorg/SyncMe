@@ -1,10 +1,14 @@
-﻿using SyncMe.Models;
+﻿using System.Collections.Concurrent;
+using SyncMe.Models;
 
 namespace SyncMe.Repos;
 
 internal sealed class SyncEventsRepository : ISyncEventsRepository
 {
-    private readonly Dictionary<Guid, SyncEvent> _events = new();
+    public event EventHandler<Guid> OnAddSyncEvent;
+    public event EventHandler OnSyncEventsUpdate;
+
+    private ConcurrentDictionary<Guid, SyncEvent> _events = new();
 
     public bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent) => _events.TryGetValue(id, out syncEvent);
 
@@ -14,10 +18,18 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
         return res;
     }
 
-    public SyncEvent AddSyncEvent(SyncEvent syncEvent)
+    public Guid AddSyncEvent(SyncEvent syncEvent)
     {
-        var withId = syncEvent with { Id = Guid.NewGuid() };
-        _events.Add(syncEvent.Id, withId);
-        return withId;
+        var newId = Guid.NewGuid();
+        _events.AddOrUpdate(newId, syncEvent, (_,__) => syncEvent);
+        OnAddSyncEvent?.Invoke(this, newId);
+        OnSyncEventsUpdate?.Invoke(this, default);
+        return newId;
+    }
+
+    public void RemoveEvents(Func<SyncEvent, bool> predicate)
+    {
+        _events = new(_events.Where(p => !predicate(p.Value)).ToDictionary(p => p.Key, p => p.Value));
+        OnSyncEventsUpdate?.Invoke(this, default);
     }
 }

@@ -1,5 +1,61 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SyncMe.Views.CreateEventPage" >
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:forms="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
+             x:Class="SyncMe.Views.CreateEventPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="LabelStyle" TargetType="Label">
+                <Setter Property="Margin" Value="5,5,0,0"/>
+                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+            </Style>
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="Margin" Value="5,0,5,0"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource epamBlue}"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="AddEvent" Text="Add event"/>
+        <ToolbarItem Text="Cancel" Clicked="CancelEvent"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Spacing="20">
+                <StackLayout>
+                    <forms:AutoSuggestBox PlaceholderText="Namespace" PropertyChanged="ValidateButtonState" TextChanged="OnTextChanged" SuggestionChosen="OnSuggestionChosen" Margin="5,0,5,0"/>
+                    <Entry Text="{Binding Title}" Placeholder="Title" PropertyChanged="ValidateButtonState" Margin="5,0,5,0"/>
+                </StackLayout>
+                <StackLayout>
+                    <Button Text="{Binding ScheduleButtonText}" Clicked="OnConfigureScheduleClicked" Style="{StaticResource ButtonStyle}"/>
+                    <StackLayout>
+                        <Label Text="Starts date" VerticalTextAlignment="Center" Style="{StaticResource LabelStyle}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <DatePicker Date="{Binding StartDate}" MinimumDate="2000/12/1" MaximumDate="2100/12/31" Grid.Column="0" Margin="5,0,5,0"/>
+                            <TimePicker Time="{Binding StartTime}" Grid.Column="1" Margin="5,0,5,0"/>
+                        </Grid>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label Text="Ends date" VerticalTextAlignment="Center" Style="{StaticResource LabelStyle}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <DatePicker Date="{Binding EndDate}" MinimumDate="2000/12/1" MaximumDate="2100/12/31" Grid.Column="0" Margin="5,0,5,0"/>
+                            <TimePicker Time="{Binding EndTime}" Grid.Column="1" Margin="5,0,5,0"/>
+                        </Grid>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout>
+                    <Label Text="Event Alert" Style="{StaticResource LabelStyle}"/>
+                    <Button Text="{Binding AlertButtonText}" Clicked="OnAlertButtonClicked" Style="{StaticResource ButtonStyle}"/>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
 </ContentPage>

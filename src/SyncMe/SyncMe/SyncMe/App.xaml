@@ -7,5 +7,11 @@
             <Color x:Key="epamBlue">#39c2d7</Color>
             <Color x:Key="epamGrey">#464547</Color>
         </ResourceDictionary>
+        <Style x:Key="ToggleButtonStyle" TargetType="Switch">
+            <Setter Property="OnColor" Value="{StaticResource epamBlue}"/>
+            <Setter Property="Margin" Value="20,0,15,11"/>
+            <Setter Property="IsToggled" Value="True"/>
+            <Setter Property="ThumbColor" Value="{StaticResource epamGrey}"/>
+        </Style>
     </Application.Resources>
 </Application>

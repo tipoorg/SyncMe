@@ -1,53 +1,38 @@
 ﻿using Android.Content;
-using SyncMe.Droid.Extensions;
-using SyncMe.Extensions;
-using SyncMe.Models;
-using SyncMe.Repos;
+using Android.Util;
 
 namespace SyncMe.Droid.Alarm;
 
 [BroadcastReceiver]
 internal class AlarmReceiver : BroadcastReceiver
 {
-    private ISyncEventsRepository _syncEventsRepository = Bootstrapper.GetService<ISyncEventsRepository>();
+    private readonly IAndroidAlarmService _androidAlarmService = Bootstrapper.GetService<IAndroidAlarmService>();
 
     public override void OnReceive(Context context, Intent intent)
     {
-        var action = intent.GetStringExtra(AlarmMessage.ActionKey);
-
-        switch (action)
+        try
         {
-            case AlarmMessage.SetAlarmAction:
-                SetAlarm(context, intent);
-                return;
+            var action = intent.GetStringExtra(AlarmMessage.ActionKey);
+            Log.Debug(MainActivity.Tag, $"AlarmReceiver.OnReceive {action}");
 
-            case AlarmMessage.StopAlarmAction:
-                StopAlarm(intent);
+            switch (action)
+            {
+                case AlarmMessage.ProcessAlarmAction:
+                    _androidAlarmService.ProcessAlarm(context, intent);
+                    return;
 
-                return;
-            default:
-                return;
+                case AlarmMessage.StopAlarmAction:
+                    _androidAlarmService.StopPlayingAlarm(intent);
+                    return;
+
+                default:
+                    Log.Debug(MainActivity.Tag, "AlarmReceiver.OnReceive default");
+                    return;
+            }
         }
-    }
-
-    private void SetAlarm(Context context, Intent intent)
-    {
-        var syncEvent = intent.GetExtra<SyncEvent>();
-        if (_syncEventsRepository.TryGetSyncEvent(syncEvent.Id, out var storedEvent) 
-            && storedEvent.Status == SyncStatus.Active)
+        catch (Exception ex)
         {
-            return;
+            Log.Error(MainActivity.Tag, ex.Message);
         }
-
-        AndroidAlarmPlayer.Instance.PlayAlarm(context);
-        AndroidNotificationManager.Instance.Show(syncEvent, context);
-        new AndroidAlarmIntent().SetAlarm(syncEvent.DecrementRemainingTimes(), context);
-    }
-
-    private void StopAlarm(Intent intent)
-    {
-        AndroidAlarmPlayer.Instance.StopPlaying();
-        var id = intent.GetIntExtra(AlarmMessage.NotificationIdKey, -1);
-        AndroidNotificationManager.Instance.Cancel(id);
     }
 }

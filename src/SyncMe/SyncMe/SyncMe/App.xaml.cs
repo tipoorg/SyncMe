@@ -1,12 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using GraphServiceClient = Microsoft.Graph.GraphServiceClient;
-using MsGraph = Microsoft.Graph;
-using Microsoft.Identity.Client;
 using System.ComponentModel;
-using System.IO;
-using System.Reflection;
-using System.Net.Http.Headers;
-using CalendarProviders.Authorization;
 
 namespace SyncMe;
 

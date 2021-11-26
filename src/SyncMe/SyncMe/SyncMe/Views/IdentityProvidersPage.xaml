@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SyncMe.Views.IdentityProvidersPage">
+             x:Class="SyncMe.Views.IdentityProvidersPage"
+             Title="Identities"
+             BackgroundImageSource="background_white.png">
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="TitleStyle" TargetType="Label">
@@ -14,55 +17,76 @@
                 <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
                 <Setter Property="VerticalTextAlignment" Value="Center"/>
                 <Setter Property="VerticalOptions" Value="Center"/>
-                <Setter Property="Margin" Value="20,0,0,0" />
+                <Setter Property="Margin" Value="20,7,0,0"/>
                 <Setter Property="Padding" Value="5"/>
             </Style>
-            <Style x:Key="FloadButtonStyle" TargetType="Button">
+            <Style x:Key="SyncButton" TargetType="Button">
                 <Setter Property="CornerRadius" Value="100"/>
-                <Setter Property="HeightRequest" Value="55"/>
-                <Setter Property="WidthRequest" Value="55"/>
-                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
-                <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
-                <Setter Property="Padding" Value="15"/>
-                <Setter Property="Margin" Value="0,0,20,20"/>
+                <Setter Property="HeightRequest" Value="35"/>
+                <Setter Property="WidthRequest" Value="35"/>
+                <Setter Property="Margin" Value="0,12,20,0"/>
+                <Setter Property="BackgroundColor" Value="White"/>
+                <Setter Property="ImageSource" Value="icon_profile_sync.png"/>
+            </Style>
+            <Style x:Key="FrameStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="Padding" Value="10"/>
+                <Setter Property="WidthRequest" Value="200"/>
+                <Setter Property="Margin" Value="8,8,8,8"/>
+                <Setter Property="BorderColor" Value="{StaticResource epamBlue}"/>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="icon_all_profiles_sync.png" Clicked="OnSyncClicked" CommandParameter="{Binding .}" />
+    </ContentPage.ToolbarItems>
+    
     <ContentPage.Content>
         <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <StackLayout>
-                <Label Text="Identities" Style="{StaticResource TitleStyle}" />
-                <ListView ItemsSource="{Binding Identities}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <StackLayout>
-                                    <Label Text="{Binding Name}" Style="{StaticResource IdentityStyle}"/>
-                                </StackLayout>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                <FlexLayout Direction="Column" JustifyContent="Center">
+                    <ListView ItemsSource="{Binding Identities}" SelectionMode="None" HasUnevenRows="True">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Frame Style="{StaticResource FrameStyle}">
+                                        <StackLayout>
+                                            <FlexLayout JustifyContent="SpaceBetween">
+                                                <Label Text="{Binding Name}" Style="{StaticResource IdentityStyle}"/>
+                                                <Button Clicked="OnSyncClicked" CommandParameter="{Binding .}" Style="{StaticResource SyncButton}" />
+                                            </FlexLayout>
+                                        </StackLayout>
+                                    </Frame>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </FlexLayout>
             </StackLayout>
-                <Button x:Name="AddIdentity"
-                        ImageSource="icon_plus.xml"
+            <Button x:Name="AddIdentity"
+                        ImageSource="{Binding Image}"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
-                        Style="{StaticResource FloadButtonStyle}"/>
-                <Button x:Name="AddOutlook"
-                        ImageSource="icon_outlook.xml"
+                        AbsoluteLayout.LayoutBounds="0.93, 0.97, 65, 65"
+                        CornerRadius="200"
+                        Rotation="180"
+                        BackgroundColor="#7f39c2d7"/>
+            <Button x:Name="AddOutlook"
+                        ImageSource="icon_outlook_provider.png"
                         IsVisible="False"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="1, 0.85, AutoSize, AutoSize"
-                        Style="{StaticResource FloadButtonStyle}"/>
-                <Button x:Name="AddGoogle"
-                        ImageSource="icon_google.xml"
+                        AbsoluteLayout.LayoutBounds="0.94, 0.82, 70, 70"
+                        BackgroundColor="Transparent"
+                        CornerRadius="200"/>
+            <Button x:Name="AddGoogle"
+                        ImageSource="icon_google.png"
                         IsVisible="False"
-                        IsEnabled="False"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="1, 0.70, AutoSize, AutoSize"
-                        Style="{StaticResource FloadButtonStyle}"/>
+                        AbsoluteLayout.LayoutBounds="0.94, 0.67, 70, 70"
+                        IsEnabled="False"   
+                        CornerRadius="200"
+                        BackgroundColor="Transparent"
+                    />
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
