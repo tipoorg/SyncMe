@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>Latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="dotMorten.Xamarin.Forms.AutoSuggestBox" Version="1.1.1" />
+		<PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Graph" Version="3.35.0" />
+		<PackageReference Include="System.Reactive" Version="5.0.0" />
+		<PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
+		<PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+		<PackageReference Include="Xamarin.Plugin.Calendar" Version="1.4.5304" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Views\EventAlertPage.xaml.cs">
+			<DependentUpon>EventAlertPage.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\CreateEventPage.xaml.cs">
+			<DependentUpon>CreateEventPage.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\EventSchedulePage.xaml.cs">
+			<DependentUpon>EventSchedulePage.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\IdentityProvidersPage.xaml.cs">
+			<DependentUpon>IdentityProvidersPage.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\NamespaceManagmentPage.xaml.cs">
+			<DependentUpon>NamespaceManagmentPage.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Views\EventSchedulePage.xaml">
+			<Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Views\NamespaceManagmentPage.xaml">
+			<Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SyncMe.CalendarProviders\SyncMe.CalendarProviders.csproj" />
+		<ProjectReference Include="..\SyncMe.Common\SyncMe.Common.csproj" />
+	</ItemGroup>
+</Project>

@@ -1,9 +1,4 @@
-﻿using Azure.Identity;
-using Microsoft.Graph;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Microsoft.Graph;
 
 namespace SyncMe.CalendarProviders.Outlook
 {
@@ -11,11 +6,13 @@ namespace SyncMe.CalendarProviders.Outlook
     {
         private readonly GraphServiceClient _graphClient;
         private readonly string _email;
+
         public OutlookProvider(GraphServiceClient graphClient, string email)
         {
             _graphClient = graphClient;
             _email = email;
         }
+
         public async Task<List<Event>> GetEventsAsync()
         {
             var events = await _graphClient.Users[_email].Calendar.Events.Request().GetAsync();
