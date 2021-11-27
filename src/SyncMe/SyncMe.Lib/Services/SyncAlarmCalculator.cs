@@ -1,12 +1,12 @@
 ﻿using SyncMe.Models;
 
-namespace SyncMe.Services;
+namespace SyncMe.Lib.Services;
 
-internal class SyncAlarmService : ISyncAlarmService
+internal class SyncAlarmCalculator : ISyncAlarmCalculator
 {
     private readonly ISyncEventsRepository _syncEventsRepository;
 
-    public SyncAlarmService(ISyncEventsRepository syncEventsRepository)
+    public SyncAlarmCalculator(ISyncEventsRepository syncEventsRepository)
     {
         _syncEventsRepository = syncEventsRepository;
     }

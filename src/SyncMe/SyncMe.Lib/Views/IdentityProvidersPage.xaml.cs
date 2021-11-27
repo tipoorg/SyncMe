@@ -16,18 +16,18 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 {
     private readonly IDisposable _addIdentitySubsciption;
     private readonly IDisposable _addOutlookIdentitySubscription;
-    private readonly ISyncEventsRepository _syncEventsRepository;
+    private readonly ISyncEventsService _syncEventsService;
     private readonly ISyncNamespaceRepository _syncNamespaceRepository;
 
     public string Image { get => AddOutlook.IsVisible ? "icon_arrow_major.png" : "icon_plus_minor.xml"; }
 
     public ObservableCollection<Identity> Identities { get; } = new ObservableCollection<Identity>();
 
-    public IdentityProvidersPage(ISyncEventsRepository syncEventsRepository, ISyncNamespaceRepository syncNamespaceRepository)
+    public IdentityProvidersPage(ISyncEventsService syncEventsService, ISyncNamespaceRepository syncNamespaceRepository)
     {
         InitializeComponent();
         BindingContext = this;
-        _syncEventsRepository = syncEventsRepository;
+        _syncEventsService = syncEventsService;
         _syncNamespaceRepository = syncNamespaceRepository;
 
         var manager = new MicrosoftAuthorizationManager();
@@ -62,9 +62,9 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
         var syncEvents = optional.Value.events;
 
         if (Identities.Any(i => i.Name == username))
-            _syncEventsRepository.RemoveEvents(e => username == e.ExternalEmail);
+            _syncEventsService.RemoveEvents(e => username == e.ExternalEmail);
 
-        var newEvents = syncEvents.Select(_syncEventsRepository.AddSyncEvent).ToList();
+        var newEvents = syncEvents.Select(_syncEventsService.AddSyncEvent).ToList();
 
         return (username, newEvents);
     }
@@ -73,7 +73,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
     {
         var manager = new MicrosoftAuthorizationManager();
         var accountsToResync = MicrosoftAuthorizationManager.CurrentAccounts.Select(a => a.Username).ToList();
-        _syncEventsRepository.RemoveEvents(e => accountsToResync.Contains(e.ExternalEmail));
+        _syncEventsService.RemoveEvents(e => accountsToResync.Contains(e.ExternalEmail));
         foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
         {
             var optional = await FetchEventsAsync(account.Username);
@@ -83,7 +83,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
             foreach (var @event in optional.Value.events)
             {
-                _syncEventsRepository.AddSyncEvent(@event);
+                _syncEventsService.AddSyncEvent(@event);
             }
         }
     }
