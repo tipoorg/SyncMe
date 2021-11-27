@@ -61,11 +61,11 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
 
     private async void OnAlertButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new EventAlertPage(_eventModel));
 
-    private async Task<int> AddNewSyncEvent()
+    private async Task<Guid> AddNewSyncEvent()
     {
-        var eventId = _syncEventsService.AddSyncEvent(_eventModel.SyncEvent.TrimNamespaceEnd() with { });
+        var guid = _syncEventsService.AddSyncEvent(_eventModel.SyncEvent.TrimNamespaceEnd() with { });
         await NavigateToCalendar();
-        return eventId;
+        return guid;
     }
 
     private async void CancelEvent(object sender, EventArgs e)

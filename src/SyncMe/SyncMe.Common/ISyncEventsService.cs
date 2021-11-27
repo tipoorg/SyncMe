@@ -7,9 +7,9 @@ namespace SyncMe
     {
         event EventHandler OnSyncEventsUpdate;
 
-        int AddSyncEvent(SyncEvent syncEvent);
+        Guid AddSyncEvent(SyncEvent syncEvent);
         IReadOnlyCollection<SyncEvent> GetAllSyncEvents();
         void RemoveEvents(Expression<Func<SyncEvent, bool>> predicate);
-        bool TryGetSyncEvent(int id, out SyncEvent syncEvent);
+        bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent);
     }
 }

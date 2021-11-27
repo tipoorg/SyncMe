@@ -22,10 +22,6 @@ public partial class App : Application, INotifyPropertyChanged
 
         _appScope = _serviceProvider.CreateScope();
 
-        var dbFactory = _serviceProvider.GetService<IApplicationContextFactory>();
-
-        dbFactory.Migrate();
-
         MainPage = _serviceProvider.GetRequiredService<AppShell>();
     }
 

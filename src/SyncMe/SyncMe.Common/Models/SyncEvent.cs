@@ -2,7 +2,6 @@
 
 public record SyncEvent
 {
-    public int Id { get; set; }
     public string? ExternalId { get; set; }
     public string? ExternalEmail { get; set; }
     public string Title { get; set; } = string.Empty;

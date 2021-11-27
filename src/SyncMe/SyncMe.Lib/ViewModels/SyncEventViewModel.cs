@@ -13,7 +13,6 @@ public class SyncEventViewModel : INotifyPropertyChanged
         {
             Start = DateTime.Now,
             End = DateTime.Now.AddHours(1),
-            NamespaceKey = "",
             Reminder = SyncReminder.AtEventTime
         };
 

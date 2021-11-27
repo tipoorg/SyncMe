@@ -1,1 +1,0 @@
-﻿global using MigrationContext = SyncMe.DataAccess.ApplicationContext;

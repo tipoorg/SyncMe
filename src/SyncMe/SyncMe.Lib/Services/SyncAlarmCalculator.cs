@@ -11,7 +11,7 @@ internal class SyncAlarmCalculator : ISyncAlarmCalculator
         _syncEventsRepository = syncEventsRepository;
     }
 
-    public bool TryGetNearestAlarm(int eventId, out SyncAlarm syncALarm)
+    public bool TryGetNearestAlarm(Guid eventId, out SyncAlarm syncALarm)
     {
         if (_syncEventsRepository.TryGetSyncEvent(eventId, out var syncEvent))
         {

@@ -15,7 +15,7 @@ public static class Bootstrapper
 
     private static IServiceProvider CreateServiceProvider()
     {
-        var dbPath = GetDatabasePath("syncme.db");
+        var dbPath = GetDatabasePathAsync("syncme.db");
 
         var services = new ServiceCollection()
           .AddSyncMeLib()
@@ -42,8 +42,15 @@ public static class Bootstrapper
         return services;
     }
 
-    private static string GetDatabasePath(string filename)
+    private static string GetDatabasePathAsync(string filename)
     {
-        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), filename);
+        var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), filename);
+
+        if (!File.Exists(path))
+        {
+            File.Create(path).Dispose();
+        }
+
+        return path;
     }
 }

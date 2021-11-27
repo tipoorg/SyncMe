@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LiteDB;
 using Microsoft.Extensions.DependencyInjection;
 using SyncMe.DataAccess.Repos;
 
@@ -10,8 +10,7 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddRepositories()
-            .AddTransient<IApplicationContextFactory, ApplicationContextFactory>()
-            .AddDbContext<ApplicationContext>(builder => builder.UseSqlite($"Filename={databasePath}"));
+            .AddSingleton<ILiteDatabase>(new LiteDatabase(databasePath));
 
         return services;
     }

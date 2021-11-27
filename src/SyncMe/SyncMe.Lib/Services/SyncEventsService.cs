@@ -21,11 +21,11 @@ internal sealed class SyncEventsService : ISyncEventsService
         _syncAlarmCalculator = syncAlarmCalculator;
     }
 
-    public bool TryGetSyncEvent(int id, out SyncEvent syncEvent) => _syncEventsRepository.TryGetSyncEvent(id, out syncEvent);
+    public bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent) => _syncEventsRepository.TryGetSyncEvent(id, out syncEvent);
 
     public IReadOnlyCollection<SyncEvent> GetAllSyncEvents() => _syncEventsRepository.GetAllSyncEvents();
 
-    public int AddSyncEvent(SyncEvent syncEvent)
+    public Guid AddSyncEvent(SyncEvent syncEvent)
     {
         var newId = _syncEventsRepository.AddSyncEvent(syncEvent);
 

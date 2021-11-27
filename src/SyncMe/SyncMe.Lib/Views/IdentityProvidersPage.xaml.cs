@@ -53,7 +53,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
             });
     }
 
-    private async Task<(string username, List<int> newEvents)> LoadEventsAsync(string username = null)
+    private async Task<(string username, List<Guid> newEvents)> LoadEventsAsync(string username = null)
     {
         var optional = await FetchEventsAsync(username);
         if (!optional.HasValue)

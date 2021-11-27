@@ -6,7 +6,7 @@ namespace SyncMe;
 public interface ISyncEventsRepository
 {
     IReadOnlyCollection<SyncEvent> GetAllSyncEvents();
-    bool TryGetSyncEvent(int id, out SyncEvent syncEvent);
-    int AddSyncEvent(SyncEvent syncEvent);
+    bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent);
+    Guid AddSyncEvent(SyncEvent syncEvent);
     void RemoveEvents(Expression<Func<SyncEvent, bool>> predicate);
 }
