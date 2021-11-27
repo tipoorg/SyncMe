@@ -1,9 +1,0 @@
-﻿global using System;
-global using System.Reactive;
-global using System.Reactive.Linq;
-global using CustomAlarm.MAUI.Pages;
-global using Microsoft.Extensions.DependencyInjection;
-global using Microsoft.Maui;
-global using Microsoft.Maui.Controls;
-global using Microsoft.Maui.Controls.Hosting;
-global using Microsoft.Maui.Hosting;
