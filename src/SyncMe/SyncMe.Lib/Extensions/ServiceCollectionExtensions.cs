@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SyncMe.Repos;
-using SyncMe.Services;
+using SyncMe.Lib.Repos;
+using SyncMe.Lib.Services;
 using SyncMe.ViewModels;
 using SyncMe.Views;
 
@@ -13,7 +13,8 @@ public static class ServiceCollectionExtensions
         services
             .AddScoped<AppShell>()
             .AddViews()
-            .AddServices();
+            .AddServices()
+            .AddRepositories();
 
         return services;
     }
@@ -32,11 +33,20 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services
-            .AddSingleton<ISyncAlarmService, SyncAlarmService>()
+            .AddSingleton<ISyncAlarmCalculator, SyncAlarmCalculator>()
+            .AddSingleton<ISyncEventsService, SyncEventsService>()
+            .AddSingleton<ISyncNamespaceService, SyncNamespaceService>();
+
+        return services;
+    }
+
+
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services
             .AddSingleton<ISyncEventsRepository, SyncEventsRepository>()
             .AddSingleton<ISyncNamespaceRepository, SyncNamespaceRepository>()
-            .AddSingleton<INotificationsSwitcherRepository, NotificationsSwitcherRepository>()
-            .AddSingleton<ISyncNamespaceService, SyncNamespaceService>();
+            .AddSingleton<INotificationsSwitcherRepository, NotificationsSwitcherRepository>();
 
         return services;
     }

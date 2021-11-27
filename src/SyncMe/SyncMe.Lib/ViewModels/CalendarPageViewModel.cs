@@ -6,22 +6,22 @@ namespace SyncMe.ViewModels;
 
 public class CalendarPageViewModel : INotifyPropertyChanged
 {
-    private readonly ISyncEventsRepository _syncEventsRepository;
+    private readonly ISyncEventsService _syncEventsService;
     private readonly INotificationsSwitcherRepository _notificationsSwitcherRepository;
     public IBackgroundColorService BackgroundColorService { get; set; }
 
     public CalendarPageViewModel(
-        ISyncEventsRepository syncEventsRepository,
+        ISyncEventsService syncEventsService,
         INotificationsSwitcherRepository notificationsSwitcherRepository)
     {
-        _syncEventsRepository = syncEventsRepository;
+        _syncEventsService = syncEventsService;
         _notificationsSwitcherRepository = notificationsSwitcherRepository;
-        _syncEventsRepository.OnSyncEventsUpdate += OnSyncEventsUpdate;
+        _syncEventsService.OnSyncEventsUpdate += OnSyncEventsUpdate;
 
 
         NotificationsSwitcher = _notificationsSwitcherRepository.State;
         ThemeSwitcher = true;
-        Events = GetEventsFromRepository();
+        Events = LoadEvents();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -30,9 +30,9 @@ public class CalendarPageViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    private EventCollection GetEventsFromRepository()
+    private EventCollection LoadEvents()
     {
-        var events = _syncEventsRepository.GetAllSyncEvents()
+        var events = _syncEventsService.GetAllSyncEvents()
             .ToLookup(k => k.Start.Date, Convert);
 
         var result = new EventCollection();
@@ -96,6 +96,6 @@ public class CalendarPageViewModel : INotifyPropertyChanged
 
     private void OnSyncEventsUpdate(object sender, EventArgs e)
     {
-        Events = GetEventsFromRepository();
+        Events = LoadEvents();
     }
 }

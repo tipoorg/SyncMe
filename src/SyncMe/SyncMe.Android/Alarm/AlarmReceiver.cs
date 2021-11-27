@@ -6,7 +6,7 @@ namespace SyncMe.Droid.Alarm;
 [BroadcastReceiver]
 internal class AlarmReceiver : BroadcastReceiver
 {
-    private readonly IAndroidAlarmService _androidAlarmService = Bootstrapper.GetService<IAndroidAlarmService>();
+    private readonly IAndroidAlarmProcessor _androidAlarmProcessor = Bootstrapper.GetService<IAndroidAlarmProcessor>();
 
     public override void OnReceive(Context context, Intent intent)
     {
@@ -18,11 +18,11 @@ internal class AlarmReceiver : BroadcastReceiver
             switch (action)
             {
                 case MessageKeys.ProcessAlarmAction:
-                    _androidAlarmService.ProcessAlarm(context, intent);
+                    _androidAlarmProcessor.ProcessAlarm(context, intent);
                     return;
 
                 case MessageKeys.StopAlarmAction:
-                    _androidAlarmService.StopPlayingAlarm(intent);
+                    _androidAlarmProcessor.StopPlayingAlarm(intent);
                     return;
 
                 default:

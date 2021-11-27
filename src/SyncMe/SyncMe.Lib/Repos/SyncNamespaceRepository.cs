@@ -1,6 +1,6 @@
 ﻿using SyncMe.Models;
 
-namespace SyncMe.Repos;
+namespace SyncMe.Lib.Repos;
 
 internal class SyncNamespaceRepository : ISyncNamespaceRepository
 {

@@ -5,57 +5,22 @@ using Android.OS;
 using Android.Widget;
 using SyncMe.Droid.Extensions;
 using SyncMe.Models;
+using AndroidApp = Android.App.Application;
 
 namespace SyncMe.Droid.Alarm;
 
-internal class AndroidAlarmService : IAndroidAlarmService
+internal class AndroidAlarmService : IAlarmService
 {
-    private readonly ISyncAlarmService _syncAlarmService;
-    private readonly IAndroidAlarmPlayer _androidAlarmPlayer;
-    private readonly ISyncNamespaceService _syncNamespaceService;
-
-    public AndroidAlarmService(
-        ISyncAlarmService syncAlarmService,
-        IAndroidAlarmPlayer androidAlarmPlayer,
-        ISyncNamespaceService syncNamespaceService)
+    public void SetAlarm(SyncAlarm syncAlarm)
     {
-        _syncAlarmService = syncAlarmService;
-        _androidAlarmPlayer = androidAlarmPlayer;
-        _syncNamespaceService = syncNamespaceService;
-    }
+        var calendarItem = GetCalendarItem(syncAlarm);
+        var alarmIntent = GetAlarmIntent(syncAlarm, AndroidApp.Context);
 
-    public void ProcessAlarm(Context context, Intent intent)
-    {
-        var pendingAlarm = intent.GetExtra<SyncAlarm>();
-        if (_syncNamespaceService.IsNamespaceActive(pendingAlarm.NamespaceFullName))
-        {
-            _androidAlarmPlayer.PlayAlarm(context);
-            AndroidNotificationManager.Instance.Show(pendingAlarm, context);
-        }
-
-        SetAlarm(pendingAlarm.EventId, context);
-    }
-
-    public void SetAlarm(Guid eventId, Context context)
-    {
-        if (_syncAlarmService.TryGetNearestAlarm(eventId, out var syncAlarm))
-        {
-            var calendarItem = GetCalendarItem(syncAlarm);
-            var alarmIntent = GetAlarmIntent(syncAlarm, context);
-
-            SetAlarm(calendarItem, alarmIntent, context);
-            Toast.MakeText(
-                context,
-                $"{syncAlarm.Title} Scheduled on {DateTime.Now.AddSeconds(syncAlarm.DelaySeconds)}",
-                ToastLength.Long).Show();
-        }
-    }
-
-    public void StopPlayingAlarm(Intent intent)
-    {
-        _androidAlarmPlayer.StopPlaying();
-        var id = intent.GetIntExtra(MessageKeys.NotificationIdKey, -1);
-        AndroidNotificationManager.Instance.Cancel(id);
+        SetAlarm(calendarItem, alarmIntent, AndroidApp.Context);
+        Toast.MakeText(
+            AndroidApp.Context,
+            $"{syncAlarm.Title} Scheduled on {DateTime.Now.AddSeconds(syncAlarm.DelaySeconds)}",
+            ToastLength.Long).Show();
     }
 
     private static Calendar GetCalendarItem(SyncAlarm syncAlarm)

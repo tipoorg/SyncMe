@@ -2,7 +2,7 @@
 
 namespace SyncMe;
 
-public interface ISyncAlarmService
+public interface ISyncAlarmCalculator
 {
     bool TryGetNearestAlarm(Guid eventId, out SyncAlarm syncALarm);
 }

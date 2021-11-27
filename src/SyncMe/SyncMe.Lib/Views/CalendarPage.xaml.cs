@@ -7,12 +7,12 @@ namespace SyncMe.Views;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class CalendarPage : ContentPage
 {
-    private readonly ISyncEventsRepository _eventsRepository;
+    private readonly ISyncEventsService _syncEventsService;
     private readonly ISyncNamespaceRepository _namespaceRepository;
 
     public CalendarPage(
         CalendarPageViewModel viewModel,
-        ISyncEventsRepository eventsRepository,
+        ISyncEventsService syncEventsService,
         ISyncNamespaceRepository namespaceRepository,
         NamespaceManagmentPage namespaceManagmentPage,
         IdentityProvidersPage identityProvidersPage)
@@ -20,7 +20,7 @@ public partial class CalendarPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
         AddEvent.Clicked += AddEvent_Clicked;
-        _eventsRepository = eventsRepository;
+        _syncEventsService = syncEventsService;
         _namespaceRepository = namespaceRepository;
 
         year.BindingContext = Calendar1;
@@ -28,5 +28,5 @@ public partial class CalendarPage : ContentPage
     }
 
     public async void AddEvent_Clicked(object sender, EventArgs e) =>
-        await Navigation.PushAsync(new CreateEventPage(_eventsRepository, _namespaceRepository));
+        await Navigation.PushAsync(new CreateEventPage(_syncEventsService, _namespaceRepository));
 }

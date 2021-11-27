@@ -1,4 +1,4 @@
-﻿namespace SyncMe.Services;
+﻿namespace SyncMe.Lib.Services;
 
 internal class SyncNamespaceService : ISyncNamespaceService
 {
@@ -63,7 +63,7 @@ internal class SyncNamespaceService : ISyncNamespaceService
     {
         var lastDotIndex = fullname.LastIndexOf('.');
 
-        if(lastDotIndex == -1) return false;
+        if (lastDotIndex == -1) return false;
 
         var parentKey = fullname.Substring(0, lastDotIndex);
         return !_namespaceRepository.GetAllSyncNamespaces()[parentKey].IsActive;

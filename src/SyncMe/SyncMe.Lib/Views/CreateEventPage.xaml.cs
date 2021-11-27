@@ -11,17 +11,17 @@ namespace SyncMe.Views;
 public sealed partial class CreateEventPage : ContentPage, IDisposable
 {
     private readonly ISyncNamespaceRepository _namespaceRepository;
-    private readonly ISyncEventsRepository _eventsRepository;
+    private readonly ISyncEventsService _syncEventsService;
     private readonly Dictionary<string, Namespace> _namespaces;
     private readonly IDisposable _addEventSubscription;
     private readonly SyncEventViewModel _eventModel;
 
-    public CreateEventPage(ISyncEventsRepository eventsRepository, ISyncNamespaceRepository namespaceRepository)
+    public CreateEventPage(ISyncEventsService syncEventsService, ISyncNamespaceRepository namespaceRepository)
     {
         _eventModel = new SyncEventViewModel();
         InitializeComponent();
         _namespaceRepository = namespaceRepository;
-        _eventsRepository = eventsRepository;
+        _syncEventsService = syncEventsService;
         _namespaces = _namespaceRepository.GetAllSyncNamespaces();
         BindingContext = _eventModel;
 
@@ -63,7 +63,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
 
     private async Task<Guid> AddNewSyncEvent()
     {
-        var guid = _eventsRepository.AddSyncEvent(_eventModel.SyncEvent.TrimNamespaceEnd() with { });
+        var guid = _syncEventsService.AddSyncEvent(_eventModel.SyncEvent.TrimNamespaceEnd() with { });
         await NavigateToCalendar();
         return guid;
     }
