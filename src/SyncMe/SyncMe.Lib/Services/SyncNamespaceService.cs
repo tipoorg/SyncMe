@@ -1,7 +1,6 @@
-﻿using SyncMe.Repos;
-namespace SyncMe.Services;
+﻿namespace SyncMe.Services;
 
-public class SyncNamespaceService : ISyncNamespaceService
+internal class SyncNamespaceService : ISyncNamespaceService
 {
     private readonly ISyncNamespaceRepository _namespaceRepository;
 

@@ -1,4 +1,4 @@
-﻿namespace SyncMe.Repos;
+﻿namespace SyncMe;
 
 public interface INotificationsSwitcherRepository
 {

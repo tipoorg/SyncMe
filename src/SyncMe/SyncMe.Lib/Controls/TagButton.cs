@@ -1,4 +1,4 @@
-﻿namespace SyncMe.Controls;
+﻿namespace SyncMe.Lib.Controls;
 
 public class TagButton<T> : Button
 {
@@ -6,13 +6,7 @@ public class TagButton<T> : Button
 
     public T Tag
     {
-        set
-        {
-            SetValue(TagProperty, value);
-        }
-        get
-        {
-            return (T)GetValue(TagProperty);
-        }
+        set => SetValue(TagProperty, value);
+        get => (T)GetValue(TagProperty);
     }
 }

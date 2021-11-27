@@ -1,4 +1,4 @@
-﻿namespace SyncMe.Extensions;
+﻿namespace SyncMe.Functional;
 
 public static class FunctionalExtensions
 {

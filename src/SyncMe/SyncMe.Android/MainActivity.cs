@@ -5,7 +5,6 @@ using Android.OS;
 using Android.Runtime;
 using Microsoft.Identity.Client;
 using SyncMe.Droid.Alarm;
-using SyncMe.Repos;
 using Xamarin.Forms.Platform.Android;
 
 namespace SyncMe.Droid;

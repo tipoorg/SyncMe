@@ -7,6 +7,7 @@ namespace SyncMe.Droid.Alarm
         void ProcessAlarm(Context context, Intent intent);
 
         void SetAlarm(Guid eventId, Context context);
+
         void StopPlayingAlarm(Intent intent);
     }
 }

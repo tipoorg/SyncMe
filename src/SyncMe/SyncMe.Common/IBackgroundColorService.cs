@@ -1,4 +1,4 @@
-﻿namespace SyncMe.Services;
+﻿namespace SyncMe;
 
 public interface IBackgroundColorService
 {

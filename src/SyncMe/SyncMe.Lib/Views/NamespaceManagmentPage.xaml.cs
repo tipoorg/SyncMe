@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using SyncMe.Extensions;
-using SyncMe.Models;
-using SyncMe.Services;
+using SyncMe.Functional;
+using SyncMe.Lib.Extensions;
+using SyncMe.Lib.Models;
 using Xamarin.Forms.Xaml;
 
 namespace SyncMe.Views;
@@ -9,7 +9,7 @@ namespace SyncMe.Views;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class NamespaceManagmentPage : ContentPage
 {
-    public ObservableCollection<NamespaceModel> Namespaces { get; set; }
+    public ObservableCollection<NamespaceViewModel> Namespaces { get; set; }
 
     private readonly ISyncNamespaceService _namespaceService;
 
@@ -18,21 +18,21 @@ public partial class NamespaceManagmentPage : ContentPage
         InitializeComponent();
         _namespaceService = namespaceRepository;
 
-        Namespaces = new ObservableCollection<NamespaceModel>(_namespaceService.
-            GetFirstLevel()
-            .Select(s => new NamespaceModel(s.FullName, s.IsActive, s.HasChilde)));
+        Namespaces = new ObservableCollection<NamespaceViewModel>(_namespaceService
+            .GetFirstLevel()
+            .Select(s => new NamespaceViewModel(s.FullName, s.IsActive, s.HasChilde)));
 
-        NamespaceModel.TomorrowClicked.Subscribe(MoveToSuspended);
-        NamespaceModel.RestoreClicked.Subscribe(MoveToActive);
-        NamespaceModel.ExpandClicked.Subscribe(ProcessExpanding);
-        NamespaceModel.NewItemClicked.Subscribe(AddNewNamespace);
-        NamespaceModel.RemoveClicked.Subscribe(RemoveItemWithChildrens);
+        NamespaceViewModel.TomorrowClicked.Subscribe(MoveToSuspended);
+        NamespaceViewModel.RestoreClicked.Subscribe(MoveToActive);
+        NamespaceViewModel.ExpandClicked.Subscribe(ProcessExpanding);
+        NamespaceViewModel.NewItemClicked.Subscribe(AddNewNamespace);
+        NamespaceViewModel.RemoveClicked.Subscribe(RemoveItemWithChildrens);
         BindingContext = this;
     }
 
     private void activeNamespaces_ItemTapped(object sender, ItemTappedEventArgs e)
     {
-        var tappedItem = e.Item as NamespaceModel;
+        var tappedItem = e.Item as NamespaceViewModel;
 
         if (tappedItem.IsActive)
         {
@@ -49,19 +49,19 @@ public partial class NamespaceManagmentPage : ContentPage
         Namespaces.RemoveAndInsertItem(tappedItem);
     }
 
-    private void MoveToSuspended(NamespaceModel item)
+    private void MoveToSuspended(NamespaceViewModel item)
     {
         item.IsSuspendButtonsVisible = false;
         SuspendAllChildren(item);
     }
 
-    private void MoveToActive(NamespaceModel item)
+    private void MoveToActive(NamespaceViewModel item)
     {
         item.IsRestoreButtonsVisible = false;
         RestoreAllChildren(item);
     }
 
-    private void ProcessExpanding(NamespaceModel item)
+    private void ProcessExpanding(NamespaceViewModel item)
     {
         if (!item.IsExpanded)
         {
@@ -74,7 +74,7 @@ public partial class NamespaceManagmentPage : ContentPage
         item.IsExpanded = !item.IsExpanded;
     }
 
-    private void SuspendAllChildren(NamespaceModel item)
+    private void SuspendAllChildren(NamespaceViewModel item)
     {
         if (!_namespaceService.UpdateStatusWithChildrens(item.FullName, false, DateTime.Now.AddDays(1)))
             return;
@@ -83,7 +83,7 @@ public partial class NamespaceManagmentPage : ContentPage
         Namespaces.ApplyToAllChildren(item.FullName, s => s.IsActive = false);
     }
 
-    private void RestoreAllChildren(NamespaceModel item)
+    private void RestoreAllChildren(NamespaceViewModel item)
     {
         if (!_namespaceService.UpdateStatusWithChildrens(item.FullName, true))
             return;
@@ -99,7 +99,7 @@ public partial class NamespaceManagmentPage : ContentPage
         Namespaces.InsertRange(parentIndex, children.ToList());
     }
 
-    private async void AddNewNamespace(NamespaceModel parent)
+    private async void AddNewNamespace(NamespaceViewModel parent)
     {
         string newName = await DisplayPromptAsync("Enter new namespace name", $"{parent.FullName}.", "Add", "Cancel", null, 10);
         if (string.IsNullOrWhiteSpace(newName))
@@ -117,7 +117,7 @@ public partial class NamespaceManagmentPage : ContentPage
         }
         else
         {
-            Namespaces.Insert(Namespaces.IndexOf(parent) + 1, new NamespaceModel(
+            Namespaces.Insert(Namespaces.IndexOf(parent) + 1, new NamespaceViewModel(
                 fullName: newFullName,
                 isActive: parent.IsActive,
                 hasChildren: false
@@ -127,7 +127,7 @@ public partial class NamespaceManagmentPage : ContentPage
         parent.IsExpanded = true;
     }
 
-    private async void RemoveItemWithChildrens(NamespaceModel item)
+    private async void RemoveItemWithChildrens(NamespaceViewModel item)
     {
         var result = await DisplayAlert("Remove namespace", $"Delete {item.FullName} and all nested Namespaces?", "Yes", "No");
         if (!result) return;
@@ -139,7 +139,7 @@ public partial class NamespaceManagmentPage : ContentPage
         ProcessParentHasChildren(item);
     }
 
-    public void ProcessParentHasChildren(NamespaceModel item)
+    public void ProcessParentHasChildren(NamespaceViewModel item)
     {
         if (!item.FullName.Contains('.'))
             return;
@@ -150,47 +150,5 @@ public partial class NamespaceManagmentPage : ContentPage
         {
             var parentItem = Namespaces.FirstOrDefault(s => s.FullName == parentName).HasChildren = false;
         }
-    }
-}
-
-public static class NamespaceExtensions
-{
-    public static void RemoveAllChildren(this ObservableCollection<NamespaceModel> items, string fullName)
-    {
-        var itemToRemove = items.FirstOrDefault(n => n.FullName.Contains($"{fullName}."));
-
-        if (itemToRemove is null) return;
-
-        items.Remove(itemToRemove);
-        RemoveAllChildren(items, fullName);
-    }
-
-    public static void ApplyToAllChildren(this ObservableCollection<NamespaceModel> items, string fullName, Action<NamespaceModel> action)
-    {
-        items.Where(n => n.FullName.Contains($"{fullName}.")).ToList().ForEach(action);
-    }
-
-    public static void CollapseAllButtons(this ObservableCollection<NamespaceModel> items)
-    {
-        foreach (var item in items)
-        {
-            item.IsSuspendButtonsVisible = false;
-            item.IsRestoreButtonsVisible = false;
-        }
-    }
-
-    public static void InsertRange(this ObservableCollection<NamespaceModel> items, int index, IList<(string FullName, bool IsActive, bool HasChildren)> children)
-    {
-        for (int i = 0; i < children.Count; i++)
-        {
-            items.Insert(index + i + 1, new NamespaceModel(children[i].FullName, children[i].IsActive, children[i].HasChildren));
-        }
-    }
-
-    public static void RemoveAndInsertItem(this ObservableCollection<NamespaceModel> items, NamespaceModel item)
-    {
-        var index = items.IndexOf(item);
-        items.RemoveAt(index);
-        items.Insert(index, item);
     }
 }

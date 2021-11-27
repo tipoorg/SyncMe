@@ -1,6 +1,6 @@
 ﻿namespace SyncMe.Droid.Alarm;
 
-public static class AlarmMessage
+public static class MessageKeys
 {
     public const string ActionKey = "ACTION";
 

@@ -54,8 +54,8 @@ internal class AndroidNotificationManager
     private PendingIntent GetStopNotificationIntent(Context context, int notificationId)
     {
         var intent = new Intent(context, typeof(AlarmReceiver))
-            .PutExtra(AlarmMessage.NotificationIdKey, notificationId)
-            .PutExtra(AlarmMessage.ActionKey, AlarmMessage.StopAlarmAction);
+            .PutExtra(MessageKeys.NotificationIdKey, notificationId)
+            .PutExtra(MessageKeys.ActionKey, MessageKeys.StopAlarmAction);
 
         int uniqueId = Guid.NewGuid().GetHashCode();
 

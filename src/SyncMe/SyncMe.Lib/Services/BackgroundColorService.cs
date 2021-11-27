@@ -1,7 +1,7 @@
 ﻿using SyncMe.Views;
 namespace SyncMe.Services;
 
-public class BackgroundColorService : IBackgroundColorService
+internal class BackgroundColorService : IBackgroundColorService
 {
     private readonly ContentPage _calendarPage;
     private readonly ContentPage _namespacePage;

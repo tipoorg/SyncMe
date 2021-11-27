@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SyncMe.Droid.Alarm;
-using SyncMe.Extensions;
+using SyncMe.Lib.Extensions;
 
 namespace SyncMe.Droid;
 
 public static class Bootstrapper
 {
     private static IServiceProvider _instance;
-    public static IServiceProvider Instance => _instance ??= CreateServiceProvider();
+    private static IServiceProvider Instance => _instance ??= CreateServiceProvider();
+
     public static T GetService<T>() => Instance.GetRequiredService<T>();
 
     private static IServiceProvider CreateServiceProvider()

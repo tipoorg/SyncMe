@@ -4,7 +4,7 @@ using SyncMe.Services;
 using SyncMe.ViewModels;
 using SyncMe.Views;
 
-namespace SyncMe.Extensions;
+namespace SyncMe.Lib.Extensions;
 
 public static class ServiceCollectionExtensions
 {

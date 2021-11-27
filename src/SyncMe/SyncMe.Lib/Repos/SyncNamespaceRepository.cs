@@ -1,9 +1,8 @@
-﻿using System.Threading;
-using SyncMe.Models;
+﻿using SyncMe.Models;
 
 namespace SyncMe.Repos;
 
-public class SyncNamespaceRepository : ISyncNamespaceRepository
+internal class SyncNamespaceRepository : ISyncNamespaceRepository
 {
     private static int _idCounter = 0;
     private readonly Dictionary<string, Namespace> _existingNamespaces = new();
@@ -30,11 +29,11 @@ public class SyncNamespaceRepository : ISyncNamespaceRepository
     private Namespace CreateNamespace(string title, bool isActive = true, DateTime? turnOnDate = null)
     {
         Increment(ref _idCounter);
-        return new Namespace 
-        { 
-            Title = title, 
-            IsActive = isActive, 
-            TurnOnDate = turnOnDate 
+        return new Namespace
+        {
+            Title = title,
+            IsActive = isActive,
+            TurnOnDate = turnOnDate
         };
     }
 

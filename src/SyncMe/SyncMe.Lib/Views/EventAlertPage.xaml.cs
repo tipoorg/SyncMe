@@ -1,5 +1,5 @@
-﻿using SyncMe.Controls;
-using SyncMe.Extensions;
+﻿using SyncMe.Extensions;
+using SyncMe.Lib.Controls;
 using SyncMe.Models;
 using SyncMe.ViewModels;
 

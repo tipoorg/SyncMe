@@ -1,9 +1,8 @@
 ﻿using SyncMe.Models;
-using SyncMe.Repos;
 
 namespace SyncMe.Services;
 
-public class SyncAlarmService : ISyncAlarmService
+internal class SyncAlarmService : ISyncAlarmService
 {
     private readonly ISyncEventsRepository _syncEventsRepository;
 

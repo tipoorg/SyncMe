@@ -72,16 +72,16 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Alarm\AlarmMessage.cs" />
+    <Compile Include="Alarm\MessageKeys.cs" />
     <Compile Include="Alarm\AndroidAlarmService.cs" />
     <Compile Include="Alarm\AndroidAlarmPlayer.cs" />
     <Compile Include="Alarm\IAndroidAlarmPlayer.cs" />
     <Compile Include="Alarm\IAndroidAlarmService.cs" />
     <Compile Include="Extensions\IntentExtensions.cs" />
-    <Compile Include="IsExternalInit.cs" />
+    <Compile Include="Properties\IsExternalInit.cs" />
     <Compile Include="Alarm\AndroidNotificationManager.cs" />
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="GlobalUsings.cs" />
+    <Compile Include="Properties\GlobalUsings.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Alarm\AlarmReceiver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -206,6 +206,10 @@
     <AndroidResource Include="Resources\drawable\background_white.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SyncMe.Common\SyncMe.Common.csproj">
+      <Project>{73ebc701-ffe2-4947-9cc5-8da43989c673}</Project>
+      <Name>SyncMe.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SyncMe.Lib\SyncMe.Lib.csproj">
       <Project>{cbf244c3-66f4-437b-b60a-290cc59b66ec}</Project>
       <Name>SyncMe.Lib</Name>

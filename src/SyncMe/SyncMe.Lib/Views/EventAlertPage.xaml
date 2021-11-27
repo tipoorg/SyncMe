@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:SyncMe.Controls"
-             xmlns:x1="clr-namespace:SyncMe.Models"
+             xmlns:local="clr-namespace:SyncMe.Lib.Controls"
+             xmlns:x1="clr-namespace:SyncMe.Models;assembly=SyncMe.Common"
              x:Class="SyncMe.Views.EventAlertPage"
              Title="Event Alert">
     <ContentPage.Content>

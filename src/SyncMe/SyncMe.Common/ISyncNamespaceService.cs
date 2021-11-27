@@ -1,4 +1,4 @@
-﻿namespace SyncMe.Services;
+﻿namespace SyncMe;
 
 public interface ISyncNamespaceService
 {
@@ -12,7 +12,7 @@ public interface ISyncNamespaceService
 
     IReadOnlyCollection<(string FullName, bool IsActive, bool HasChilde)> GetFirstLevel();
     IReadOnlyCollection<(string FullName, bool IsActive, bool HasChildren)> GetFirstChildren(string fullName);
-    
+
     void RemoveWithChildren(string fullName);
     bool IsNamespaceActive(string fullName);
 }

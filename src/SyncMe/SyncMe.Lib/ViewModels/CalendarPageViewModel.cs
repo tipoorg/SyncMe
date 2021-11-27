@@ -1,8 +1,5 @@
 ﻿using System.ComponentModel;
 using SyncMe.Models;
-using SyncMe.Repos;
-using SyncMe.Services;
-using SyncMe.Views;
 using Xamarin.Plugin.Calendar.Models;
 
 namespace SyncMe.ViewModels;

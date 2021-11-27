@@ -1,14 +1,11 @@
-﻿using SyncMe.Models;
-using SyncMe.Repos;
-using System.Threading;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Reactive.Linq;
-using Xamarin.Forms.Xaml;
-using SyncMe.Extensions;
-using SyncMe.Common;
 using SyncMe.CalendarProviders.Authorization;
+using SyncMe.CalendarProviders.Extensions;
 using SyncMe.CalendarProviders.Outlook;
-using System.ComponentModel;
+using SyncMe.Functional;
+using SyncMe.Models;
+using Xamarin.Forms.Xaml;
 
 namespace SyncMe.Views;
 
@@ -35,7 +32,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
         var manager = new MicrosoftAuthorizationManager();
 
-        foreach(var account in MicrosoftAuthorizationManager.CurrentAccounts)
+        foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
         {
             Identities.Add(new Identity(account.Username));
         }
@@ -51,7 +48,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
             .ObserveOn(SynchronizationContext.Current)
             .Subscribe(x =>
             {
-                if(!Identities.Any(i => i.Name == x.username))
+                if (!Identities.Any(i => i.Name == x.username))
                     Identities.Add(new Identity(x.username));
             });
     }
@@ -109,7 +106,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
         var client = await manager.GetGraphClientAsync(username);
         var events = await new OutlookProvider(client, username).GetEventsAsync();
 
-        if(!_syncNamespaceRepository.GetAllSyncNamespaces().Any(n => n.Value.Title == outlookNamespace.Title))
+        if (!_syncNamespaceRepository.GetAllSyncNamespaces().Any(n => n.Value.Title == outlookNamespace.Title))
         {
             _syncNamespaceRepository.AddSyncNamespace(outlookNamespace.Title);
         }

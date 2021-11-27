@@ -5,7 +5,6 @@ using Android.OS;
 using Android.Widget;
 using SyncMe.Droid.Extensions;
 using SyncMe.Models;
-using SyncMe.Services;
 
 namespace SyncMe.Droid.Alarm;
 
@@ -46,8 +45,8 @@ internal class AndroidAlarmService : IAndroidAlarmService
 
             SetAlarm(calendarItem, alarmIntent, context);
             Toast.MakeText(
-                context, 
-                $"{syncAlarm.Title} Scheduled on {DateTime.Now.AddSeconds(syncAlarm.DelaySeconds)}", 
+                context,
+                $"{syncAlarm.Title} Scheduled on {DateTime.Now.AddSeconds(syncAlarm.DelaySeconds)}",
                 ToastLength.Long).Show();
         }
     }
@@ -55,7 +54,7 @@ internal class AndroidAlarmService : IAndroidAlarmService
     public void StopPlayingAlarm(Intent intent)
     {
         _androidAlarmPlayer.StopPlaying();
-        var id = intent.GetIntExtra(AlarmMessage.NotificationIdKey, -1);
+        var id = intent.GetIntExtra(MessageKeys.NotificationIdKey, -1);
         AndroidNotificationManager.Instance.Cancel(id);
     }
 
@@ -78,7 +77,7 @@ internal class AndroidAlarmService : IAndroidAlarmService
     private PendingIntent GetAlarmIntent(SyncAlarm syncAlarm, Context context)
     {
         var intent = new Intent(context, typeof(AlarmReceiver))
-            .PutExtra(AlarmMessage.ActionKey, AlarmMessage.ProcessAlarmAction)
+            .PutExtra(MessageKeys.ActionKey, MessageKeys.ProcessAlarmAction)
             .PutExtra(syncAlarm)
             .AddFlags(ActivityFlags.IncludeStoppedPackages)
             .AddFlags(ActivityFlags.ReceiverForeground);

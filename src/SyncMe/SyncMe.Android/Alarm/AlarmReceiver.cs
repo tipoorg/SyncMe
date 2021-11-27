@@ -12,16 +12,16 @@ internal class AlarmReceiver : BroadcastReceiver
     {
         try
         {
-            var action = intent.GetStringExtra(AlarmMessage.ActionKey);
+            var action = intent.GetStringExtra(MessageKeys.ActionKey);
             Log.Debug(MainActivity.Tag, $"AlarmReceiver.OnReceive {action}");
 
             switch (action)
             {
-                case AlarmMessage.ProcessAlarmAction:
+                case MessageKeys.ProcessAlarmAction:
                     _androidAlarmService.ProcessAlarm(context, intent);
                     return;
 
-                case AlarmMessage.StopAlarmAction:
+                case MessageKeys.StopAlarmAction:
                     _androidAlarmService.StopPlayingAlarm(intent);
                     return;
 

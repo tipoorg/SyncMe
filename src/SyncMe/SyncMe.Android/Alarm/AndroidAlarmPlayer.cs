@@ -1,6 +1,5 @@
 ﻿using Android.Content;
 using Android.Media;
-using SyncMe.Repos;
 
 namespace SyncMe.Droid.Alarm;
 
