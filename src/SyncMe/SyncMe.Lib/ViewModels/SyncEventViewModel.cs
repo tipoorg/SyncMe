@@ -13,9 +13,8 @@ public class SyncEventViewModel : INotifyPropertyChanged
         {
             Start = DateTime.Now,
             End = DateTime.Now.AddHours(1),
-            Namespace = new Namespace(),
-            Schedule = new SyncSchedule(),
-            Alert = new SyncAlert { Reminder = SyncReminder.AtEventTime }
+            NamespaceKey = "",
+            Reminder = SyncReminder.AtEventTime
         };
 
         var currentHour = TimeSpan.FromHours(DateTime.Now.TimeOfDay.Hours);
@@ -110,12 +109,12 @@ public class SyncEventViewModel : INotifyPropertyChanged
 
     public SyncReminder Notification
     {
-        get { return SyncEvent.Alert.Reminder; }
+        get { return SyncEvent.Reminder; }
         set
         {
-            if (SyncEvent.Alert.Reminder != value)
+            if (SyncEvent.Reminder != value)
             {
-                SyncEvent.Alert.Reminder = value;
+                SyncEvent.Reminder = value;
                 OnPropertyChanged(nameof(Title));
             }
         }
@@ -123,12 +122,12 @@ public class SyncEventViewModel : INotifyPropertyChanged
 
     public SyncRepeat Schedule
     {
-        get { return SyncEvent.Schedule.Repeat; }
+        get { return SyncEvent.Repeat; }
         set
         {
-            if (SyncEvent.Schedule.Repeat != value)
+            if (SyncEvent.Repeat != value)
             {
-                SyncEvent.Schedule.Repeat = value;
+                SyncEvent.Repeat = value;
                 OnPropertyChanged(nameof(Title));
             }
         }
@@ -149,12 +148,12 @@ public class SyncEventViewModel : INotifyPropertyChanged
 
     public string Namespace
     {
-        get { return SyncEvent.Namespace.Title; }
+        get { return SyncEvent.NamespaceKey; }
         set
         {
-            if (SyncEvent.Namespace.Title != value)
+            if (SyncEvent.NamespaceKey != value)
             {
-                SyncEvent.Namespace.Title = value;
+                SyncEvent.NamespaceKey = value;
                 OnPropertyChanged(nameof(Namespace));
             }
         }

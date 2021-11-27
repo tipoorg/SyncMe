@@ -12,8 +12,6 @@ public partial class App : Application, INotifyPropertyChanged
     public App(IServiceProvider serviceProvider)
     {
         InitializeComponent();
-
-        MainPage = serviceProvider.GetRequiredService<AppShell>();
         _serviceProvider = serviceProvider;
     }
 
@@ -23,6 +21,12 @@ public partial class App : Application, INotifyPropertyChanged
             CloseScope();
 
         _appScope = _serviceProvider.CreateScope();
+
+        var dbFactory = _serviceProvider.GetService<IApplicationContextFactory>();
+
+        dbFactory.Migrate();
+
+        MainPage = _serviceProvider.GetRequiredService<AppShell>();
     }
 
     protected override void OnSleep()

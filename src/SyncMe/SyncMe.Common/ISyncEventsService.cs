@@ -1,4 +1,5 @@
-﻿using SyncMe.Models;
+﻿using System.Linq.Expressions;
+using SyncMe.Models;
 
 namespace SyncMe
 {
@@ -6,9 +7,9 @@ namespace SyncMe
     {
         event EventHandler OnSyncEventsUpdate;
 
-        Guid AddSyncEvent(SyncEvent syncEvent);
+        int AddSyncEvent(SyncEvent syncEvent);
         IReadOnlyCollection<SyncEvent> GetAllSyncEvents();
-        void RemoveEvents(Func<SyncEvent, bool> predicate);
-        bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent);
+        void RemoveEvents(Expression<Func<SyncEvent, bool>> predicate);
+        bool TryGetSyncEvent(int id, out SyncEvent syncEvent);
     }
 }

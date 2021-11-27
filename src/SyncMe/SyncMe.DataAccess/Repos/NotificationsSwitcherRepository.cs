@@ -1,4 +1,4 @@
-﻿namespace SyncMe.Lib.Repos;
+﻿namespace SyncMe.DataAccess.Repos;
 
 internal class NotificationsSwitcherRepository : INotificationsSwitcherRepository
 {

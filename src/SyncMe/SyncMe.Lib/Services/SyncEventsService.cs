@@ -1,4 +1,5 @@
-﻿using SyncMe.Models;
+﻿using System.Linq.Expressions;
+using SyncMe.Models;
 
 namespace SyncMe.Lib.Services;
 
@@ -20,11 +21,11 @@ internal sealed class SyncEventsService : ISyncEventsService
         _syncAlarmCalculator = syncAlarmCalculator;
     }
 
-    public bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent) => _syncEventsRepository.TryGetSyncEvent(id, out syncEvent);
+    public bool TryGetSyncEvent(int id, out SyncEvent syncEvent) => _syncEventsRepository.TryGetSyncEvent(id, out syncEvent);
 
     public IReadOnlyCollection<SyncEvent> GetAllSyncEvents() => _syncEventsRepository.GetAllSyncEvents();
 
-    public Guid AddSyncEvent(SyncEvent syncEvent)
+    public int AddSyncEvent(SyncEvent syncEvent)
     {
         var newId = _syncEventsRepository.AddSyncEvent(syncEvent);
 
@@ -37,7 +38,7 @@ internal sealed class SyncEventsService : ISyncEventsService
         return newId;
     }
 
-    public void RemoveEvents(Func<SyncEvent, bool> predicate)
+    public void RemoveEvents(Expression<Func<SyncEvent, bool>> predicate)
     {
         _syncEventsRepository.RemoveEvents(predicate);
         OnSyncEventsUpdate?.Invoke(this, default);

@@ -6,7 +6,7 @@ public static class SyncEventExtensions
 {
     public static SyncEvent TrimNamespaceEnd(this SyncEvent syncEvent)
     {
-        syncEvent.Namespace.Title = syncEvent.Namespace.Title.TrimEnd('.');
+        syncEvent.NamespaceKey = syncEvent.NamespaceKey.TrimEnd('.');
         return syncEvent;
     }
 }

@@ -11,13 +11,13 @@ internal class SyncAlarmCalculator : ISyncAlarmCalculator
         _syncEventsRepository = syncEventsRepository;
     }
 
-    public bool TryGetNearestAlarm(Guid eventId, out SyncAlarm syncALarm)
+    public bool TryGetNearestAlarm(int eventId, out SyncAlarm syncALarm)
     {
         if (_syncEventsRepository.TryGetSyncEvent(eventId, out var syncEvent))
         {
             if (TryGetNearestAlarmDelay(syncEvent, out var alarmDelay))
             {
-                syncALarm = new SyncAlarm(syncEvent.Title, eventId, syncEvent.Namespace.Title, (int)alarmDelay.TotalSeconds);
+                syncALarm = new SyncAlarm(syncEvent.Title, eventId, syncEvent.NamespaceKey, (int)alarmDelay.TotalSeconds);
                 return true;
             }
         }
@@ -28,10 +28,10 @@ internal class SyncAlarmCalculator : ISyncAlarmCalculator
 
     private bool TryGetNearestAlarmDelay(SyncEvent syncEvent, out TimeSpan delay)
     {
-        var eventDateTime = syncEvent.Start - TimeSpan.FromSeconds((int)syncEvent.Alert.Reminder);
+        var eventDateTime = syncEvent.Start - TimeSpan.FromSeconds((int)syncEvent.Reminder);
         TimeSpan eventTime = eventDateTime.TimeOfDay;
 
-        delay = syncEvent.Schedule.Repeat switch
+        delay = syncEvent.Repeat switch
         {
             SyncRepeat.None => DelayAgainstNow(eventDateTime),
             SyncRepeat.Dayly => FirstAvailable(DateTime.Today.Add(eventTime), Dayly),
