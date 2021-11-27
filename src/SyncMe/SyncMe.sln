@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncMe.Android", "SyncMe\SyncMe.Android\SyncMe.Android.csproj", "{64ECC97B-776C-4CCF-AE46-527C1947DE13}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyncMe", "SyncMe\SyncMe\SyncMe.csproj", "{9B592FAF-30C8-492B-9E3B-5CB295E83AF3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyncMe.CalendarProviders", "SyncMe.CalendarProviders\SyncMe.CalendarProviders.csproj", "{B3C9E0AB-B740-4421-ADA1-1A0ED54F389B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncMe.Common", "SyncMe.Common\SyncMe.Common.csproj", "{73EBC701-FFE2-4947-9CC5-8DA43989C673}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyncMe.Common", "SyncMe.Common\SyncMe.Common.csproj", "{73EBC701-FFE2-4947-9CC5-8DA43989C673}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncMe.Android", "SyncMe.Android\SyncMe.Android.csproj", "{64ECC97B-776C-4CCF-AE46-527C1947DE13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncMe.Lib", "SyncMe.Lib\SyncMe.Lib.csproj", "{CBF244C3-66F4-437B-B60A-290CC59B66EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,18 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{64ECC97B-776C-4CCF-AE46-527C1947DE13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64ECC97B-776C-4CCF-AE46-527C1947DE13}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64ECC97B-776C-4CCF-AE46-527C1947DE13}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{64ECC97B-776C-4CCF-AE46-527C1947DE13}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64ECC97B-776C-4CCF-AE46-527C1947DE13}.Release|Any CPU.Build.0 = Release|Any CPU
-		{64ECC97B-776C-4CCF-AE46-527C1947DE13}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{9B592FAF-30C8-492B-9E3B-5CB295E83AF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9B592FAF-30C8-492B-9E3B-5CB295E83AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9B592FAF-30C8-492B-9E3B-5CB295E83AF3}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{9B592FAF-30C8-492B-9E3B-5CB295E83AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9B592FAF-30C8-492B-9E3B-5CB295E83AF3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9B592FAF-30C8-492B-9E3B-5CB295E83AF3}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{B3C9E0AB-B740-4421-ADA1-1A0ED54F389B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B3C9E0AB-B740-4421-ADA1-1A0ED54F389B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3C9E0AB-B740-4421-ADA1-1A0ED54F389B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -37,6 +25,16 @@ Global
 		{73EBC701-FFE2-4947-9CC5-8DA43989C673}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73EBC701-FFE2-4947-9CC5-8DA43989C673}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73EBC701-FFE2-4947-9CC5-8DA43989C673}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64ECC97B-776C-4CCF-AE46-527C1947DE13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64ECC97B-776C-4CCF-AE46-527C1947DE13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64ECC97B-776C-4CCF-AE46-527C1947DE13}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{64ECC97B-776C-4CCF-AE46-527C1947DE13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64ECC97B-776C-4CCF-AE46-527C1947DE13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64ECC97B-776C-4CCF-AE46-527C1947DE13}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{CBF244C3-66F4-437B-B60A-290CC59B66EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBF244C3-66F4-437B-B60A-290CC59B66EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBF244C3-66F4-437B-B60A-290CC59B66EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBF244C3-66F4-437B-B60A-290CC59B66EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
