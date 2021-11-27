@@ -1,30 +1,29 @@
-﻿using Android.Content;
-using Android.Media;
+﻿using Android.Media;
+using AndroidApp = Android.App.Application;
 
 namespace SyncMe.Droid.Alarm;
 
-internal sealed class AndroidAlarmPlayer : IAndroidAlarmPlayer
+internal sealed class AndroidAlarmPlayer : IAlarmPlayer
 {
     private readonly MediaPlayer _mediaPlayer;
-    private readonly INotificationsSwitcherRepository _notificationsSwitcherRepository;
+    private readonly ISoundSwitcherRepository _soundSwitcherRepository;
 
-    public AndroidAlarmPlayer(INotificationsSwitcherRepository notificationsSwitcherRepository)
+    public AndroidAlarmPlayer(ISoundSwitcherRepository soundSwitcherRepository)
     {
         _mediaPlayer = new MediaPlayer();
-        _notificationsSwitcherRepository = notificationsSwitcherRepository;
-        _notificationsSwitcherRepository.OnStateChanged += OnStateChanged;
+        _soundSwitcherRepository = soundSwitcherRepository;
     }
 
-    public void PlayAlarm(Context context)
+    public void PlayAlarm()
     {
-        if (_notificationsSwitcherRepository.State)
+        if (!_soundSwitcherRepository.GetIsMuteState())
         {
-            var soundUri = RingtoneManager.GetActualDefaultRingtoneUri(context, RingtoneType.Alarm);
+            var soundUri = RingtoneManager.GetActualDefaultRingtoneUri(AndroidApp.Context, RingtoneType.Alarm);
 
             try
             {
                 _mediaPlayer.Reset();
-                _mediaPlayer.SetDataSource(context, soundUri);
+                _mediaPlayer.SetDataSource(AndroidApp.Context, soundUri);
                 _mediaPlayer.SetAudioAttributes(GetAudio());
                 _mediaPlayer.Prepare();
                 _mediaPlayer.Start();

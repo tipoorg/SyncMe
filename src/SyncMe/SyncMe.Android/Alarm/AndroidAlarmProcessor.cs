@@ -7,13 +7,13 @@ namespace SyncMe.Droid.Alarm;
 internal class AndroidAlarmProcessor : IAndroidAlarmProcessor
 {
     private readonly IAlarmService _alarmService;
-    private readonly IAndroidAlarmPlayer _androidAlarmPlayer;
+    private readonly IAlarmPlayer _androidAlarmPlayer;
     private readonly ISyncNamespaceService _syncNamespaceService;
     private readonly ISyncAlarmCalculator _syncAlarmCalculator;
 
     public AndroidAlarmProcessor(
         IAlarmService alarmService,
-        IAndroidAlarmPlayer androidAlarmPlayer,
+        IAlarmPlayer androidAlarmPlayer,
         ISyncNamespaceService syncNamespaceService,
         ISyncAlarmCalculator syncAlarmCalculator)
     {
@@ -28,7 +28,7 @@ internal class AndroidAlarmProcessor : IAndroidAlarmProcessor
         var pendingAlarm = intent.GetExtra<SyncAlarm>();
         if (_syncNamespaceService.IsNamespaceActive(pendingAlarm.NamespaceFullName))
         {
-            _androidAlarmPlayer.PlayAlarm(context);
+            _androidAlarmPlayer.PlayAlarm();
             AndroidNotificationManager.Instance.Show(pendingAlarm, context);
         }
 

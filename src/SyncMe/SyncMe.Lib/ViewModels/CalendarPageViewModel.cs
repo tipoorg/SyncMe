@@ -7,19 +7,20 @@ namespace SyncMe.ViewModels;
 public class CalendarPageViewModel : INotifyPropertyChanged
 {
     private readonly ISyncEventsService _syncEventsService;
-    private readonly INotificationsSwitcherRepository _notificationsSwitcherRepository;
+    private readonly ISoundSwitcherService _soundSwitcherService;
+
     public IBackgroundColorService BackgroundColorService { get; set; }
 
     public CalendarPageViewModel(
         ISyncEventsService syncEventsService,
-        INotificationsSwitcherRepository notificationsSwitcherRepository)
+        ISoundSwitcherService soundSwitcherService)
     {
         _syncEventsService = syncEventsService;
-        _notificationsSwitcherRepository = notificationsSwitcherRepository;
+        _soundSwitcherService = soundSwitcherService;
         _syncEventsService.OnSyncEventsUpdate += OnSyncEventsUpdate;
 
 
-        NotificationsSwitcher = _notificationsSwitcherRepository.State;
+        SoundSwitcher = !_soundSwitcherService.IsMute();
         ThemeSwitcher = true;
         Events = LoadEvents();
     }
@@ -62,18 +63,20 @@ public class CalendarPageViewModel : INotifyPropertyChanged
         }
     }
 
-    private bool _notificationsSwitcher;
+    private bool _soundSwitcher;
 
-    public bool NotificationsSwitcher
+    public bool SoundSwitcher
     {
-        get => _notificationsSwitcher;
+        get => _soundSwitcher;
         set
         {
-            if (_notificationsSwitcher != value)
+            if (_soundSwitcher != value)
             {
-                _notificationsSwitcherRepository.State = value;
-                _notificationsSwitcher = value;
-                OnPropertyChanged("NotificationsSwitcher");
+                if (value is true) _soundSwitcherService.SetSound();
+                else _soundSwitcherService.Mute();
+
+                _soundSwitcher = value;
+                OnPropertyChanged("SoundSwitcher");
             }
         }
     }

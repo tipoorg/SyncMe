@@ -11,7 +11,7 @@ internal class SyncNamespaceService : ISyncNamespaceService
 
     public void Add(string fullName)
     {
-        _namespaceRepository.AddSyncNamespace(fullName, !ParentIsSuspended(fullName));
+        _namespaceRepository.TryAddSyncNamespace(fullName, !ParentIsSuspended(fullName));
     }
 
     public IReadOnlyCollection<(string FullName, bool IsActive, bool HasChildren)> GetAll(string namespaceName)

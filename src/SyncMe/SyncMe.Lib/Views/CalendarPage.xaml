@@ -127,10 +127,10 @@
         <Switch 
             AbsoluteLayout.LayoutBounds="1, 0, 0.2, 0.1"
             AbsoluteLayout.LayoutFlags="SizeProportional"        
-            x:Name="NotificationsSwitcher" 
+            x:Name="SoundSwitcher" 
             VerticalOptions="End"
             Style="{StaticResource ToggleButtonStyle}"
-            IsToggled="{Binding NotificationsSwitcher}"
+            IsToggled="{Binding SoundSwitcher}"
             IsVisible="{Binding CalendarSectionShown}"                    
                     />
         <Switch 

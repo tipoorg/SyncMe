@@ -76,7 +76,6 @@
     <Compile Include="Alarm\MessageKeys.cs" />
     <Compile Include="Alarm\AndroidAlarmProcessor.cs" />
     <Compile Include="Alarm\AndroidAlarmPlayer.cs" />
-    <Compile Include="Alarm\IAndroidAlarmPlayer.cs" />
     <Compile Include="Alarm\IAndroidAlarmProcessor.cs" />
     <Compile Include="Extensions\IntentExtensions.cs" />
     <Compile Include="Properties\IsExternalInit.cs" />

@@ -1,55 +1,50 @@
-﻿using SyncMe.Models;
+﻿using LiteDB;
+using SyncMe.Models;
 
 namespace SyncMe.DataAccess.Repos;
 
 internal class SyncNamespaceRepository : ISyncNamespaceRepository
 {
-    private static int _idCounter = 0;
-    private readonly Dictionary<string, Namespace> _existingNamespaces = new();
+    private ILiteCollection<Namespace> _namespaces;
 
-    public SyncNamespaceRepository()
+    public SyncNamespaceRepository(ILiteDatabase database)
     {
+        _namespaces = database.GetCollection<Namespace>();
+        BsonMapper.Global.Entity<Namespace>().Id(x => x.Key);
         SeedData();
     }
 
     private void SeedData()
     {
-        _existingNamespaces.Add("Work", CreateNamespace("Work"));
-        _existingNamespaces.Add("Work.Team1", CreateNamespace("Team1"));
-        _existingNamespaces.Add("Work.Team2", CreateNamespace("Team2"));
-        _existingNamespaces.Add("Russia", CreateNamespace("Russia", false));
-        _existingNamespaces.Add("Russia.Holidays", CreateNamespace("Holidays", false));
-        _existingNamespaces.Add("Personal", CreateNamespace("Personal", false));
-        _existingNamespaces.Add("Personal.Birthday", CreateNamespace("Birthday", false));
-        _existingNamespaces.Add("Outlook", CreateNamespace("Outlook"));
-    }
-
-    private void Increment(ref int counter) => Interlocked.Increment(ref counter);
-
-    private Namespace CreateNamespace(string title, bool isActive = true, DateTime? turnOnDate = null)
-    {
-        Increment(ref _idCounter);
-        return new Namespace
+        if (_namespaces.Count() is 0)
         {
-            Title = title,
-            IsActive = isActive,
-            TurnOnDate = turnOnDate
-        };
+            _namespaces.Insert(new Namespace[]
+            {
+                new() { Key = "Work", IsActive = true },
+                new() { Key = "Work.Team1", IsActive = true },
+                new() { Key = "Work.Team2", IsActive = true },
+                new() { Key = "Outlook", IsActive = true },
+            });
+        }
     }
 
-    public Dictionary<string, Namespace> GetAllSyncNamespaces() =>
-        _existingNamespaces;
-
-    public void AddSyncNamespace(string name, bool isActive = true)
+    public Dictionary<string, Namespace> GetAllSyncNamespaces()
     {
-        if (_existingNamespaces.ContainsKey(name))
-            return;
-
-        _existingNamespaces.Add(name, new Namespace { Title = name, IsActive = isActive });
+        var result = _namespaces.FindAll().ToDictionary(k => k.Key);
+        return result;
     }
 
-    public bool TryGetSyncNamespace(string name, out Namespace existingNamespace)
+    public void TryAddSyncNamespace(string namespaceKey, bool isActive = true)
     {
-        return _existingNamespaces.TryGetValue(name, out existingNamespace);
+        if (_namespaces.FindById(namespaceKey) is null)
+        {
+            _namespaces.Insert(new Namespace { Key = namespaceKey, IsActive = isActive });
+        }
+    }
+
+    public bool TryGetSyncNamespace(string namespaceKey, out Namespace existingNamespace)
+    {
+        existingNamespace = _namespaces.FindById(namespaceKey);
+        return existingNamespace != null;
     }
 }

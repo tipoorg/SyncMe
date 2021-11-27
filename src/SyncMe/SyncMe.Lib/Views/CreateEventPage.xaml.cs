@@ -28,7 +28,7 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         _addEventSubscription = Observable
             .FromEventPattern(AddEvent, nameof(Button.Clicked))
             .SelectMany(x => AddNewSyncEvent())
-            .Do(x => _namespaceRepository.AddSyncNamespace(_eventModel.Namespace))
+            .Do(x => _namespaceRepository.TryAddSyncNamespace(_eventModel.Namespace))
             .Subscribe(async x => await NavigateToCalendar());
     }
 

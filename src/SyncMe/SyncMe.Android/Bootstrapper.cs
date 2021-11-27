@@ -36,7 +36,7 @@ public static class Bootstrapper
     {
         services
             .AddSingleton<IAlarmService, AndroidAlarmService>()
-            .AddSingleton<IAndroidAlarmPlayer, AndroidAlarmPlayer>()
+            .AddSingleton<IAlarmPlayer, AndroidAlarmPlayer>()
             .AddSingleton<IAndroidAlarmProcessor, AndroidAlarmProcessor>();
 
         return services;

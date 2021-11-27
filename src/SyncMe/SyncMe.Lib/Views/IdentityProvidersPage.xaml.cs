@@ -90,7 +90,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
     private async Task<Optional<(string username, IEnumerable<SyncEvent> events)>> FetchEventsAsync(string username)
     {
-        var outlookNamespace = new Namespace { Title = "Outlook", IsActive = true };
+        var outlookNamespace = new Namespace { Key = "Outlook", IsActive = true };
         var manager = new MicrosoftAuthorizationManager();
 
         if (username is null)
@@ -106,13 +106,10 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
         var client = await manager.GetGraphClientAsync(username);
         var events = await new OutlookProvider(client, username).GetEventsAsync();
 
-        if (!_syncNamespaceRepository.GetAllSyncNamespaces().Any(n => n.Value.Title == outlookNamespace.Title))
-        {
-            _syncNamespaceRepository.AddSyncNamespace(outlookNamespace.Title);
-        }
+        _syncNamespaceRepository.TryAddSyncNamespace(outlookNamespace.Key);
 
         return (username, events.Select(e => e.ToSyncEvent(username))
-                                .Select(e => e with { NamespaceKey = outlookNamespace.Title }));
+                                .Select(e => e with { NamespaceKey = outlookNamespace.Key }));
     }
 
     private void SwitchLayouts()
