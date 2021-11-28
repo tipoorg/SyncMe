@@ -11,6 +11,7 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
     public SyncEventsRepository(ILiteDatabase database)
     {
         _events = database.GetCollection<SyncEvent>();
+        BsonMapper.Global.Entity<SyncEvent>().Id(x => x.Id);
     }
 
     public bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent)
@@ -21,7 +22,8 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
 
     public IReadOnlyCollection<SyncEvent> GetAllSyncEvents()
     {
-        return _events.FindAll().ToList();
+        var result = _events.FindAll().ToList();
+        return result;
     }
 
     public Guid AddSyncEvent(SyncEvent syncEvent)
@@ -30,6 +32,11 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
         _events.Insert(newId, syncEvent);
 
         return newId;
+    }
+
+    public void RemoveEvent(Guid eventId)
+    {
+        _events.Delete(eventId);
     }
 
     public void RemoveEvents(Expression<Func<SyncEvent, bool>> predicate)

@@ -74,7 +74,9 @@ internal class SyncNamespaceService : ISyncNamespaceService
         var namespaces = _namespaceRepository.GetAllSyncNamespaces();
         while (namespaces.Any(s => s.Key.Contains(fullName)))
         {
-            namespaces.Remove(namespaces.First(s => s.Key.Contains(fullName)).Key);
+            string namespaceKey = namespaces.First(s => s.Key.Contains(fullName)).Key;
+            namespaces.Remove(namespaceKey);
+            _namespaceRepository.RemoveNamespace(namespaceKey);
         }
     }
 

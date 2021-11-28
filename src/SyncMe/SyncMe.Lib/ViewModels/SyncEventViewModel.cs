@@ -1,12 +1,21 @@
-﻿using System.ComponentModel;
-using SyncMe.Extensions;
+﻿using SyncMe.Extensions;
 using SyncMe.Models;
 
 namespace SyncMe.ViewModels;
 
-public class SyncEventViewModel : INotifyPropertyChanged
+public class SyncEventViewModel : BaseEventViewModel
 {
     public SyncEvent SyncEvent { get; init; }
+
+    public SyncEventViewModel(SyncEvent syncEvent)
+    {
+        SyncEvent = syncEvent;
+        Description = syncEvent.NamespaceKey;
+        Name = syncEvent.Title;
+        StartDate = syncEvent.Start;
+        EndDate = syncEvent.End;
+    }
+    
     public SyncEventViewModel()
     {
         SyncEvent = new SyncEvent
@@ -28,23 +37,15 @@ public class SyncEventViewModel : INotifyPropertyChanged
     private string _scheduleButtonText;
     public string ScheduleButtonText
     {
-        get { return _scheduleButtonText; }
-        set
-        {
-            _scheduleButtonText = value;
-            OnPropertyChanged(nameof(ScheduleButtonText));
-        }
+        get => _scheduleButtonText;
+        set => ChangeProperty(ref _scheduleButtonText, value, nameof(ScheduleButtonText));
     }
 
     private string _alertButtonText;
     public string AlertButtonText
     {
-        get { return _alertButtonText; }
-        set
-        {
-            _alertButtonText = value;
-            OnPropertyChanged(nameof(AlertButtonText));
-        }
+        get => _alertButtonText;
+        set => ChangeProperty(ref _alertButtonText, value, nameof(AlertButtonText));
     }
 
     public string Name { get; init; }
@@ -52,7 +53,7 @@ public class SyncEventViewModel : INotifyPropertyChanged
 
     public DateTime StartDate
     {
-        get { return SyncEvent.Start; }
+        get => SyncEvent.Start;
         set
         {
             if (SyncEvent.Start != value)
@@ -66,7 +67,7 @@ public class SyncEventViewModel : INotifyPropertyChanged
     private TimeSpan _startTime;
     public TimeSpan StartTime
     {
-        get { return _startTime; }
+        get => _startTime;
         set
         {
             if (_startTime != value)
@@ -80,7 +81,7 @@ public class SyncEventViewModel : INotifyPropertyChanged
 
     public DateTime EndDate
     {
-        get { return SyncEvent.End; }
+        get => SyncEvent.End;
         set
         {
             if (SyncEvent.End != value)
@@ -94,7 +95,7 @@ public class SyncEventViewModel : INotifyPropertyChanged
     private TimeSpan _endTime;
     public TimeSpan EndTime
     {
-        get { return _endTime; }
+        get => _endTime;
         set
         {
             if (_endTime != value)
@@ -108,7 +109,7 @@ public class SyncEventViewModel : INotifyPropertyChanged
 
     public SyncReminder Notification
     {
-        get { return SyncEvent.Reminder; }
+        get => SyncEvent.Reminder;
         set
         {
             if (SyncEvent.Reminder != value)
@@ -121,7 +122,7 @@ public class SyncEventViewModel : INotifyPropertyChanged
 
     public SyncRepeat Schedule
     {
-        get { return SyncEvent.Repeat; }
+        get => SyncEvent.Repeat;
         set
         {
             if (SyncEvent.Repeat != value)
@@ -134,7 +135,7 @@ public class SyncEventViewModel : INotifyPropertyChanged
 
     public string Title
     {
-        get { return SyncEvent.Title; }
+        get => SyncEvent.Title;
         set
         {
             if (SyncEvent.Title != value)
@@ -147,7 +148,7 @@ public class SyncEventViewModel : INotifyPropertyChanged
 
     public string Namespace
     {
-        get { return SyncEvent.NamespaceKey; }
+        get => SyncEvent.NamespaceKey;
         set
         {
             if (SyncEvent.NamespaceKey != value)
@@ -158,10 +159,8 @@ public class SyncEventViewModel : INotifyPropertyChanged
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    private void OnPropertyChanged(string prop = "")
+    public bool IsDeleteButtonVisible
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        get => SyncEvent.ExternalId is null;
     }
 }

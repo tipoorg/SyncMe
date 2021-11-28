@@ -43,4 +43,13 @@ internal sealed class SyncEventsService : ISyncEventsService
         _syncEventsRepository.RemoveEvents(predicate);
         OnSyncEventsUpdate?.Invoke(this, default);
     }
+
+    public void TryRemoveInternalEvent(Guid eventId)
+    {
+        if (_syncEventsRepository.TryGetSyncEvent(eventId, out var syncEvent) && syncEvent.ExternalId is null)
+        {
+            _syncEventsRepository.RemoveEvent(eventId);
+            OnSyncEventsUpdate?.Invoke(this, default);
+        }
+    }
 }

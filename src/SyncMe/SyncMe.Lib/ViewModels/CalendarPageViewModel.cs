@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using SyncMe.Models;
 using Xamarin.Plugin.Calendar.Models;
 
 namespace SyncMe.ViewModels;
@@ -34,7 +33,7 @@ public class CalendarPageViewModel : INotifyPropertyChanged
     private EventCollection LoadEvents()
     {
         var events = _syncEventsService.GetAllSyncEvents()
-            .ToLookup(k => k.Start.Date, Convert);
+            .ToLookup(k => k.Start.Date, e => new SyncEventViewModel(e));
 
         var result = new EventCollection();
         foreach (var e in events)
@@ -44,8 +43,6 @@ public class CalendarPageViewModel : INotifyPropertyChanged
 
         return result;
     }
-
-    private static SyncEventViewModel Convert(SyncEvent e) => new() { Description = e.NamespaceKey, Name = e.Title, StartDate = e.Start };
 
     private EventCollection _events;
 

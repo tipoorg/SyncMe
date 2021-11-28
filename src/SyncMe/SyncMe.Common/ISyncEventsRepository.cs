@@ -9,4 +9,5 @@ public interface ISyncEventsRepository
     bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent);
     Guid AddSyncEvent(SyncEvent syncEvent);
     void RemoveEvents(Expression<Func<SyncEvent, bool>> predicate);
+    void RemoveEvent(Guid eventId);
 }

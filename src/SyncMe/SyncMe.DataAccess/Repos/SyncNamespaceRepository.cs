@@ -47,4 +47,9 @@ internal class SyncNamespaceRepository : ISyncNamespaceRepository
         existingNamespace = _namespaces.FindById(namespaceKey);
         return existingNamespace != null;
     }
+
+    public void RemoveNamespace(string namespaceKey)
+    {
+        _namespaces.Delete(namespaceKey);
+    }
 }

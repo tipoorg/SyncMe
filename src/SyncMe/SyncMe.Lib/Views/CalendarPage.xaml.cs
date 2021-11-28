@@ -29,4 +29,13 @@ public partial class CalendarPage : ContentPage
 
     public async void AddEvent_Clicked(object sender, EventArgs e) =>
         await Navigation.PushAsync(new CreateEventPage(_syncEventsService, _namespaceRepository));
+
+
+    private void OnRemoveClicked(object sender, EventArgs e)
+    {
+        if (sender is Button { CommandParameter: SyncEventViewModel { SyncEvent.Id: var eventId } })
+        {
+            _syncEventsService.TryRemoveInternalEvent(eventId);
+        }
+    }
 }
