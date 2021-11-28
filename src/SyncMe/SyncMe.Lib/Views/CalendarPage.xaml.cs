@@ -43,7 +43,7 @@ public partial class CalendarPage : ContentPage
 
     private void OnRemoveClicked(object sender, EventArgs e)
     {
-        if (sender is Button { CommandParameter: SyncEventViewModel { SyncEvent.Id: var eventId } })
+        if (sender is MenuItem { CommandParameter: SyncEventViewModel { SyncEvent.Id: var eventId } })
         {
             _syncEventsService.TryRemoveInternalEvent(eventId);
             _viewModel.InitEventsCollection();

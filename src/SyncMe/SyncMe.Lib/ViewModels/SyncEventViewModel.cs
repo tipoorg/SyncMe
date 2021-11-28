@@ -163,4 +163,9 @@ public class SyncEventViewModel : BaseViewModel
     {
         get => SyncEvent.ExternalId is null;
     }
+
+    public string StartTimeString
+    {
+        get => SyncEvent.Start.ToShortTimeString();
+    }
 }

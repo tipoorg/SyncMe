@@ -13,12 +13,6 @@
                 <Setter Property="Margin" Value="10,0,0,0"/>
 
             </Style>
-            <Style x:Key="ThemeStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
-                <Setter Property="HorizontalTextAlignment" Value="End"/>
-                <Setter Property="FontSize" Value="Large"/>
-                <Setter Property="Margin" Value="0,0,10,0"/>
-            </Style>
 
             <Style x:Key="TimeStyle" TargetType="Label">
                 <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
@@ -30,6 +24,12 @@
                 <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
                 <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="Margin" Value="5,0,0,0"/>
+            </Style>
+            <Style x:Key="DescriptionStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="HorizontalTextAlignment" Value="Start"/>
+                <Setter Property="FontSize" Value="Small"/>
                 <Setter Property="Margin" Value="5,0,0,0"/>
             </Style>
             <Style x:Key="YearMonthStyle" TargetType="Label">
@@ -68,7 +68,7 @@
                 <Setter Property="CornerRadius" Value="100"/>
                 <Setter Property="BackgroundColor" Value="White"/>
             </Style>
-
+            
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -86,7 +86,6 @@
                     <RowDefinition Height="20*"/>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" Text="Sound"  Style="{StaticResource NotificationStyle}"></Label>
-                <Label Grid.Row="0" Grid.Column="1" Text="Theme"  Style="{StaticResource ThemeStyle}"></Label>
 
                 <Label Grid.Row="1" FontSize="Medium" Style="{StaticResource YearMonthStyle}" Grid.Column="0" Grid.ColumnSpan="2" x:Name="year"  HorizontalOptions="Center" IsVisible="{Binding CalendarSectionShown}">
                     <Label.FormattedText>
@@ -112,17 +111,21 @@
                     <controls:Calendar.EventTemplate>
                         <DataTemplate>
                             <Frame Style="{StaticResource FrameStyle}">
-                                <StackLayout Padding="15,0,0,0">
-                                    <Label Text="{Binding StartDate}" Style="{StaticResource TimeStyle}"/>
-                                    <Label Text="{Binding Name}" Style="{StaticResource TitleStyle}"/>
-                                    <Label Text="{Binding Description}" Style="{StaticResource TitleStyle}"/>
-                                    <Button
-                                        ImageSource="icon_trash.png"
-                                        Style="{StaticResource MinorButtonStyle}"
-                                        IsVisible="{Binding IsDeleteButtonVisible}"
-                                        Clicked="OnRemoveClicked" 
-                                        CommandParameter="{Binding .}" />
-                                </StackLayout>
+                                <SwipeView BackgroundColor="Transparent">
+                                    <SwipeView.RightItems>
+                                        <SwipeItem 
+                                            IconImageSource="icon_trash.png"
+                                            IsVisible="{Binding IsDeleteButtonVisible}"
+                                            Clicked="OnRemoveClicked" 
+                                            BackgroundColor="LightPink"
+                                            CommandParameter="{Binding .}" />
+                                    </SwipeView.RightItems>
+                                    <StackLayout Padding="15,0,0,0">
+                                        <Label Text="{Binding StartTimeString}" Style="{StaticResource TimeStyle}"/>
+                                        <Label Text="{Binding Name}" Style="{StaticResource TitleStyle}"/>
+                                        <Label Text="{Binding Description}" Style="{StaticResource DescriptionStyle}"/>
+                                    </StackLayout>
+                                </SwipeView>
                             </Frame>
                         </DataTemplate>
                     </controls:Calendar.EventTemplate>
