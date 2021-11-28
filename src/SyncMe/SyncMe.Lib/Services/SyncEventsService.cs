@@ -1,11 +1,10 @@
-﻿using SyncMe.Models;
+﻿using System.Linq.Expressions;
+using SyncMe.Models;
 
 namespace SyncMe.Lib.Services;
 
 internal sealed class SyncEventsService : ISyncEventsService
 {
-    public event EventHandler OnSyncEventsUpdate;
-
     private readonly ISyncEventsRepository _syncEventsRepository;
     private readonly IAlarmService _alarmService;
     private readonly ISyncAlarmCalculator _syncAlarmCalculator;
@@ -20,26 +19,38 @@ internal sealed class SyncEventsService : ISyncEventsService
         _syncAlarmCalculator = syncAlarmCalculator;
     }
 
-    public bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent) => _syncEventsRepository.TryGetSyncEvent(id, out syncEvent);
+    public bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent)
+    {
+        return _syncEventsRepository.TryGetSyncEvent(id, out syncEvent);
+    }
 
-    public IReadOnlyCollection<SyncEvent> GetAllSyncEvents() => _syncEventsRepository.GetAllSyncEvents();
+    public IReadOnlyCollection<SyncEvent> GetAllSyncEvents()
+    {
+        return _syncEventsRepository.GetAllSyncEvents();
+    }
 
     public Guid AddSyncEvent(SyncEvent syncEvent)
     {
-        var newId = _syncEventsRepository.AddSyncEvent(syncEvent);
+        var newEvent = _syncEventsRepository.AddSyncEvent(syncEvent);
 
-        if (_syncAlarmCalculator.TryGetNearestAlarm(newId, out var syncAlarm))
+        if (_syncAlarmCalculator.TryGetNearestAlarm(newEvent, out var syncAlarm))
         {
             _alarmService.SetAlarm(syncAlarm);
         }
 
-        OnSyncEventsUpdate?.Invoke(this, default);
-        return newId;
+        return newEvent.Id;
     }
 
-    public void RemoveEvents(Func<SyncEvent, bool> predicate)
+    public void RemoveEvents(Expression<Func<SyncEvent, bool>> predicate)
     {
         _syncEventsRepository.RemoveEvents(predicate);
-        OnSyncEventsUpdate?.Invoke(this, default);
+    }
+
+    public void TryRemoveInternalEvent(Guid eventId)
+    {
+        if (_syncEventsRepository.TryGetSyncEvent(eventId, out var syncEvent) && syncEvent.ExternalId is null)
+        {
+            _syncEventsRepository.RemoveEvent(eventId);
+        }
     }
 }

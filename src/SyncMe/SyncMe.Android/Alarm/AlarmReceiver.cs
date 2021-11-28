@@ -1,12 +1,14 @@
 ﻿using Android.Content;
 using Android.Util;
+using SyncMe.Droid.Extensions;
+using SyncMe.Models;
 
 namespace SyncMe.Droid.Alarm;
 
 [BroadcastReceiver]
 internal class AlarmReceiver : BroadcastReceiver
 {
-    private readonly IAndroidAlarmProcessor _androidAlarmProcessor = Bootstrapper.GetService<IAndroidAlarmProcessor>();
+    private readonly IAlarmProcessor _androidAlarmProcessor = Bootstrapper.GetService<IAlarmProcessor>();
 
     public override void OnReceive(Context context, Intent intent)
     {
@@ -18,11 +20,13 @@ internal class AlarmReceiver : BroadcastReceiver
             switch (action)
             {
                 case MessageKeys.ProcessAlarmAction:
-                    _androidAlarmProcessor.ProcessAlarm(context, intent);
+                    var pendingAlarm = intent.GetExtra<SyncAlarm>();
+                    _androidAlarmProcessor.ProcessAlarm(pendingAlarm);
                     return;
 
                 case MessageKeys.StopAlarmAction:
-                    _androidAlarmProcessor.StopPlayingAlarm(intent);
+                    var notificationId = intent.GetIntExtra(MessageKeys.NotificationIdKey, -1);
+                    _androidAlarmProcessor.StopPlayingAlarm(notificationId);
                     return;
 
                 default:

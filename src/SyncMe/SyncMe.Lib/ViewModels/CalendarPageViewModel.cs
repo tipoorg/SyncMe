@@ -1,39 +1,26 @@
-﻿using System.ComponentModel;
-using SyncMe.Models;
-using Xamarin.Plugin.Calendar.Models;
+﻿using Xamarin.Plugin.Calendar.Models;
 
 namespace SyncMe.ViewModels;
 
-public class CalendarPageViewModel : INotifyPropertyChanged
+public class CalendarPageViewModel : BaseViewModel
 {
     private readonly ISyncEventsService _syncEventsService;
-    private readonly INotificationsSwitcherRepository _notificationsSwitcherRepository;
-    public IBackgroundColorService BackgroundColorService { get; set; }
 
     public CalendarPageViewModel(
-        ISyncEventsService syncEventsService,
-        INotificationsSwitcherRepository notificationsSwitcherRepository)
+        ISyncEventsService syncEventsService)
     {
         _syncEventsService = syncEventsService;
-        _notificationsSwitcherRepository = notificationsSwitcherRepository;
-        _syncEventsService.OnSyncEventsUpdate += OnSyncEventsUpdate;
-
-
-        NotificationsSwitcher = _notificationsSwitcherRepository.State;
-        ThemeSwitcher = true;
-        Events = LoadEvents();
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
-    protected virtual void OnPropertyChanged(string propertyName)
+    public void InitEventsCollection()
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        Events = LoadEvents();
     }
 
     private EventCollection LoadEvents()
     {
         var events = _syncEventsService.GetAllSyncEvents()
-            .ToLookup(k => k.Start.Date, Convert);
+            .ToLookup(k => k.Start.Date, e => new SyncEventViewModel(e));
 
         var result = new EventCollection();
         foreach (var e in events)
@@ -44,58 +31,10 @@ public class CalendarPageViewModel : INotifyPropertyChanged
         return result;
     }
 
-    private static SyncEventViewModel Convert(SyncEvent e) => new() { Description = e.Namespace.Title, Name = e.Title, StartDate = e.Start };
-
     private EventCollection _events;
-
     public EventCollection Events
     {
         get => _events;
-        set
-        {
-            if (_events != value)
-            {
-                _events = value;
-                OnPropertyChanged("Events");
-            }
-            _events = value;
-        }
-    }
-
-    private bool _notificationsSwitcher;
-
-    public bool NotificationsSwitcher
-    {
-        get => _notificationsSwitcher;
-        set
-        {
-            if (_notificationsSwitcher != value)
-            {
-                _notificationsSwitcherRepository.State = value;
-                _notificationsSwitcher = value;
-                OnPropertyChanged("NotificationsSwitcher");
-            }
-        }
-    }
-
-    private bool _themeSwitcher;
-
-    public bool ThemeSwitcher
-    {
-        get => _themeSwitcher;
-        set
-        {
-            if (_themeSwitcher != value)
-            {
-                _themeSwitcher = value;
-                BackgroundColorService?.ChangeTheme(value);
-                OnPropertyChanged(nameof(ThemeSwitcher));
-            }
-        }
-    }
-
-    private void OnSyncEventsUpdate(object sender, EventArgs e)
-    {
-        Events = LoadEvents();
+        set => ChangeProperty(ref _events, value, nameof(Events));
     }
 }

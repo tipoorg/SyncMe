@@ -74,10 +74,7 @@
   <ItemGroup>
     <Compile Include="Alarm\AndroidAlarmService.cs" />
     <Compile Include="Alarm\MessageKeys.cs" />
-    <Compile Include="Alarm\AndroidAlarmProcessor.cs" />
     <Compile Include="Alarm\AndroidAlarmPlayer.cs" />
-    <Compile Include="Alarm\IAndroidAlarmPlayer.cs" />
-    <Compile Include="Alarm\IAndroidAlarmProcessor.cs" />
     <Compile Include="Extensions\IntentExtensions.cs" />
     <Compile Include="Properties\IsExternalInit.cs" />
     <Compile Include="Alarm\AndroidNotificationManager.cs" />
@@ -210,6 +207,10 @@
     <ProjectReference Include="..\SyncMe.Common\SyncMe.Common.csproj">
       <Project>{73ebc701-ffe2-4947-9cc5-8da43989c673}</Project>
       <Name>SyncMe.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SyncMe.DataAccess\SyncMe.DataAccess.csproj">
+      <Project>{f2014c1a-cbff-4e29-84a3-46b25ea490f8}</Project>
+      <Name>SyncMe.DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\SyncMe.Lib\SyncMe.Lib.csproj">
       <Project>{cbf244c3-66f4-437b-b60a-290cc59b66ec}</Project>

@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyncMe.Common", "SyncMe.Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncMe.Android", "SyncMe.Android\SyncMe.Android.csproj", "{64ECC97B-776C-4CCF-AE46-527C1947DE13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncMe.Lib", "SyncMe.Lib\SyncMe.Lib.csproj", "{CBF244C3-66F4-437B-B60A-290CC59B66EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyncMe.Lib", "SyncMe.Lib\SyncMe.Lib.csproj", "{CBF244C3-66F4-437B-B60A-290CC59B66EC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyncMe.DataAccess", "SyncMe.DataAccess\SyncMe.DataAccess.csproj", "{F2014C1A-CBFF-4E29-84A3-46B25EA490F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{CBF244C3-66F4-437B-B60A-290CC59B66EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBF244C3-66F4-437B-B60A-290CC59B66EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBF244C3-66F4-437B-B60A-290CC59B66EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2014C1A-CBFF-4E29-84A3-46B25EA490F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2014C1A-CBFF-4E29-84A3-46B25EA490F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2014C1A-CBFF-4E29-84A3-46B25EA490F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2014C1A-CBFF-4E29-84A3-46B25EA490F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

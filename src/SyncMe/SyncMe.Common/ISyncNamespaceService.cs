@@ -1,4 +1,6 @@
-﻿namespace SyncMe;
+﻿using SyncMe.Models;
+
+namespace SyncMe;
 
 public interface ISyncNamespaceService
 {
@@ -15,5 +17,6 @@ public interface ISyncNamespaceService
 
     void RemoveWithChildren(string fullName);
     bool IsNamespaceActive(string fullName);
+    IReadOnlyCollection<Namespace> GetAllSyncNamespaces();
 }
 

@@ -4,5 +4,5 @@ namespace SyncMe;
 
 public interface ISyncAlarmCalculator
 {
-    bool TryGetNearestAlarm(Guid eventId, out SyncAlarm syncALarm);
+    bool TryGetNearestAlarm(SyncEvent syncEvent, out SyncAlarm syncALarm);
 }
