@@ -45,6 +45,7 @@ public partial class CalendarPage : ContentPage
         if (sender is Button { CommandParameter: SyncEventViewModel { SyncEvent.Id: var eventId } })
         {
             _syncEventsService.TryRemoveInternalEvent(eventId);
+            _viewModel.InitEventsCollection();
         }
     }
 }

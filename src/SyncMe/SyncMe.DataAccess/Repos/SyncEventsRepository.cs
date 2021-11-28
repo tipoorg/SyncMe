@@ -33,12 +33,12 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
         return result;
     }
 
-    public Guid AddSyncEvent(SyncEvent syncEvent)
+    public SyncEvent AddSyncEvent(SyncEvent syncEvent)
     {
         var newId = Guid.NewGuid();
         _events.Insert(newId, syncEvent);
 
-        return newId;
+        return _events.FindById(newId);
     }
 
     public void UpdateEvents(IEnumerable<SyncEvent> syncEvents)

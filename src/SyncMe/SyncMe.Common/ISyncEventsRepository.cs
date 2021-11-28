@@ -7,7 +7,7 @@ public interface ISyncEventsRepository
 {
     IReadOnlyCollection<SyncEvent> GetAllSyncEvents();
     bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent);
-    Guid AddSyncEvent(SyncEvent syncEvent);
+    SyncEvent AddSyncEvent(SyncEvent syncEvent);
     void RemoveEvents(Expression<Func<SyncEvent, bool>> predicate);
     void RemoveEvent(Guid eventId);
     IReadOnlyCollection<SyncEvent> GetByNamespace(string namespaceKey);

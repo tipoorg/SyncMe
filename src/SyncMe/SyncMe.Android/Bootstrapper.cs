@@ -35,9 +35,9 @@ public static class Bootstrapper
     public static IServiceCollection AddSyncMeAndroid(this IServiceCollection services)
     {
         services
+            .AddSingleton<INotificationManager, AndroidNotificationManager>()
             .AddSingleton<IAlarmService, AndroidAlarmService>()
-            .AddSingleton<IAlarmPlayer, AndroidAlarmPlayer>()
-            .AddSingleton<IAndroidAlarmProcessor, AndroidAlarmProcessor>();
+            .AddSingleton<IAlarmPlayer, AndroidAlarmPlayer>();
 
         return services;
     }

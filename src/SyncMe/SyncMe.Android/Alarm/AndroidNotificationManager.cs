@@ -8,7 +8,7 @@ using AndroidApp = Android.App.Application;
 
 namespace SyncMe.Droid.Alarm;
 
-internal class AndroidNotificationManager
+internal class AndroidNotificationManager : INotificationManager
 {
     private const string _channelId = "default";
     private const string _channelName = "Default";
@@ -19,25 +19,22 @@ internal class AndroidNotificationManager
     private int _messageId = 0;
     public const string TitleKey = "title";
 
-    private static AndroidNotificationManager _instance;
-    public static AndroidNotificationManager Instance => _instance ??= new AndroidNotificationManager();
-
-    private AndroidNotificationManager()
+    public AndroidNotificationManager()
     {
         _manager = AndroidApp.Context.GetSystemService(Context.NotificationService) as NotificationManager;
         CreateNotificationChannel();
     }
 
-    public void Show(SyncAlarm syncAlarm, Context context)
+    public void Show(SyncAlarm syncAlarm)
     {
         var notificationId = _messageId++;
-        var stopNotificationIntent = GetStopNotificationIntent(context, notificationId);
+        var stopNotificationIntent = GetStopNotificationIntent(AndroidApp.Context, notificationId);
 
-        var notification = new NotificationCompat.Builder(context, _channelId)
+        var notification = new NotificationCompat.Builder(AndroidApp.Context, _channelId)
             .SetContentTitle(syncAlarm.Title)
             .SetContentText("OK")
             .SetContentIntent(stopNotificationIntent)
-            .SetLargeIcon(BitmapFactory.DecodeResource(context.Resources, Resource.Drawable.icon_open_calendar))
+            .SetLargeIcon(BitmapFactory.DecodeResource(AndroidApp.Context.Resources, Resource.Drawable.icon_open_calendar))
             .SetSmallIcon(Resource.Drawable.icon_open_calendar)
             .SetSilent(true)
             .SetAutoCancel(true)

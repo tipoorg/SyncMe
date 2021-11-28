@@ -95,7 +95,7 @@ internal class SyncNamespaceService : ISyncNamespaceService
             return syncNamespace.IsActive || DateTime.Now > syncNamespace.TurnOnDate;
         }
 
-        return true;
+        return false;
     }
 }
 

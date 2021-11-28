@@ -4,22 +4,12 @@ namespace SyncMe.Lib.Services;
 
 internal class SyncAlarmCalculator : ISyncAlarmCalculator
 {
-    private readonly ISyncEventsRepository _syncEventsRepository;
-
-    public SyncAlarmCalculator(ISyncEventsRepository syncEventsRepository)
+    public bool TryGetNearestAlarm(SyncEvent syncEvent, out SyncAlarm syncALarm)
     {
-        _syncEventsRepository = syncEventsRepository;
-    }
-
-    public bool TryGetNearestAlarm(Guid eventId, out SyncAlarm syncALarm)
-    {
-        if (_syncEventsRepository.TryGetSyncEvent(eventId, out var syncEvent))
+        if (TryGetNearestAlarmDelay(syncEvent, out var alarmDelay))
         {
-            if (TryGetNearestAlarmDelay(syncEvent, out var alarmDelay))
-            {
-                syncALarm = new SyncAlarm(syncEvent.Title, eventId, syncEvent.NamespaceKey, (int)alarmDelay.TotalSeconds);
-                return true;
-            }
+            syncALarm = new SyncAlarm(syncEvent.Title, syncEvent.Id, syncEvent.NamespaceKey, (int)alarmDelay.TotalSeconds);
+            return true;
         }
 
         syncALarm = default;

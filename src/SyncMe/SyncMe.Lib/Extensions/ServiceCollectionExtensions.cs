@@ -34,7 +34,8 @@ public static class ServiceCollectionExtensions
             .AddSingleton<ISoundSwitcherService, SoundSwitcherService>()
             .AddSingleton<ISyncAlarmCalculator, SyncAlarmCalculator>()
             .AddSingleton<ISyncEventsService, SyncEventsService>()
-            .AddSingleton<ISyncNamespaceService, SyncNamespaceService>();
+            .AddSingleton<ISyncNamespaceService, SyncNamespaceService>()
+            .AddSingleton<IAlarmProcessor, AlarmProcessor>();
 
         return services;
     }

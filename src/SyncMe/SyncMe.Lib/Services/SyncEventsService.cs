@@ -19,20 +19,26 @@ internal sealed class SyncEventsService : ISyncEventsService
         _syncAlarmCalculator = syncAlarmCalculator;
     }
 
-    public bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent) => _syncEventsRepository.TryGetSyncEvent(id, out syncEvent);
+    public bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent)
+    {
+        return _syncEventsRepository.TryGetSyncEvent(id, out syncEvent);
+    }
 
-    public IReadOnlyCollection<SyncEvent> GetAllSyncEvents() => _syncEventsRepository.GetAllSyncEvents();
+    public IReadOnlyCollection<SyncEvent> GetAllSyncEvents()
+    {
+        return _syncEventsRepository.GetAllSyncEvents();
+    }
 
     public Guid AddSyncEvent(SyncEvent syncEvent)
     {
-        var newId = _syncEventsRepository.AddSyncEvent(syncEvent);
+        var newEvent = _syncEventsRepository.AddSyncEvent(syncEvent);
 
-        if (_syncAlarmCalculator.TryGetNearestAlarm(newId, out var syncAlarm))
+        if (_syncAlarmCalculator.TryGetNearestAlarm(newEvent, out var syncAlarm))
         {
             _alarmService.SetAlarm(syncAlarm);
         }
 
-        return newId;
+        return newEvent.Id;
     }
 
     public void RemoveEvents(Expression<Func<SyncEvent, bool>> predicate)
