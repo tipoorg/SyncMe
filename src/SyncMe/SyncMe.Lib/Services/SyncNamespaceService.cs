@@ -20,6 +20,11 @@ internal class SyncNamespaceService : ISyncNamespaceService
         _namespaceRepository.TryAddSyncNamespace(fullName, !ParentIsSuspended(fullName));
     }
 
+    public IReadOnlyCollection<Namespace> GetAllSyncNamespaces()
+    {
+        return _namespaceRepository.GetAllSyncNamespaces().Values;
+    }
+
     public IReadOnlyCollection<(string FullName, bool IsActive, bool HasChildren)> GetAll(string namespaceName)
     {
         return _namespaceRepository.GetAllSyncNamespaces().Select(s => (s.Key, s.Value.IsActive, HasChildren(s.Key))).ToList();

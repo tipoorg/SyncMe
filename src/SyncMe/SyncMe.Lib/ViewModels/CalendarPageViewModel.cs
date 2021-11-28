@@ -1,36 +1,20 @@
-﻿using System.ComponentModel;
-using Xamarin.Plugin.Calendar.Models;
+﻿using Xamarin.Plugin.Calendar.Models;
 
 namespace SyncMe.ViewModels;
 
-public class CalendarPageViewModel : INotifyPropertyChanged
+public class CalendarPageViewModel : BaseViewModel
 {
     private readonly ISyncEventsService _syncEventsService;
-    private readonly ISoundSwitcherService _soundSwitcherService;
-
-    public IBackgroundColorService BackgroundColorService { get; set; }
 
     public CalendarPageViewModel(
-        ISyncEventsService syncEventsService,
-        ISoundSwitcherService soundSwitcherService)
+        ISyncEventsService syncEventsService)
     {
         _syncEventsService = syncEventsService;
-        _soundSwitcherService = soundSwitcherService;
-
-
-        SoundSwitcher = !_soundSwitcherService.IsMute();
-        ThemeSwitcher = true;
     }
 
     public void InitEventsCollection()
     {
         Events = LoadEvents();
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     private EventCollection LoadEvents()
@@ -48,51 +32,9 @@ public class CalendarPageViewModel : INotifyPropertyChanged
     }
 
     private EventCollection _events;
-
     public EventCollection Events
     {
         get => _events;
-        set
-        {
-            if (_events != value)
-            {
-                _events = value;
-                OnPropertyChanged("Events");
-            }
-        }
-    }
-
-    private bool _soundSwitcher;
-
-    public bool SoundSwitcher
-    {
-        get => _soundSwitcher;
-        set
-        {
-            if (_soundSwitcher != value)
-            {
-                if (value is true) _soundSwitcherService.SetSound();
-                else _soundSwitcherService.Mute();
-
-                _soundSwitcher = value;
-                OnPropertyChanged("SoundSwitcher");
-            }
-        }
-    }
-
-    private bool _themeSwitcher;
-
-    public bool ThemeSwitcher
-    {
-        get => _themeSwitcher;
-        set
-        {
-            if (_themeSwitcher != value)
-            {
-                _themeSwitcher = value;
-                BackgroundColorService?.ChangeTheme(value);
-                OnPropertyChanged(nameof(ThemeSwitcher));
-            }
-        }
+        set => ChangeProperty(ref _events, value, nameof(Events));
     }
 }

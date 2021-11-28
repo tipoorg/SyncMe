@@ -10,7 +10,7 @@ internal class AlarmProcessor : IAlarmProcessor
     private readonly ISyncEventsService _syncEventsService;
     private readonly ISyncNamespaceService _syncNamespaceService;
     private readonly ISyncAlarmCalculator _syncAlarmCalculator;
-    private readonly ISoundSwitcherRepository _soundSwitcherRepository;
+    private readonly IConfigRepository _configRepository;
 
     public AlarmProcessor(
         IAlarmService alarmService,
@@ -19,7 +19,7 @@ internal class AlarmProcessor : IAlarmProcessor
         ISyncEventsService syncEventsService,
         ISyncNamespaceService syncNamespaceService,
         ISyncAlarmCalculator syncAlarmCalculator,
-        ISoundSwitcherRepository soundSwitcherRepository)
+        IConfigRepository configRepository)
     {
         _alarmService = alarmService;
         _alarmPlayer = alarmPlayer;
@@ -27,7 +27,7 @@ internal class AlarmProcessor : IAlarmProcessor
         _syncEventsService = syncEventsService;
         _syncNamespaceService = syncNamespaceService;
         _syncAlarmCalculator = syncAlarmCalculator;
-        _soundSwitcherRepository = soundSwitcherRepository;
+        _configRepository = configRepository;
     }
 
     public void ProcessAlarm(SyncAlarm pendingAlarm)
@@ -39,7 +39,7 @@ internal class AlarmProcessor : IAlarmProcessor
 
         if (_syncNamespaceService.IsNamespaceActive(pendingAlarm.NamespaceFullName))
         {
-            if (!_soundSwitcherRepository.GetIsMuteState())
+            if (!_configRepository.Get(ConfigKey.IsMute))
                 _alarmPlayer.PlayAlarm();
 
             _notificationManager.Show(pendingAlarm);

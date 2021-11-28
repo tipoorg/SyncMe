@@ -2,7 +2,7 @@
 
 namespace SyncMe.ViewModels;
 
-public abstract class BaseEventViewModel : INotifyPropertyChanged
+public abstract class BaseViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -11,12 +11,15 @@ public abstract class BaseEventViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    protected void ChangeProperty<T>(ref T internalValue, T newValue, string propertyName)
+    protected bool ChangeProperty<T>(ref T internalValue, T newValue, string propertyName)
     {
         if (!EqualityComparer<T>.Default.Equals(internalValue, newValue))
         {
             internalValue = newValue;
             OnPropertyChanged(propertyName);
+            return true;
         }
+
+        return false;
     }
 }

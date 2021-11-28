@@ -137,26 +137,22 @@
             AbsoluteLayout.LayoutBounds="0.93, 0.94, 50, 50"
             AbsoluteLayout.LayoutFlags="PositionProportional" />
         <Switch 
+            x:Name="SoundToggle"
             AbsoluteLayout.LayoutBounds="1, 0, 0.2, 0.1"
             AbsoluteLayout.LayoutFlags="SizeProportional"
-            x:Name="SoundSwitcher" 
             VerticalOptions="End"
             Style="{StaticResource ToggleButtonStyle}"
-            IsToggled="{Binding SoundSwitcher}"
+            Toggled="OnSoundToggled"
             IsVisible="{Binding CalendarSectionShown}" />
         <Switch 
+            x:Name="ThemeToggle"
             AbsoluteLayout.LayoutBounds="1, 0, 0.2, 0.1"
             AbsoluteLayout.LayoutFlags="All"
-            x:Name="ThemeSwitcher"
             VerticalOptions="End"
             Style="{StaticResource ToggleButtonStyle}"
-            IsToggled="{Binding ThemeSwitcher}"
+            Toggled="OnThemeToggled"
             IsVisible="{Binding CalendarSectionShown}" />
 
-
-
-
     </AbsoluteLayout>
-
 
 </ContentPage>

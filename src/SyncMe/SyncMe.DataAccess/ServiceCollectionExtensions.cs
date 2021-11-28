@@ -21,7 +21,7 @@ public static class ServiceCollectionExtensions
         services
             .AddSingleton<ISyncEventsRepository, SyncEventsRepository>()
             .AddSingleton<ISyncNamespaceRepository, SyncNamespaceRepository>()
-            .AddSingleton<ISoundSwitcherRepository, SoundSwitcherRepository>();
+            .AddSingleton<IConfigRepository, ConfigRepository>();
 
         return services;
     }

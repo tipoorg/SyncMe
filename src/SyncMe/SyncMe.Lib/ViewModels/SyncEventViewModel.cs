@@ -3,7 +3,7 @@ using SyncMe.Models;
 
 namespace SyncMe.ViewModels;
 
-public class SyncEventViewModel : BaseEventViewModel
+public class SyncEventViewModel : BaseViewModel
 {
     public SyncEvent SyncEvent { get; init; }
 
