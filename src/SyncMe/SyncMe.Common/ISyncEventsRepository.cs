@@ -10,4 +10,6 @@ public interface ISyncEventsRepository
     Guid AddSyncEvent(SyncEvent syncEvent);
     void RemoveEvents(Expression<Func<SyncEvent, bool>> predicate);
     void RemoveEvent(Guid eventId);
+    IReadOnlyCollection<SyncEvent> GetByNamespace(string namespaceKey);
+    void UpdateEvents(IEnumerable<SyncEvent> syncEvents);
 }

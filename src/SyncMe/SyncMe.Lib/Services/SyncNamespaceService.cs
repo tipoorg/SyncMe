@@ -1,12 +1,18 @@
-﻿namespace SyncMe.Lib.Services;
+﻿using SyncMe.Models;
+
+namespace SyncMe.Lib.Services;
 
 internal class SyncNamespaceService : ISyncNamespaceService
 {
     private readonly ISyncNamespaceRepository _namespaceRepository;
+    private readonly ISyncEventsRepository _syncEventsRepository;
 
-    public SyncNamespaceService(ISyncNamespaceRepository namespaceRepository)
+    public SyncNamespaceService(
+        ISyncNamespaceRepository namespaceRepository,
+        ISyncEventsRepository syncEventsRepository)
     {
         _namespaceRepository = namespaceRepository;
+        _syncEventsRepository = syncEventsRepository;
     }
 
     public void Add(string fullName)
@@ -77,6 +83,8 @@ internal class SyncNamespaceService : ISyncNamespaceService
             string namespaceKey = namespaces.First(s => s.Key.Contains(fullName)).Key;
             namespaces.Remove(namespaceKey);
             _namespaceRepository.RemoveNamespace(namespaceKey);
+            var eventsUnderNamespace = _syncEventsRepository.GetByNamespace(namespaceKey);
+            _syncEventsRepository.UpdateEvents(eventsUnderNamespace.Select(x => x with { NamespaceKey = Namespace.Root.Key }));
         }
     }
 

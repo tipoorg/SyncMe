@@ -16,11 +16,14 @@ public class CalendarPageViewModel : INotifyPropertyChanged
     {
         _syncEventsService = syncEventsService;
         _soundSwitcherService = soundSwitcherService;
-        _syncEventsService.OnSyncEventsUpdate += OnSyncEventsUpdate;
 
 
         SoundSwitcher = !_soundSwitcherService.IsMute();
         ThemeSwitcher = true;
+    }
+
+    public void InitEventsCollection()
+    {
         Events = LoadEvents();
     }
 
@@ -56,7 +59,6 @@ public class CalendarPageViewModel : INotifyPropertyChanged
                 _events = value;
                 OnPropertyChanged("Events");
             }
-            _events = value;
         }
     }
 
@@ -92,10 +94,5 @@ public class CalendarPageViewModel : INotifyPropertyChanged
                 OnPropertyChanged(nameof(ThemeSwitcher));
             }
         }
-    }
-
-    private void OnSyncEventsUpdate(object sender, EventArgs e)
-    {
-        Events = LoadEvents();
     }
 }

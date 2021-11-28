@@ -5,8 +5,6 @@ namespace SyncMe.Lib.Services;
 
 internal sealed class SyncEventsService : ISyncEventsService
 {
-    public event EventHandler OnSyncEventsUpdate;
-
     private readonly ISyncEventsRepository _syncEventsRepository;
     private readonly IAlarmService _alarmService;
     private readonly ISyncAlarmCalculator _syncAlarmCalculator;
@@ -34,14 +32,12 @@ internal sealed class SyncEventsService : ISyncEventsService
             _alarmService.SetAlarm(syncAlarm);
         }
 
-        OnSyncEventsUpdate?.Invoke(this, default);
         return newId;
     }
 
     public void RemoveEvents(Expression<Func<SyncEvent, bool>> predicate)
     {
         _syncEventsRepository.RemoveEvents(predicate);
-        OnSyncEventsUpdate?.Invoke(this, default);
     }
 
     public void TryRemoveInternalEvent(Guid eventId)
@@ -49,7 +45,6 @@ internal sealed class SyncEventsService : ISyncEventsService
         if (_syncEventsRepository.TryGetSyncEvent(eventId, out var syncEvent) && syncEvent.ExternalId is null)
         {
             _syncEventsRepository.RemoveEvent(eventId);
-            OnSyncEventsUpdate?.Invoke(this, default);
         }
     }
 }

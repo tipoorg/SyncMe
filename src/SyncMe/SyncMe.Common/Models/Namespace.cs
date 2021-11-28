@@ -2,6 +2,8 @@
 
 public record Namespace
 {
+    public static Namespace Root { get; } = new() { Key = "Root" };
+
     public string Key { get; set; } = string.Empty;
     public bool IsActive { get; set; }
     public DateTime? TurnOnDate { get; set; }

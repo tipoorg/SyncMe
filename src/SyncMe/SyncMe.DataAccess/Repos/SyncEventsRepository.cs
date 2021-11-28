@@ -20,6 +20,13 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
         return syncEvent != null;
     }
 
+    public IReadOnlyCollection<SyncEvent> GetByNamespace(string namespaceKey)
+    {
+        _events.EnsureIndex(x => x.NamespaceKey);
+        var result = _events.Find(x => x.NamespaceKey == namespaceKey).ToList();
+        return result;
+    }
+
     public IReadOnlyCollection<SyncEvent> GetAllSyncEvents()
     {
         var result = _events.FindAll().ToList();
@@ -32,6 +39,11 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
         _events.Insert(newId, syncEvent);
 
         return newId;
+    }
+
+    public void UpdateEvents(IEnumerable<SyncEvent> syncEvents)
+    {
+        _events.Update(syncEvents);
     }
 
     public void RemoveEvent(Guid eventId)

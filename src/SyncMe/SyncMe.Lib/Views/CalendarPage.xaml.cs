@@ -7,6 +7,7 @@ namespace SyncMe.Views;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class CalendarPage : ContentPage
 {
+    private readonly CalendarPageViewModel _viewModel;
     private readonly ISyncEventsService _syncEventsService;
     private readonly ISyncNamespaceRepository _namespaceRepository;
 
@@ -20,6 +21,7 @@ public partial class CalendarPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
         AddEvent.Clicked += AddEvent_Clicked;
+        _viewModel=viewModel;
         _syncEventsService = syncEventsService;
         _namespaceRepository = namespaceRepository;
 
@@ -27,9 +29,16 @@ public partial class CalendarPage : ContentPage
         viewModel.BackgroundColorService = new BackgroundColorService(this, namespaceManagmentPage, identityProvidersPage);
     }
 
-    public async void AddEvent_Clicked(object sender, EventArgs e) =>
-        await Navigation.PushAsync(new CreateEventPage(_syncEventsService, _namespaceRepository));
+    protected override void OnAppearing()
+    {
+        _viewModel.InitEventsCollection();
+        base.OnAppearing();
+    }
 
+    public async void AddEvent_Clicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new CreateEventPage(_syncEventsService, _namespaceRepository));
+    }
 
     private void OnRemoveClicked(object sender, EventArgs e)
     {
