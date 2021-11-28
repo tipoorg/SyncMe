@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SyncMe.Views.CalendarPage"
              xmlns:controls="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar" 
-             Title="Calendar" >
+             Title="Calendar">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="NotificationStyle" TargetType="Label">
@@ -143,14 +143,6 @@
             VerticalOptions="End"
             Style="{StaticResource ToggleButtonStyle}"
             Toggled="OnSoundToggled"
-            IsVisible="{Binding CalendarSectionShown}" />
-        <Switch 
-            x:Name="ThemeToggle"
-            AbsoluteLayout.LayoutBounds="1, 0, 0.2, 0.1"
-            AbsoluteLayout.LayoutFlags="All"
-            VerticalOptions="End"
-            Style="{StaticResource ToggleButtonStyle}"
-            Toggled="OnThemeToggled"
             IsVisible="{Binding CalendarSectionShown}" />
 
     </AbsoluteLayout>

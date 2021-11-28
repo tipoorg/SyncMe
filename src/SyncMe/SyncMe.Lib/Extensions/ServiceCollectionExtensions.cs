@@ -31,7 +31,6 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services
-            .AddSingleton<IBackgroundColorService, BackgroundColorService>()
             .AddSingleton<ISyncAlarmCalculator, SyncAlarmCalculator>()
             .AddSingleton<ISyncEventsService, SyncEventsService>()
             .AddSingleton<ISyncNamespaceService, SyncNamespaceService>()
