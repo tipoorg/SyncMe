@@ -30,8 +30,6 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
         _syncEventsService = syncEventsService;
         _syncNamespaceRepository = syncNamespaceRepository;
 
-        var manager = new MicrosoftAuthorizationManager();
-
         foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
         {
             Identities.Add(new Identity(account.Username));
