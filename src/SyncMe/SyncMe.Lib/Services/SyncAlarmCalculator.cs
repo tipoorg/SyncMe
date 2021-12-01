@@ -8,7 +8,7 @@ internal class SyncAlarmCalculator : ISyncAlarmCalculator
     {
         if (TryGetNearestAlarmDelay(syncEvent, out var alarmDelay))
         {
-            syncALarm = new SyncAlarm(syncEvent.Title, syncEvent.Id, syncEvent.NamespaceKey, (int)alarmDelay.TotalSeconds);
+            syncALarm = new SyncAlarm(syncEvent.Title, syncEvent.Id, syncEvent.NamespaceKey, alarmDelay);
             return true;
         }
 
@@ -16,41 +16,40 @@ internal class SyncAlarmCalculator : ISyncAlarmCalculator
         return false;
     }
 
-    private bool TryGetNearestAlarmDelay(SyncEvent syncEvent, out TimeSpan delay)
+    private bool TryGetNearestAlarmDelay(SyncEvent syncEvent, out DateTime alarmTime)
     {
         var eventDateTime = syncEvent.Start - TimeSpan.FromSeconds((int)syncEvent.Reminder);
         TimeSpan eventTime = eventDateTime.TimeOfDay;
 
-        delay = syncEvent.Repeat switch
+        alarmTime = syncEvent.Repeat switch
         {
-            SyncRepeat.None => DelayAgainstNow(eventDateTime),
+            SyncRepeat.None => eventDateTime,
             SyncRepeat.Dayly => FirstAvailable(DateTime.Today.Add(eventTime), Dayly),
             SyncRepeat.WorkDays => FirstAvailable(DateTime.Today.Add(eventTime), WorkDays),
             SyncRepeat.EveryWeek => FirstAvailable(DateTime.Today.Add(eventTime), EveryWeek),
             SyncRepeat.EveryMonth => FirstAvailable(DateTime.Today.Add(eventTime), EveryMonth),
             SyncRepeat.EveryYear => FirstAvailable(DateTime.Today.Add(eventTime), EveryYear),
             SyncRepeat.EveryMinute => FirstAvailable(DateTime.Today.Add(eventTime), EveryMinute),
-            _ => TimeSpan.Zero,
+            _ => throw new NotImplementedException(),
         };
 
-        return delay.Ticks > 100;
+        return alarmTime > DateTime.Now;
     }
 
-    private TimeSpan FirstAvailable(DateTime since, Func<DateTime, DateTime> next)
+    private DateTime FirstAvailable(DateTime since, Func<DateTime, DateTime> next)
     {
+        var now = DateTime.Now;
         var current = since;
 
         while (true)
         {
-            var delay = DelayAgainstNow(current);
-            if (delay.Ticks > 100)
-                return delay;
+            if (current > now)
+                return current;
 
             current = next(current);
         }
     }
 
-    private static TimeSpan DelayAgainstNow(DateTime eventDateTime) => eventDateTime - DateTime.Now;
     private static DateTime Dayly(DateTime date) => date.AddDays(1);
     private static DateTime EveryWeek(DateTime date) => date.AddDays(7);
     private static DateTime EveryMonth(DateTime date) => date.AddMonths(1);

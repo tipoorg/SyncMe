@@ -13,30 +13,30 @@ internal class AndroidAlarmService : IAlarmService
 {
     public void SetAlarm(SyncAlarm syncAlarm)
     {
-        var calendarItem = GetCalendarItem(syncAlarm);
+        var triggerAtMs = GetTriggerAtMs(syncAlarm.AlarmTime);
         var alarmIntent = GetAlarmIntent(syncAlarm, AndroidApp.Context);
 
-        SetAlarm(calendarItem, alarmIntent, AndroidApp.Context);
+        SetAlarm(triggerAtMs, alarmIntent, AndroidApp.Context);
         Toast.MakeText(
             AndroidApp.Context,
-            $"{syncAlarm.Title} Scheduled on {DateTime.Now.AddSeconds(syncAlarm.DelaySeconds)}",
+            $"{syncAlarm.Title} Scheduled on {syncAlarm.AlarmTime}",
             ToastLength.Long).Show();
     }
 
-    private static Calendar GetCalendarItem(SyncAlarm syncAlarm)
+    private static long GetTriggerAtMs(DateTime alarmTime)
     {
         var calendarItem = Calendar.Instance;
-        calendarItem.Add(CalendarField.Second, syncAlarm.DelaySeconds);
-        return calendarItem;
+        calendarItem.Set(alarmTime.Year, alarmTime.Month - 1, alarmTime.Day, alarmTime.Hour, alarmTime.Minute, alarmTime.Second);
+        return calendarItem.TimeInMillis;
     }
 
-    private void SetAlarm(Calendar calendarItem, PendingIntent alarmIntent, Context context)
+    private void SetAlarm(long triggerAtMs, PendingIntent alarmIntent, Context context)
     {
         var am = context.GetSystemService(Context.AlarmService) as AlarmManager;
         if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
-            am.SetExactAndAllowWhileIdle(AlarmType.RtcWakeup, calendarItem.TimeInMillis, alarmIntent);
+            am.SetExactAndAllowWhileIdle(AlarmType.RtcWakeup, triggerAtMs, alarmIntent);
         else
-            am.SetExact(AlarmType.RtcWakeup, calendarItem.TimeInMillis, alarmIntent);
+            am.SetExact(AlarmType.RtcWakeup, triggerAtMs, alarmIntent);
     }
 
     private PendingIntent GetAlarmIntent(SyncAlarm syncAlarm, Context context)
