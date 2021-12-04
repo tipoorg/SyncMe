@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Icu.Util;
 using Android.OS;
 using Android.Widget;
+using Microsoft.Extensions.Logging;
 using SyncMe.Droid.Extensions;
 using SyncMe.Models;
 using AndroidApp = Android.App.Application;
@@ -11,16 +12,22 @@ namespace SyncMe.Droid.Alarm;
 
 internal class AndroidAlarmService : IAlarmService
 {
+    private readonly ILogger<AndroidAlarmService> _logger;
+
+    public AndroidAlarmService(ILogger<AndroidAlarmService> logger)
+    {
+        _logger = logger;
+    }
+
     public void SetAlarm(SyncAlarm syncAlarm)
     {
         var triggerAtMs = GetTriggerAtMs(syncAlarm.AlarmTime);
         var alarmIntent = GetAlarmIntent(syncAlarm, AndroidApp.Context);
 
         SetAlarm(triggerAtMs, alarmIntent, AndroidApp.Context);
-        Toast.MakeText(
-            AndroidApp.Context,
-            $"{syncAlarm.Title} Scheduled on {syncAlarm.AlarmTime}",
-            ToastLength.Long).Show();
+        string text = $"{syncAlarm.Title} Scheduled on {syncAlarm.AlarmTime}";
+        Toast.MakeText(AndroidApp.Context, text, ToastLength.Long).Show();
+        _logger.LogInformation(text);
     }
 
     private static long GetTriggerAtMs(DateTime alarmTime)
