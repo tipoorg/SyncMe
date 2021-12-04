@@ -18,7 +18,7 @@ public static class SerilogExtensions
 
         return sink.File(
             path: logFilePath,
-            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] {Message}{NewLine}{Exception}",
+            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}",
             fileSizeLimitBytes: 100000000,
             rollingInterval: RollingInterval.Month,
             rollOnFileSizeLimit: true,

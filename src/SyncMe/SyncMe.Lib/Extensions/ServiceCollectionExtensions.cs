@@ -51,6 +51,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddSyncMeLogging(this IServiceCollection services, SyncMeBootstrapper bootstrapper, string logsFolder)
     {
         Log.Logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
             .WriteTo.SyncMeFile(logsFolder)
             .WriteTo.PlatformSpecificLog(bootstrapper)
             .CreateLogger();

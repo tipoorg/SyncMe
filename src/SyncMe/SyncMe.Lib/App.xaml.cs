@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.ComponentModel;
 
 namespace SyncMe;
@@ -6,6 +7,8 @@ namespace SyncMe;
 public partial class App : Application, INotifyPropertyChanged
 {
     private static IServiceProvider _serviceProvider;
+    private readonly ILogger<App> _logger;
+
     public static object AuthUIParent { get; set; }
     private IDisposable _appScope;
 
@@ -13,10 +16,13 @@ public partial class App : Application, INotifyPropertyChanged
     {
         InitializeComponent();
         _serviceProvider = serviceProvider;
+        _logger = serviceProvider.GetRequiredService<ILogger<App>>();
     }
 
     protected override void OnStart()
     {
+        _logger.LogInformation(nameof(OnStart) + " called");
+
         if (_appScope is not null)
             CloseScope();
 
@@ -27,11 +33,15 @@ public partial class App : Application, INotifyPropertyChanged
 
     protected override void OnSleep()
     {
+        _logger.LogInformation(nameof(OnSleep) + " called");
+
         CloseScope();
     }
 
     protected override void OnResume()
     {
+        _logger.LogInformation(nameof(OnResume) + " called");
+
         if (_appScope is not null)
             CloseScope();
 
