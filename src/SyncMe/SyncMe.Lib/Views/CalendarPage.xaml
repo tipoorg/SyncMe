@@ -68,36 +68,40 @@
                 <Setter Property="CornerRadius" Value="100"/>
                 <Setter Property="BackgroundColor" Value="White"/>
             </Style>
-            
+
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <AbsoluteLayout>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="icon_about.png" Clicked="OnSettingsClicked" />
+    </ContentPage.ToolbarItems>
 
-        <StackLayout>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*" />
-                    <ColumnDefinition Width="5*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="20*"/>
-                </Grid.RowDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" Text="Sound"  Style="{StaticResource NotificationStyle}"></Label>
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <StackLayout>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="20*"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Text="Sound"  Style="{StaticResource NotificationStyle}"></Label>
 
-                <Label Grid.Row="1" FontSize="Medium" Style="{StaticResource YearMonthStyle}" Grid.Column="0" Grid.ColumnSpan="2" x:Name="year"  HorizontalOptions="Center" IsVisible="{Binding CalendarSectionShown}">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="{Binding MonthText}"/>
-                            <Span Text=" "/>
-                            <Span Text="{Binding Year}"/>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
+                    <Label Grid.Row="1" FontSize="Medium" Style="{StaticResource YearMonthStyle}" Grid.Column="0" Grid.ColumnSpan="2" x:Name="year"  HorizontalOptions="Center" IsVisible="{Binding CalendarSectionShown}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding MonthText}"/>
+                                <Span Text=" "/>
+                                <Span Text="{Binding Year}"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
 
-                <controls:Calendar 
+                    <controls:Calendar 
                     x:Name="Calendar1"
                     Grid.Row="2"  
                     Grid.Column="0" 
@@ -108,38 +112,38 @@
                     ShowMonthPicker="False"
                     ShowYearPicker="False"
                     HorizontalOptions="Center">
-                    <controls:Calendar.EventTemplate>
-                        <DataTemplate>
-                            <Frame Style="{StaticResource FrameStyle}">
-                                <SwipeView BackgroundColor="Transparent">
-                                    <SwipeView.RightItems>
-                                        <SwipeItem 
+                        <controls:Calendar.EventTemplate>
+                            <DataTemplate>
+                                <Frame Style="{StaticResource FrameStyle}">
+                                    <SwipeView BackgroundColor="Transparent">
+                                        <SwipeView.RightItems>
+                                            <SwipeItem 
                                             IconImageSource="icon_trash.png"
                                             IsVisible="{Binding IsDeleteButtonVisible}"
                                             Clicked="OnRemoveClicked" 
                                             BackgroundColor="LightPink"
                                             CommandParameter="{Binding .}" />
-                                    </SwipeView.RightItems>
-                                    <StackLayout Padding="15,0,0,0">
-                                        <Label Text="{Binding StartTimeString}" Style="{StaticResource TimeStyle}"/>
-                                        <Label Text="{Binding Name}" Style="{StaticResource TitleStyle}"/>
-                                        <Label Text="{Binding Description}" Style="{StaticResource DescriptionStyle}"/>
-                                    </StackLayout>
-                                </SwipeView>
-                            </Frame>
-                        </DataTemplate>
-                    </controls:Calendar.EventTemplate>
-                </controls:Calendar>
-            </Grid>
-        </StackLayout>
-        <Button
+                                        </SwipeView.RightItems>
+                                        <StackLayout Padding="15,0,0,0">
+                                            <Label Text="{Binding StartTimeString}" Style="{StaticResource TimeStyle}"/>
+                                            <Label Text="{Binding Name}" Style="{StaticResource TitleStyle}"/>
+                                            <Label Text="{Binding Description}" Style="{StaticResource DescriptionStyle}"/>
+                                        </StackLayout>
+                                    </SwipeView>
+                                </Frame>
+                            </DataTemplate>
+                        </controls:Calendar.EventTemplate>
+                    </controls:Calendar>
+                </Grid>
+            </StackLayout>
+            <Button
             x:Name="AddEvent"
             ImageSource="icon_add_calendar.png"
             BackgroundColor="Transparent"
             Style="{StaticResource FloadButtonStyle}"
             AbsoluteLayout.LayoutBounds="0.93, 0.94, 50, 50"
             AbsoluteLayout.LayoutFlags="PositionProportional" />
-        <Switch 
+            <Switch 
             x:Name="SoundToggle"
             AbsoluteLayout.LayoutBounds="1, 0, 0.2, 0.1"
             AbsoluteLayout.LayoutFlags="SizeProportional"
@@ -148,6 +152,6 @@
             Toggled="OnSoundToggled"
             IsVisible="{Binding CalendarSectionShown}" />
 
-    </AbsoluteLayout>
-
+        </AbsoluteLayout>
+    </ContentPage.Content>
 </ContentPage>

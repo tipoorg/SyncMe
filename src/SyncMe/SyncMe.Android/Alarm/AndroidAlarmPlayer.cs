@@ -1,4 +1,5 @@
 ﻿using Android.Media;
+using Microsoft.Extensions.Logging;
 using AndroidApp = Android.App.Application;
 
 namespace SyncMe.Droid.Alarm;
@@ -6,10 +7,12 @@ namespace SyncMe.Droid.Alarm;
 internal sealed class AndroidAlarmPlayer : IAlarmPlayer
 {
     private readonly MediaPlayer _mediaPlayer;
+    private readonly ILogger<AndroidAlarmPlayer> _logger;
 
-    public AndroidAlarmPlayer()
+    public AndroidAlarmPlayer(ILogger<AndroidAlarmPlayer> logger)
     {
         _mediaPlayer = new MediaPlayer();
+        _logger = logger;
     }
 
     public void PlayAlarm()
@@ -23,10 +26,11 @@ internal sealed class AndroidAlarmPlayer : IAlarmPlayer
             _mediaPlayer.SetAudioAttributes(GetAudio());
             _mediaPlayer.Prepare();
             _mediaPlayer.Start();
+            _logger.LogInformation("Alarm played");
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            _logger.LogError(ex.Message);
         }
     }
 

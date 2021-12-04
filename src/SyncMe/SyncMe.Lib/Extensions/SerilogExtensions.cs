@@ -14,7 +14,7 @@ public static class SerilogExtensions
 
     public static LoggerConfiguration SyncMeFile(this LoggerSinkConfiguration sink, string logsDirectory)
     {
-        var logFilePath = Path.Combine(logsDirectory, "syncme-.log");
+        var logFilePath = Path.Combine(logsDirectory, "syncme-.txt");
 
         return sink.File(
             path: logFilePath,

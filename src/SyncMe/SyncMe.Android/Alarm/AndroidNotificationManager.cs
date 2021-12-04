@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using AndroidX.Core.App;
+using Microsoft.Extensions.Logging;
 using SyncMe.Models;
 using AndroidApp = Android.App.Application;
 
@@ -15,12 +16,13 @@ internal class AndroidNotificationManager : INotificationManager
     private const string _channelDescription = "The default channel for notifications.";
 
     private readonly NotificationManager _manager;
-
+    private readonly ILogger<AndroidNotificationManager> _logger;
     private int _messageId = 0;
     public const string TitleKey = "title";
 
-    public AndroidNotificationManager()
+    public AndroidNotificationManager(ILogger<AndroidNotificationManager> logger)
     {
+        _logger = logger;
         _manager = AndroidApp.Context.GetSystemService(Context.NotificationService) as NotificationManager;
         CreateNotificationChannel();
     }
@@ -41,6 +43,7 @@ internal class AndroidNotificationManager : INotificationManager
             .Build();
 
         _manager.Notify(notificationId, notification);
+        _logger.LogInformation($"{syncAlarm.Title} notified");
     }
 
     public void Cancel(int notificationId)

@@ -1,5 +1,5 @@
 ﻿using Android.Content;
-using Android.Util;
+using Serilog;
 using SyncMe.Droid.Extensions;
 using SyncMe.Models;
 
@@ -15,7 +15,7 @@ internal class AlarmReceiver : BroadcastReceiver
         try
         {
             var action = intent.GetStringExtra(MessageKeys.ActionKey);
-            Log.Debug(MainActivity.Tag, $"AlarmReceiver.OnReceive {action}");
+            Log.Information($"AlarmReceiver.OnReceive {action}");
 
             switch (action)
             {
@@ -30,13 +30,12 @@ internal class AlarmReceiver : BroadcastReceiver
                     return;
 
                 default:
-                    Log.Debug(MainActivity.Tag, "AlarmReceiver.OnReceive default");
                     return;
             }
         }
         catch (Exception ex)
         {
-            Log.Error(MainActivity.Tag, ex.Message);
+            Log.Error(ex.Message);
         }
     }
 }
