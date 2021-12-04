@@ -8,7 +8,7 @@ namespace SyncMe.Droid.Alarm;
 [BroadcastReceiver]
 internal class AlarmReceiver : BroadcastReceiver
 {
-    private readonly IAlarmProcessor _androidAlarmProcessor = Bootstrapper.GetService<IAlarmProcessor>();
+    private readonly IAlarmProcessor _androidAlarmProcessor = AndroidStarter.GetService<IAlarmProcessor>();
 
     public override void OnReceive(Context context, Intent intent)
     {
