@@ -102,27 +102,27 @@
                     </Label>
 
                     <controls:Calendar 
-                    x:Name="Calendar1"
-                    Grid.Row="2"  
-                    Grid.Column="0" 
-                    Grid.ColumnSpan="2"
-                    Events="{Binding Events}"
-                    DayTappedCommand="{Binding DayTappedCommand}"
-                    Style="{StaticResource CalendarStyle}"
-                    ShowMonthPicker="False"
-                    ShowYearPicker="False"
-                    HorizontalOptions="Center">
+                        x:Name="Calendar1"
+                        Grid.Row="2"  
+                        Grid.Column="0" 
+                        Grid.ColumnSpan="2"
+                        Events="{Binding Events}"
+                        DayTappedCommand="{Binding DayTappedCommand}"
+                        Style="{StaticResource CalendarStyle}"
+                        ShowMonthPicker="False"
+                        ShowYearPicker="False"
+                        HorizontalOptions="Center">
                         <controls:Calendar.EventTemplate>
                             <DataTemplate>
                                 <Frame Style="{StaticResource FrameStyle}">
-                                    <SwipeView BackgroundColor="Transparent">
+                                    <SwipeView BackgroundColor="White">
                                         <SwipeView.RightItems>
-                                            <SwipeItem 
-                                            IconImageSource="icon_trash.png"
-                                            IsVisible="{Binding IsDeleteButtonVisible}"
-                                            Clicked="OnRemoveClicked" 
-                                            BackgroundColor="LightPink"
-                                            CommandParameter="{Binding .}" />
+                                            <SwipeItem
+                                                IconImageSource="icon_trash.png"
+                                                IsVisible="{Binding IsDeleteButtonVisible}"
+                                                Clicked="OnRemoveClicked" 
+                                                BackgroundColor="LightPink"
+                                                CommandParameter="{Binding .}" />
                                         </SwipeView.RightItems>
                                         <StackLayout Padding="15,0,0,0">
                                             <Label Text="{Binding StartTimeString}" Style="{StaticResource TimeStyle}"/>
@@ -137,20 +137,20 @@
                 </Grid>
             </StackLayout>
             <Button
-            x:Name="AddEvent"
-            ImageSource="icon_add_calendar.png"
-            BackgroundColor="Transparent"
-            Style="{StaticResource FloadButtonStyle}"
-            AbsoluteLayout.LayoutBounds="0.93, 0.94, 50, 50"
-            AbsoluteLayout.LayoutFlags="PositionProportional" />
+                x:Name="AddEvent"
+                ImageSource="icon_add_calendar.png"
+                BackgroundColor="Transparent"
+                Style="{StaticResource FloadButtonStyle}"
+                AbsoluteLayout.LayoutBounds="0.93, 0.94, 50, 50"
+                AbsoluteLayout.LayoutFlags="PositionProportional" />
             <Switch 
-            x:Name="SoundToggle"
-            AbsoluteLayout.LayoutBounds="1, 0, 0.2, 0.1"
-            AbsoluteLayout.LayoutFlags="SizeProportional"
-            VerticalOptions="End"
-            Style="{StaticResource ToggleButtonStyle}"
-            Toggled="OnSoundToggled"
-            IsVisible="{Binding CalendarSectionShown}" />
+                x:Name="SoundToggle"
+                AbsoluteLayout.LayoutBounds="1, 0, 0.2, 0.1"
+                AbsoluteLayout.LayoutFlags="SizeProportional"
+                VerticalOptions="End"
+                Style="{StaticResource ToggleButtonStyle}"
+                Toggled="OnSoundToggled"
+                IsVisible="{Binding CalendarSectionShown}" />
 
         </AbsoluteLayout>
     </ContentPage.Content>
