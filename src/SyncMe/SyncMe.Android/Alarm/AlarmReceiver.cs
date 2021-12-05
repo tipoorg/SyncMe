@@ -15,7 +15,7 @@ internal class AlarmReceiver : BroadcastReceiver
         try
         {
             var action = intent.GetStringExtra(MessageKeys.ActionKey);
-            Log.Information($"AlarmReceiver.OnReceive {action}");
+            Log.ForContext<AlarmReceiver>().Information($"AlarmReceiver.OnReceive {action}");
 
             switch (action)
             {
@@ -35,7 +35,7 @@ internal class AlarmReceiver : BroadcastReceiver
         }
         catch (Exception ex)
         {
-            Log.Error(ex.Message);
+            Log.ForContext<AlarmReceiver>().Error(ex.Message);
         }
     }
 }
