@@ -123,13 +123,12 @@ internal sealed class SyncEventsService : ISyncEventsService
 
     private static IEnumerable<T> Generate<T>(T seed, Func<T, T> next)
     {
-        yield return seed;
         var cur = seed;
 
         while (true)
         {
-            cur = next(cur);
             yield return cur;
+            cur = next(cur);
         }
     }
 }
