@@ -24,14 +24,17 @@ internal sealed class SyncEventsService : ISyncEventsService
 
     public IReadOnlyCollection<(SyncEvent Event, DateTime Time)> SearchSyncEventTimes(SyncEventQuery query)
     {
-        var events = _syncEventsRepository.GetNotRepeatableEvents(query)
-            .Concat(_syncEventsRepository.GetRepeatableLessMonthEvents(query))
-            .Concat(_syncEventsRepository.GetEveryMonthRepeatableEvents(query))
-            .Concat(_syncEventsRepository.GetEveryYearRepeatableEvents(query))
-            .SelectMany(e => GetEventTimes(e, query.Month, query.Year).Select(x => (e, x)))
+        IEnumerable<(SyncEvent Event, DateTime Time)> ExtractTimes(IEnumerable<SyncEvent> syncEvents) => syncEvents
+           .SelectMany(e => EnumerateEventTimes(e, query.Month, query.Year).Select(x => (Event: e, Time: x)))
+           .TakeWhile(x => LastDay(x.Time.Year, x.Time.Month) <= LastDay(query.Year, query.Month));
+
+        var times = ExtractTimes(_syncEventsRepository.GetNotRepeatableEvents(query))
+            .Concat(ExtractTimes(_syncEventsRepository.GetRepeatableLessMonthEvents(query)))
+            .Concat(ExtractTimes(_syncEventsRepository.GetEveryMonthRepeatableEvents(query)))
+            .Concat(ExtractTimes(_syncEventsRepository.GetEveryYearRepeatableEvents(query)))
             .ToList();
 
-        return events;
+        return times;
     }
 
     public Guid AddSyncEvent(SyncEvent syncEvent)
@@ -71,14 +74,14 @@ internal sealed class SyncEventsService : ISyncEventsService
         return false;
     }
 
-    private static IEnumerable<DateTime> GetEventTimes(SyncEvent e, int month, int year) => e.Repeat switch
+    private static IEnumerable<DateTime> EnumerateEventTimes(SyncEvent e, int month, int year) => e.Repeat switch
     {
         SyncRepeat.None => Enumerable.Repeat(e.Start, 1),
-        SyncRepeat.Dayly => Enumerate(e.Start, Dayly, Until(month, year)),
-        SyncRepeat.WorkDays => Enumerate(e.Start, WorkDays, Until(month, year)),
-        SyncRepeat.EveryWeek => Enumerate(e.Start, EveryWeek, Until(month, year)),
-        SyncRepeat.EveryMonth => Enumerate(new(year, month, e.Start.Day), EveryMonth, Until(month, year)),
-        SyncRepeat.EveryYear => Enumerate(new(year, month, e.Start.Day), EveryYear, Until(month, year)),
+        SyncRepeat.Dayly => Generate(e.Start, Dayly),
+        SyncRepeat.WorkDays => Generate(e.Start, WorkDays),
+        SyncRepeat.EveryWeek => Generate(e.Start, EveryWeek),
+        SyncRepeat.EveryMonth => Generate(new DateTime(year, month, e.Start.Day), EveryMonth),
+        SyncRepeat.EveryYear => Generate(new DateTime(year, month, e.Start.Day), EveryYear),
         SyncRepeat.EveryMinute => Enumerable.Repeat(e.Start, 1),
         _ => throw new NotImplementedException(),
     };
@@ -117,22 +120,22 @@ internal sealed class SyncEventsService : ISyncEventsService
 
     private static DateTime LastDay(int year, int month) => new DateTime(year, month, 1).AddMonths(1).AddDays(-1);
 
-    private static Func<DateTime, bool> Until(int month, int year) => x => LastDay(x.Year, x.Month) <= LastDay(year, month);
-
-    private static IEnumerable<DateTime> Enumerate(DateTime seed, Func<DateTime, DateTime> next, Func<DateTime, bool> until)
+    private static IEnumerable<T> Generate<T>(T seed, Func<T, T> next)
     {
+        yield return seed;
         var cur = seed;
-        while (until(cur))
+
+        while (true)
         {
-            yield return cur;
             cur = next(cur);
+            yield return cur;
         }
     }
 
-    private static DateTime FirstAvailable(DateTime since, Func<DateTime, DateTime> next)
+    private static DateTime FirstAvailable(DateTime seed, Func<DateTime, DateTime> next)
     {
         var now = DateTime.Now;
-        var current = since;
+        var current = seed;
 
         while (true)
         {
