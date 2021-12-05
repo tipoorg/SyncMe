@@ -88,18 +88,19 @@ internal sealed class SyncEventsService : ISyncEventsService
 
     private static bool TryGetNearestAlarmTime(SyncEvent syncEvent, out DateTime alarmTime)
     {
+        var now = DateTime.Now;
         var eventDateTime = syncEvent.Start - TimeSpan.FromSeconds((int)syncEvent.Reminder);
         TimeSpan eventTime = eventDateTime.TimeOfDay;
 
         alarmTime = syncEvent.Repeat switch
         {
             SyncRepeat.None => eventDateTime,
-            SyncRepeat.Dayly => FirstAvailable(DateTime.Today.Add(eventTime), Dayly),
-            SyncRepeat.WorkDays => FirstAvailable(DateTime.Today.Add(eventTime), WorkDays),
-            SyncRepeat.EveryWeek => FirstAvailable(DateTime.Today.Add(eventTime), EveryWeek),
-            SyncRepeat.EveryMonth => FirstAvailable(DateTime.Today.Add(eventTime), EveryMonth),
-            SyncRepeat.EveryYear => FirstAvailable(DateTime.Today.Add(eventTime), EveryYear),
-            SyncRepeat.EveryMinute => FirstAvailable(DateTime.Today.Add(eventTime), EveryMinute),
+            SyncRepeat.Dayly => Generate(DateTime.Today.Add(eventTime), Dayly).First(x => x > now),
+            SyncRepeat.WorkDays => Generate(DateTime.Today.Add(eventTime), WorkDays).First(x => x > now),
+            SyncRepeat.EveryWeek => Generate(DateTime.Today.Add(eventTime), EveryWeek).First(x => x > now),
+            SyncRepeat.EveryMonth => Generate(DateTime.Today.Add(eventTime), EveryMonth).First(x => x > now),
+            SyncRepeat.EveryYear => Generate(DateTime.Today.Add(eventTime), EveryYear).First(x => x > now),
+            SyncRepeat.EveryMinute => Generate(DateTime.Today.Add(eventTime), EveryMinute).First(x => x > now),
             _ => throw new NotImplementedException(),
         };
 
@@ -129,20 +130,6 @@ internal sealed class SyncEventsService : ISyncEventsService
         {
             cur = next(cur);
             yield return cur;
-        }
-    }
-
-    private static DateTime FirstAvailable(DateTime seed, Func<DateTime, DateTime> next)
-    {
-        var now = DateTime.Now;
-        var current = seed;
-
-        while (true)
-        {
-            if (current > now)
-                return current;
-
-            current = next(current);
         }
     }
 }
