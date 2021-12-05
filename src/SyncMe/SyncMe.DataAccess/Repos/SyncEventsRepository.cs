@@ -33,7 +33,9 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
         queryable = query.StartMonth is int month ? queryable.Where(x => x.Start.Month == month) : queryable;
         queryable = query.StartYear is int year ? queryable.Where(x => x.Start.Year == year) : queryable;
         
-        return queryable.ToArray();
+        return queryable
+            .OrderBy(x => x.Start)
+            .ToArray();
     }
 
     public SyncEvent AddSyncEvent(SyncEvent syncEvent)
