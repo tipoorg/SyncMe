@@ -9,7 +9,6 @@ internal class AlarmProcessor : IAlarmProcessor
     private readonly INotificationManager _notificationManager;
     private readonly ISyncEventsService _syncEventsService;
     private readonly ISyncNamespaceService _syncNamespaceService;
-    private readonly ISyncAlarmCalculator _syncAlarmCalculator;
     private readonly IConfigRepository _configRepository;
 
     public AlarmProcessor(
@@ -18,7 +17,6 @@ internal class AlarmProcessor : IAlarmProcessor
         INotificationManager notificationManager,
         ISyncEventsService syncEventsService,
         ISyncNamespaceService syncNamespaceService,
-        ISyncAlarmCalculator syncAlarmCalculator,
         IConfigRepository configRepository)
     {
         _alarmService = alarmService;
@@ -26,7 +24,6 @@ internal class AlarmProcessor : IAlarmProcessor
         _notificationManager = notificationManager;
         _syncEventsService = syncEventsService;
         _syncNamespaceService = syncNamespaceService;
-        _syncAlarmCalculator = syncAlarmCalculator;
         _configRepository = configRepository;
     }
 
@@ -45,7 +42,7 @@ internal class AlarmProcessor : IAlarmProcessor
             _notificationManager.Show(pendingAlarm);
         }
 
-        if (_syncAlarmCalculator.TryGetNearestAlarm(syncEvent, out var syncAlarm))
+        if (_syncEventsService.TryGetNearestAlarm(syncEvent, out var syncAlarm))
         {
             _alarmService.SetAlarm(syncAlarm);
         }

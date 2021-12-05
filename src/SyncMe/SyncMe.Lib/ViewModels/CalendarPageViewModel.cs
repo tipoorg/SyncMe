@@ -1,4 +1,4 @@
-﻿using SyncMe.Lib.Services;
+﻿using SyncMe.Lib.Extensions;
 using Xamarin.Plugin.Calendar.Models;
 
 namespace SyncMe.ViewModels;
@@ -21,9 +21,8 @@ public class CalendarPageViewModel : BaseViewModel
 
     private EventCollection LoadEvents(int month, int year)
     {
-        var events = _syncEventsService.SearchSyncEvents(new() { StartMonth = month, StartYear = year })
-            .Where(x => x.Start.Date.Month == month && x.Start.Date.Year == year)
-            .ToEventCollection(k => k.Start.Date, e => new SyncEventViewModel(e));
+        var events = _syncEventsService.SearchSyncEventTimes(new() { Month = month, Year = year })
+            .ToEventCollection(k => k.Time.Date, e => new SyncEventViewModel(e.Event));
 
         return events;
     }

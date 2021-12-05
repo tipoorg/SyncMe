@@ -7,9 +7,10 @@ namespace SyncMe
     public interface ISyncEventsService
     {
         Guid AddSyncEvent(SyncEvent syncEvent);
-        IReadOnlyCollection<SyncEvent> SearchSyncEvents(SyncEventQuery syncEventQuery);
         void RemoveEvents(Expression<Func<SyncEvent, bool>> predicate);
         bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent);
         void TryRemoveInternalEvent(Guid eventId);
+        IReadOnlyCollection<(SyncEvent Event, DateTime Time)> SearchSyncEventTimes(SyncEventQuery syncEventQuery);
+        bool TryGetNearestAlarm(SyncEvent syncEvent, out SyncAlarm syncAlarm);
     }
 }

@@ -2,6 +2,6 @@
 
 public record SyncEventQuery
 {
-    public int? StartMonth { get; init; }
-    public int? StartYear { get; init; }
+    public int Month { get; init; }
+    public int Year { get; init; }
 }

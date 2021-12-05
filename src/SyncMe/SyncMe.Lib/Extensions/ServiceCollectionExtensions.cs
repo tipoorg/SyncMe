@@ -40,7 +40,6 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services
-            .AddSingleton<ISyncAlarmCalculator, SyncAlarmCalculator>()
             .AddSingleton<ISyncEventsService, SyncEventsService>()
             .AddSingleton<ISyncNamespaceService, SyncNamespaceService>()
             .AddSingleton<IAlarmProcessor, AlarmProcessor>();

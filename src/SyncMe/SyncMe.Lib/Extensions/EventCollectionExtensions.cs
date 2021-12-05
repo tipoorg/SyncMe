@@ -1,6 +1,6 @@
 ﻿using Xamarin.Plugin.Calendar.Models;
 
-namespace SyncMe.Lib.Services;
+namespace SyncMe.Lib.Extensions;
 
 public static class EventCollectionExtensions
 {
