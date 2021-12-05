@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
 using LiteDB;
 using SyncMe.Models;
+using SyncMe.Queries;
 
 namespace SyncMe.DataAccess.Repos;
-
 internal sealed class SyncEventsRepository : ISyncEventsRepository
 {
     private readonly ILiteCollection<SyncEvent> _events;
@@ -27,10 +27,13 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
         return result;
     }
 
-    public IReadOnlyCollection<SyncEvent> GetAllSyncEvents()
+    public IReadOnlyCollection<SyncEvent> SearchSyncEvents(SyncEventQuery query)
     {
-        var result = _events.FindAll().ToList();
-        return result;
+        var queryable = _events.Query();
+        queryable = query.StartMonth is int month ? queryable.Where(x => x.Start.Month == month) : queryable;
+        queryable = query.StartYear is int year ? queryable.Where(x => x.Start.Year == year) : queryable;
+        
+        return queryable.ToArray();
     }
 
     public SyncEvent AddSyncEvent(SyncEvent syncEvent)

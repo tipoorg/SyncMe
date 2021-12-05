@@ -1,4 +1,5 @@
-﻿using Xamarin.Plugin.Calendar.Models;
+﻿using SyncMe.Lib.Services;
+using Xamarin.Plugin.Calendar.Models;
 
 namespace SyncMe.ViewModels;
 
@@ -14,27 +15,29 @@ public class CalendarPageViewModel : BaseViewModel
 
     public void InitEventsCollection()
     {
-        Events = LoadEvents();
+        Events.Clear();
+        Events.AddSafe(LoadEvents(CurrentMonthYear.Month, CurrentMonthYear.Year));
     }
 
-    private EventCollection LoadEvents()
+    private EventCollection LoadEvents(int month, int year)
     {
-        var events = _syncEventsService.GetAllSyncEvents()
-            .ToLookup(k => k.Start.Date, e => new SyncEventViewModel(e));
+        var events = _syncEventsService.SearchSyncEvents(new() { StartMonth = month, StartYear = year })
+            .Where(x => x.Start.Date.Month == month && x.Start.Date.Year == year)
+            .ToEventCollection(k => k.Start.Date, e => new SyncEventViewModel(e));
 
-        var result = new EventCollection();
-        foreach (var e in events)
+        return events;
+    }
+
+    private DateTime _currentMonthYear = DateTime.Now;
+    public DateTime CurrentMonthYear
+    {
+        get => _currentMonthYear;
+        set
         {
-            result.Add(e.Key, e.ToList());
+            Events.AddSafe(LoadEvents(value.Month, value.Year));
+            ChangeProperty(ref _currentMonthYear, value, nameof(CurrentMonthYear));
         }
-
-        return result;
     }
 
-    private EventCollection _events;
-    public EventCollection Events
-    {
-        get => _events;
-        set => ChangeProperty(ref _events, value, nameof(Events));
-    }
+    public EventCollection Events { get; } = new EventCollection();
 }

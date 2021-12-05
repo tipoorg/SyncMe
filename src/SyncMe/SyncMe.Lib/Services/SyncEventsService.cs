@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using SyncMe.Models;
+using SyncMe.Queries;
 
 namespace SyncMe.Lib.Services;
 
@@ -24,9 +25,9 @@ internal sealed class SyncEventsService : ISyncEventsService
         return _syncEventsRepository.TryGetSyncEvent(id, out syncEvent);
     }
 
-    public IReadOnlyCollection<SyncEvent> GetAllSyncEvents()
+    public IReadOnlyCollection<SyncEvent> SearchSyncEvents(SyncEventQuery syncEventQuery)
     {
-        return _syncEventsRepository.GetAllSyncEvents();
+        return _syncEventsRepository.SearchSyncEvents(syncEventQuery);
     }
 
     public Guid AddSyncEvent(SyncEvent syncEvent)

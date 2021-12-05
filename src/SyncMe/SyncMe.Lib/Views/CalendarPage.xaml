@@ -108,6 +108,7 @@
                         Grid.ColumnSpan="2"
                         Events="{Binding Events}"
                         DayTappedCommand="{Binding DayTappedCommand}"
+                        MonthYear="{Binding CurrentMonthYear}"
                         Style="{StaticResource CalendarStyle}"
                         ShowMonthPicker="False"
                         ShowYearPicker="False"

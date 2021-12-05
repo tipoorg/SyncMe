@@ -1,11 +1,12 @@
 ﻿using System.Linq.Expressions;
 using SyncMe.Models;
+using SyncMe.Queries;
 
 namespace SyncMe;
 
 public interface ISyncEventsRepository
 {
-    IReadOnlyCollection<SyncEvent> GetAllSyncEvents();
+    IReadOnlyCollection<SyncEvent> SearchSyncEvents(SyncEventQuery query);
     bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent);
     SyncEvent AddSyncEvent(SyncEvent syncEvent);
     void RemoveEvents(Expression<Func<SyncEvent, bool>> predicate);
