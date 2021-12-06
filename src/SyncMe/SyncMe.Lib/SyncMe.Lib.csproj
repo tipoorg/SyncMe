@@ -10,8 +10,13 @@
 	<ItemGroup>
 		<PackageReference Include="dotMorten.Xamarin.Forms.AutoSuggestBox" Version="1.1.1" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Graph" Version="3.35.0" />
+		<PackageReference Include="Plugin.Permissions" Version="6.0.1" />
+		<PackageReference Include="Serilog" Version="2.10.0" />
+		<PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="System.Reactive" Version="5.0.0" />
 		<PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
 		<PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
@@ -51,5 +56,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\SyncMe.CalendarProviders\SyncMe.CalendarProviders.csproj" />
 		<ProjectReference Include="..\SyncMe.Common\SyncMe.Common.csproj" />
+		<ProjectReference Include="..\SyncMe.DataAccess\SyncMe.DataAccess.csproj" />
 	</ItemGroup>
 </Project>

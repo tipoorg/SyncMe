@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.OS;
+using Serilog;
 using Xamarin.Forms.Platform.Android;
 
 namespace SyncMe.Droid;
@@ -27,7 +28,7 @@ public class SplashActivity : FormsAppCompatActivity
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex);
+            Log.ForContext<SplashActivity>().Error(ex.Message);
         }
     }
 }

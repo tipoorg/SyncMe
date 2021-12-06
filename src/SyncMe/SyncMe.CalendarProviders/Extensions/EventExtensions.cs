@@ -11,9 +11,9 @@ public static class EventExtensions
         ExternalEmail = username,
         Title = e.Subject,
         Description = e.Body.Content,
-        Namespace = new Namespace { Title = "" },
-        Schedule = new SyncSchedule { Repeat = SyncRepeat.None },
-        Alert = new SyncAlert { Reminder = SyncReminder.AtEventTime },
+        NamespaceKey = Namespace.Root.Key,
+        Repeat = SyncRepeat.None,
+        Reminder = SyncReminder.AtEventTime,
         Status = SyncStatus.Active,
         Start = DateTime.Parse(e.Start.DateTime).ToLocalTime(),
         End = DateTime.Parse(e.End.DateTime).ToLocalTime()

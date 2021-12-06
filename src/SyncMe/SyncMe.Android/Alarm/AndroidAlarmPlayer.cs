@@ -1,38 +1,36 @@
-﻿using Android.Content;
-using Android.Media;
+﻿using Android.Media;
+using Microsoft.Extensions.Logging;
+using AndroidApp = Android.App.Application;
 
 namespace SyncMe.Droid.Alarm;
 
-internal sealed class AndroidAlarmPlayer : IAndroidAlarmPlayer
+internal sealed class AndroidAlarmPlayer : IAlarmPlayer
 {
     private readonly MediaPlayer _mediaPlayer;
-    private readonly INotificationsSwitcherRepository _notificationsSwitcherRepository;
+    private readonly ILogger<AndroidAlarmPlayer> _logger;
 
-    public AndroidAlarmPlayer(INotificationsSwitcherRepository notificationsSwitcherRepository)
+    public AndroidAlarmPlayer(ILogger<AndroidAlarmPlayer> logger)
     {
         _mediaPlayer = new MediaPlayer();
-        _notificationsSwitcherRepository = notificationsSwitcherRepository;
-        _notificationsSwitcherRepository.OnStateChanged += OnStateChanged;
+        _logger = logger;
     }
 
-    public void PlayAlarm(Context context)
+    public void PlayAlarm()
     {
-        if (_notificationsSwitcherRepository.State)
-        {
-            var soundUri = RingtoneManager.GetActualDefaultRingtoneUri(context, RingtoneType.Alarm);
+        var soundUri = RingtoneManager.GetActualDefaultRingtoneUri(AndroidApp.Context, RingtoneType.Alarm);
 
-            try
-            {
-                _mediaPlayer.Reset();
-                _mediaPlayer.SetDataSource(context, soundUri);
-                _mediaPlayer.SetAudioAttributes(GetAudio());
-                _mediaPlayer.Prepare();
-                _mediaPlayer.Start();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
+        try
+        {
+            _mediaPlayer.Reset();
+            _mediaPlayer.SetDataSource(AndroidApp.Context, soundUri);
+            _mediaPlayer.SetAudioAttributes(GetAudio());
+            _mediaPlayer.Prepare();
+            _mediaPlayer.Start();
+            _logger.LogInformation("Alarm played");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
         }
     }
 
@@ -46,11 +44,5 @@ internal sealed class AndroidAlarmPlayer : IAndroidAlarmPlayer
         return new AudioAttributes.Builder()
             .SetUsage(AudioUsageKind.Alarm)
             .Build();
-    }
-
-    private void OnStateChanged(object sender, bool newState)
-    {
-        if (newState is false)
-            _mediaPlayer.Stop();
     }
 }
