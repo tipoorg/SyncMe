@@ -20,7 +20,7 @@ public partial class AppDelegate : Xamarin.Forms.Platform.iOS.FormsApplicationDe
     public override bool FinishedLaunching(UIApplication app, NSDictionary options)
     {
         Xamarin.Forms.Forms.Init();
-        LoadApplication(Bootstrapper.CreateApp());
+        LoadApplication(IOSStarter.CreateApp());
 
         return base.FinishedLaunching(app, options);
     }
