@@ -1,17 +1,28 @@
-﻿namespace SyncMe.Lib.Services;
+﻿using SyncMe.Models;
+
+namespace SyncMe.Lib.Services;
 
 internal class SyncNamespaceService : ISyncNamespaceService
 {
     private readonly ISyncNamespaceRepository _namespaceRepository;
+    private readonly ISyncEventsRepository _syncEventsRepository;
 
-    public SyncNamespaceService(ISyncNamespaceRepository namespaceRepository)
+    public SyncNamespaceService(
+        ISyncNamespaceRepository namespaceRepository,
+        ISyncEventsRepository syncEventsRepository)
     {
         _namespaceRepository = namespaceRepository;
+        _syncEventsRepository = syncEventsRepository;
     }
 
     public void Add(string fullName)
     {
-        _namespaceRepository.AddSyncNamespace(fullName, !ParentIsSuspended(fullName));
+        _namespaceRepository.TryAddSyncNamespace(fullName, !ParentIsSuspended(fullName));
+    }
+
+    public IReadOnlyCollection<Namespace> GetAllSyncNamespaces()
+    {
+        return _namespaceRepository.GetAllSyncNamespaces().Values;
     }
 
     public IReadOnlyCollection<(string FullName, bool IsActive, bool HasChildren)> GetAll(string namespaceName)
@@ -74,7 +85,11 @@ internal class SyncNamespaceService : ISyncNamespaceService
         var namespaces = _namespaceRepository.GetAllSyncNamespaces();
         while (namespaces.Any(s => s.Key.Contains(fullName)))
         {
-            namespaces.Remove(namespaces.First(s => s.Key.Contains(fullName)).Key);
+            string namespaceKey = namespaces.First(s => s.Key.Contains(fullName)).Key;
+            namespaces.Remove(namespaceKey);
+            _namespaceRepository.RemoveNamespace(namespaceKey);
+            var eventsUnderNamespace = _syncEventsRepository.GetByNamespace(namespaceKey);
+            _syncEventsRepository.UpdateEvents(eventsUnderNamespace.Select(x => x with { NamespaceKey = Namespace.Root.Key }));
         }
     }
 
@@ -85,7 +100,7 @@ internal class SyncNamespaceService : ISyncNamespaceService
             return syncNamespace.IsActive || DateTime.Now > syncNamespace.TurnOnDate;
         }
 
-        return true;
+        return false;
     }
 }
 

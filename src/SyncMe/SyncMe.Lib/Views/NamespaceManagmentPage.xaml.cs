@@ -9,8 +9,6 @@ namespace SyncMe.Views;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class NamespaceManagmentPage : ContentPage
 {
-    public ObservableCollection<NamespaceViewModel> Namespaces { get; set; }
-
     private readonly ISyncNamespaceService _namespaceService;
 
     public NamespaceManagmentPage(ISyncNamespaceService namespaceRepository)
@@ -18,16 +16,35 @@ public partial class NamespaceManagmentPage : ContentPage
         InitializeComponent();
         _namespaceService = namespaceRepository;
 
-        Namespaces = new ObservableCollection<NamespaceViewModel>(_namespaceService
-            .GetFirstLevel()
-            .Select(s => new NamespaceViewModel(s.FullName, s.IsActive, s.HasChilde)));
-
         NamespaceViewModel.TomorrowClicked.Subscribe(MoveToSuspended);
         NamespaceViewModel.RestoreClicked.Subscribe(MoveToActive);
         NamespaceViewModel.ExpandClicked.Subscribe(ProcessExpanding);
         NamespaceViewModel.NewItemClicked.Subscribe(AddNewNamespace);
         NamespaceViewModel.RemoveClicked.Subscribe(RemoveItemWithChildrens);
         BindingContext = this;
+    }
+
+    private ObservableCollection<NamespaceViewModel> _namespaces;
+    public ObservableCollection<NamespaceViewModel> Namespaces
+    {
+        get => _namespaces;
+        set
+        {
+            if (_namespaces != value)
+            {
+                _namespaces = value;
+                OnPropertyChanged(nameof(Namespaces));
+            }
+        }
+    }
+
+    protected override void OnAppearing()
+    {
+        Namespaces = new ObservableCollection<NamespaceViewModel>(_namespaceService
+            .GetFirstLevel()
+            .Select(s => new NamespaceViewModel(s.FullName, s.IsActive, s.HasChilde)));
+
+        base.OnAppearing();
     }
 
     private void activeNamespaces_ItemTapped(object sender, ItemTappedEventArgs e)

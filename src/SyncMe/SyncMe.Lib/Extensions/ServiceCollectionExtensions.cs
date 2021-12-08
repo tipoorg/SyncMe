@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SyncMe.Lib.Repos;
+using Serilog;
 using SyncMe.Lib.Services;
 using SyncMe.ViewModels;
 using SyncMe.Views;
@@ -8,13 +8,20 @@ namespace SyncMe.Lib.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    public static IServiceCollection AddPlatformSpecific(this IServiceCollection services, SyncMeBootstrapper bootstrapper)
+    {
+        bootstrapper
+            .AddPlatformSpecific(services);
+
+        return services;
+    }
+
     public static IServiceCollection AddSyncMeLib(this IServiceCollection services)
     {
         services
             .AddScoped<AppShell>()
             .AddViews()
-            .AddServices()
-            .AddRepositories();
+            .AddServices();
 
         return services;
     }
@@ -33,20 +40,22 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services
-            .AddSingleton<ISyncAlarmCalculator, SyncAlarmCalculator>()
             .AddSingleton<ISyncEventsService, SyncEventsService>()
-            .AddSingleton<ISyncNamespaceService, SyncNamespaceService>();
+            .AddSingleton<ISyncNamespaceService, SyncNamespaceService>()
+            .AddSingleton<IAlarmProcessor, AlarmProcessor>();
 
         return services;
     }
 
-
-    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    public static IServiceCollection AddSyncMeLogging(this IServiceCollection services, SyncMeBootstrapper bootstrapper, string logsFolder)
     {
-        services
-            .AddSingleton<ISyncEventsRepository, SyncEventsRepository>()
-            .AddSingleton<ISyncNamespaceRepository, SyncNamespaceRepository>()
-            .AddSingleton<INotificationsSwitcherRepository, NotificationsSwitcherRepository>();
+        Log.Logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .WriteTo.SyncMeFile(logsFolder)
+            .WriteTo.PlatformSpecificLog(bootstrapper)
+            .CreateLogger();
+
+        services.AddLogging(builder => builder.AddSerilog());
 
         return services;
     }

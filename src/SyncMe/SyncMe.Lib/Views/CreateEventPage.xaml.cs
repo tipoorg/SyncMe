@@ -10,25 +10,25 @@ namespace SyncMe.Views;
 
 public sealed partial class CreateEventPage : ContentPage, IDisposable
 {
-    private readonly ISyncNamespaceRepository _namespaceRepository;
+    private readonly ISyncNamespaceService _namespaceService;
     private readonly ISyncEventsService _syncEventsService;
-    private readonly Dictionary<string, Namespace> _namespaces;
+    private readonly IReadOnlyCollection<Namespace> _namespaces;
     private readonly IDisposable _addEventSubscription;
     private readonly SyncEventViewModel _eventModel;
 
-    public CreateEventPage(ISyncEventsService syncEventsService, ISyncNamespaceRepository namespaceRepository)
+    public CreateEventPage(ISyncEventsService syncEventsService, ISyncNamespaceService namespaceService)
     {
         _eventModel = new SyncEventViewModel();
         InitializeComponent();
-        _namespaceRepository = namespaceRepository;
+        _namespaceService = namespaceService;
         _syncEventsService = syncEventsService;
-        _namespaces = _namespaceRepository.GetAllSyncNamespaces();
+        _namespaces = _namespaceService.GetAllSyncNamespaces();
         BindingContext = _eventModel;
 
         _addEventSubscription = Observable
             .FromEventPattern(AddEvent, nameof(Button.Clicked))
             .SelectMany(x => AddNewSyncEvent())
-            .Do(x => _namespaceRepository.AddSyncNamespace(_eventModel.Namespace))
+            .Do(x => _namespaceService.Add(_eventModel.Namespace))
             .Subscribe(async x => await NavigateToCalendar());
     }
 

@@ -20,7 +20,7 @@ public class MainActivity : FormsAppCompatActivity
         Xamarin.Essentials.Platform.Init(this, savedInstanceState);
         Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-        var app = Bootstrapper.CreateApp();
+        var app = AndroidStarter.CreateApp();
         LoadApplication(app);
 
         App.AuthUIParent = this;

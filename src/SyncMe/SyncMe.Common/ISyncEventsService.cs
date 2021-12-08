@@ -1,14 +1,16 @@
-﻿using SyncMe.Models;
+﻿using System.Linq.Expressions;
+using SyncMe.Models;
+using SyncMe.Queries;
 
 namespace SyncMe
 {
     public interface ISyncEventsService
     {
-        event EventHandler OnSyncEventsUpdate;
-
         Guid AddSyncEvent(SyncEvent syncEvent);
-        IReadOnlyCollection<SyncEvent> GetAllSyncEvents();
-        void RemoveEvents(Func<SyncEvent, bool> predicate);
+        void RemoveEvents(Expression<Func<SyncEvent, bool>> predicate);
         bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent);
+        void TryRemoveInternalEvent(Guid eventId);
+        IReadOnlyCollection<(SyncEvent Event, DateTime Time)> SearchSyncEventTimes(SyncEventQuery syncEventQuery);
+        bool TryGetNearestAlarm(SyncEvent syncEvent, out SyncAlarm syncAlarm);
     }
 }
