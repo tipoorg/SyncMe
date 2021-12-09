@@ -8,6 +8,22 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\icon_about.png" />
+	  <None Remove="Resources\icon_identities.png" />
+	  <None Remove="Resources\icon_namespaces.png" />
+	  <None Remove="Resources\icon_open_calendar.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\icon_about.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="Resources\icon_identities.png" />
+	  <EmbeddedResource Include="Resources\icon_namespaces.png" />
+	  <EmbeddedResource Include="Resources\icon_open_calendar.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="dotMorten.Xamarin.Forms.AutoSuggestBox" Version="1.1.1" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />

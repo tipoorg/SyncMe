@@ -3,6 +3,7 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:SyncMe"
        xmlns:views="clr-namespace:SyncMe.Views"
+       xmlns:markup="clr-namespace:SyncMe.Lib.MarkupExtensions"
        x:Class="SyncMe.AppShell">
     <!-- Display a bottom tab bar containing two tabs -->
     <Shell.Resources>
@@ -17,17 +18,17 @@
     </Shell.Resources>
     <TabBar>
         <ShellContent Title="Calendar"
-                      Icon="icon_open_calendar.png"
+                      Icon="{markup:ImageExtension SharedSource=icon_open_calendar.png}"
                       ContentTemplate="{local:DIDataTemplate Type={x:Type views:CalendarPage}}"
                       Route="calendar"
                       Style="{StaticResource BaseStyle}"/>
         <ShellContent Title="Namespaces"
-                      Icon="icon_namespaces.png"
+                      Icon="{markup:ImageExtension SharedSource=icon_namespaces.png}"
                       ContentTemplate="{local:DIDataTemplate Type={x:Type views:NamespaceManagmentPage}}"
                       Route="namespace"
                       Style="{StaticResource BaseStyle}"/>
         <ShellContent Title="Identities"
-                      Icon="icon_identities.png"
+                      Icon="{markup:ImageExtension SharedSource=icon_identities.png}"
                       ContentTemplate="{local:DIDataTemplate Type={x:Type views:IdentityProvidersPage}}"
                       Route="identities"
                       Style="{StaticResource BaseStyle}"/>

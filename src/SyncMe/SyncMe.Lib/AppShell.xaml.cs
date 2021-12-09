@@ -8,7 +8,11 @@ public partial class AppShell : Shell
     public AppShell()
     {
         InitializeComponent();
+        AskAndroidStoragePermissions();
+    }
 
+    private void AskAndroidStoragePermissions()
+    {
         Task.Run(async () =>
         {
             try
