@@ -46,7 +46,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
             .ObserveOn(SynchronizationContext.Current)
             .Subscribe(x =>
             {
-                if (!Identities.Any(i => i.Name == x.username))
+                if (!Identities.Any(i => i.Name == x.username) && !string.IsNullOrEmpty(x.username))
                     Identities.Add(new Identity(x.username));
             });
     }
