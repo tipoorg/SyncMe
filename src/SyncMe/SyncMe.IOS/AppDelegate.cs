@@ -20,6 +20,7 @@ public partial class AppDelegate : Xamarin.Forms.Platform.iOS.FormsApplicationDe
     public override bool FinishedLaunching(UIApplication app, NSDictionary options)
     {
         Xamarin.Forms.Forms.Init();
+        App.iOSKeychainSecurityGroup = NSBundle.MainBundle.BundleIdentifier;
         LoadApplication(IOSStarter.CreateApp());
 
         return base.FinishedLaunching(app, options);

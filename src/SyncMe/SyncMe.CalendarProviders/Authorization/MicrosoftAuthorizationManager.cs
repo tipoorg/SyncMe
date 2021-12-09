@@ -8,11 +8,10 @@ namespace SyncMe.CalendarProviders.Authorization;
 public class MicrosoftAuthorizationManager
 {
     public string[] Scopes => new[] { "Calendars.Read" };
-    public string? iOSKeychainSecurityGroup { get; private set; } = null;
     public IPublicClientApplication PCA { get; private set; }
     public static IEnumerable<IAccount> CurrentAccounts { get; private set; } = new List<IAccount>();
 
-    public MicrosoftAuthorizationManager()
+    public MicrosoftAuthorizationManager(string iOSKeychainSecurityGroup)
     {
         var builder = PublicClientApplicationBuilder
         .Create(OAuthSettings.ApplicationId)

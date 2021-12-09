@@ -10,6 +10,8 @@ public partial class App : Application, INotifyPropertyChanged
     private readonly ILogger<App> _logger;
 
     public static object AuthUIParent { get; set; }
+    public static string iOSKeychainSecurityGroup { get; set; }
+
     private IDisposable _appScope;
 
     public App(IServiceProvider serviceProvider)

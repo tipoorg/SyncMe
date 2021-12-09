@@ -69,7 +69,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
     private async Task LoadAllEventsAsync()
     {
-        var manager = new MicrosoftAuthorizationManager();
+        var manager = new MicrosoftAuthorizationManager(App.iOSKeychainSecurityGroup);
         var accountsToResync = MicrosoftAuthorizationManager.CurrentAccounts.Select(a => a.Username).ToList();
         _syncEventsService.RemoveEvents(e => accountsToResync.Contains(e.ExternalEmail));
         foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
@@ -89,7 +89,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
     private async Task<Optional<(string username, IEnumerable<SyncEvent> events)>> FetchEventsAsync(string username)
     {
         var outlookNamespace = new Namespace { Key = "Outlook", IsActive = true };
-        var manager = new MicrosoftAuthorizationManager();
+        var manager = new MicrosoftAuthorizationManager(App.iOSKeychainSecurityGroup);
 
         if (username is null)
         {
