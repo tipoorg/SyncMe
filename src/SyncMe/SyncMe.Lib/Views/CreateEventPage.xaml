@@ -17,14 +17,13 @@
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="AddEvent" Text="Add event"/>
-        <ToolbarItem Text="Cancel" Clicked="CancelEvent"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Spacing="20">
                 <StackLayout>
-                    <forms:AutoSuggestBox PlaceholderText="Namespace" PropertyChanged="ValidateButtonState" TextChanged="OnTextChanged" SuggestionChosen="OnSuggestionChosen" Margin="5,0,5,0"/>
-                    <Entry Text="{Binding Title}" Placeholder="Title" PropertyChanged="ValidateButtonState" Margin="5,0,5,0"/>
+                    <forms:AutoSuggestBox PlaceholderText="Namespace" TextChanged="OnTextChanged" SuggestionChosen="OnSuggestionChosen" Margin="5,0,5,0"/>
+                    <Entry Text="{Binding Title}" Placeholder="Title" Margin="5,0,5,0"/>
                 </StackLayout>
                 <StackLayout>
                     <Button Text="{Binding ScheduleButtonText}" Clicked="OnConfigureScheduleClicked" Style="{StaticResource ButtonStyle}"/>

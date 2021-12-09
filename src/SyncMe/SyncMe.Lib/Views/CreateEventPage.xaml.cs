@@ -37,7 +37,6 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         if (sender is AutoSuggestBox autoSuggest)
         {
             autoSuggest.Text = $"{e.SelectedItem}";
-            ValidateButtonState();
         }
     }
 
@@ -52,8 +51,6 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
                 .Where(x => x.StartsWith(autoSuggest.Text, StringComparison.OrdinalIgnoreCase))
                 .Distinct()
                 .ToArray();
-
-            ValidateButtonState();
         }
     }
 
@@ -68,35 +65,10 @@ public sealed partial class CreateEventPage : ContentPage, IDisposable
         return guid;
     }
 
-    private async void CancelEvent(object sender, EventArgs e)
-    {
-        if (!string.IsNullOrEmpty(_eventModel.Namespace))
-        {
-            if (await DisplayAlert(null, "Discard this event?", "Discard", "Keep editing"))
-            {
-                await NavigateToCalendar();
-            }
-        }
-    }
-
     private static async Task<Unit> NavigateToCalendar()
     {
         await Shell.Current.GoToAsync("//calendar");
         return Unit.Default;
-    }
-
-    private void ValidateButtonState(object sender, PropertyChangedEventArgs e) => ValidateButtonState();
-
-    private void ValidateButtonState()
-    {
-        if (!string.IsNullOrEmpty(_eventModel.Namespace) && !string.IsNullOrEmpty(_eventModel.Title))
-        {
-            AddEvent.IsEnabled = true;
-        }
-        else
-        {
-            AddEvent.IsEnabled = false;
-        }
     }
 
     public void Dispose() => _addEventSubscription.Dispose();
