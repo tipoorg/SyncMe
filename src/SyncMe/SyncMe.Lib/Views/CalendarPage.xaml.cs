@@ -1,5 +1,4 @@
-﻿using SyncMe.Models;
-using SyncMe.ViewModels;
+﻿using SyncMe.ViewModels;
 using Xamarin.Forms.Xaml;
 
 namespace SyncMe.Views;
@@ -10,21 +9,17 @@ public partial class CalendarPage : ContentPage
     private readonly CalendarPageViewModel _viewModel;
     private readonly ISyncEventsService _syncEventsService;
     private readonly ISyncNamespaceService _namespaceService;
-    private readonly IConfigRepository _configRepository;
 
     public CalendarPage(
         CalendarPageViewModel viewModel,
         ISyncEventsService syncEventsService,
-        ISyncNamespaceService namespaceService,
-        IConfigRepository configRepository)
+        ISyncNamespaceService namespaceService)
     {
         InitializeComponent();
         BindingContext = viewModel;
         _viewModel = viewModel;
         _syncEventsService = syncEventsService;
         _namespaceService = namespaceService;
-        _configRepository = configRepository;
-        SoundToggle.IsToggled = !_configRepository.Get(ConfigKey.IsMute);
         AddEvent.Clicked += AddEvent_Clicked;
         year.BindingContext = Calendar1;
     }
@@ -47,10 +42,5 @@ public partial class CalendarPage : ContentPage
             _syncEventsService.TryRemoveInternalEvent(eventId);
             _viewModel.InitEventsCollection();
         }
-    }
-
-    private void OnSoundToggled(object sender, ToggledEventArgs e)
-    {
-        _configRepository.Set(ConfigKey.IsMute, !e.Value);
     }
 }

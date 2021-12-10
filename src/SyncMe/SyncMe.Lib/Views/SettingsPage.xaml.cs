@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using SyncMe.Models;
 using Xamarin.Essentials;
 using Xamarin.Forms.Xaml;
 
@@ -10,16 +11,20 @@ public record LogFile(string Name);
 public partial class SettingsPage : ContentPage
 {
     private readonly IPathProvider _pathProvider;
+    private readonly IConfigRepository _configRepository;
 
     public ObservableCollection<LogFile> Logs { get; } = new ObservableCollection<LogFile>();
 
     public string CurrentBuild => VersionTracking.CurrentBuild;
     public string CurrentVersion => VersionTracking.CurrentVersion;
 
-    public SettingsPage(IPathProvider pathProvider)
+    public SettingsPage(IPathProvider pathProvider,
+                        IConfigRepository configRepository)
     {
         InitializeComponent();
         _pathProvider = pathProvider;
+        _configRepository = configRepository;
+        SoundToggle.On = !_configRepository.Get(ConfigKey.IsMute);
         BindingContext = this;
 
         if (Directory.Exists(_pathProvider.SyncMeLogsFolder))
@@ -39,12 +44,20 @@ public partial class SettingsPage : ContentPage
 
     private void OnLogFileRemoved(object sender, EventArgs e)
     {
-        if (sender is SwipeItem { CommandParameter: LogFile logFile } && 
-            Path.Combine(_pathProvider.SyncMeLogsFolder, logFile.Name) is string logFilePath && 
+        if (sender is SwipeItem { CommandParameter: LogFile logFile } &&
+            Path.Combine(_pathProvider.SyncMeLogsFolder, logFile.Name) is string logFilePath &&
             File.Exists(logFilePath))
         {
             File.Delete(logFilePath);
             Logs.Remove(Logs.First(x => x.Name.Equals(Path.GetFileName(logFilePath))));
+        }
+    }
+
+    private void OnSoundTapped(object sender, EventArgs e)
+    {
+        if (sender is SwitchCell switchCell)
+        {
+            _configRepository.Set(ConfigKey.IsMute, !switchCell.On);
         }
     }
 }

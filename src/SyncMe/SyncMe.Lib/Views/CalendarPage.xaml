@@ -7,14 +7,6 @@
              Title="Calendar">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style x:Key="NotificationStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
-                <Setter Property="HorizontalTextAlignment" Value="Start"/>
-                <Setter Property="FontSize" Value="Large"/>
-                <Setter Property="Margin" Value="10,0,0,0"/>
-
-            </Style>
-
             <Style x:Key="TimeStyle" TargetType="Label">
                 <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
@@ -61,15 +53,6 @@
                 <Setter Property="BorderColor" Value="{StaticResource epamBlue}"/>
                 <Setter Property="Margin" Value="8,8,8,8"/>
             </Style>
-            <Style x:Key="MinorButtonStyle" TargetType="Button">
-                <Setter Property="VerticalOptions" Value="Center"/>
-                <Setter Property="HorizontalOptions" Value="Center"/>
-                <Setter Property="WidthRequest" Value="20"/>
-                <Setter Property="HeightRequest" Value="20"/>
-                <Setter Property="CornerRadius" Value="100"/>
-                <Setter Property="BackgroundColor" Value="White"/>
-            </Style>
-
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -86,7 +69,6 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="20*"/>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Grid.Column="0" Text="Sound"  Style="{StaticResource NotificationStyle}"></Label>
 
                     <Label Grid.Row="1" FontSize="Medium" Style="{StaticResource YearMonthStyle}" Grid.Column="0" Grid.ColumnSpan="2" x:Name="year"  HorizontalOptions="Center" IsVisible="{Binding CalendarSectionShown}">
                         <Label.FormattedText>
@@ -141,15 +123,6 @@
                 Style="{StaticResource FloadButtonStyle}"
                 AbsoluteLayout.LayoutBounds="0.93, 0.94, 50, 50"
                 AbsoluteLayout.LayoutFlags="PositionProportional" />
-            <Switch 
-                x:Name="SoundToggle"
-                AbsoluteLayout.LayoutBounds="1, 0, 0.2, 0.1"
-                AbsoluteLayout.LayoutFlags="SizeProportional"
-                VerticalOptions="End"
-                Style="{StaticResource ToggleButtonStyle}"
-                Toggled="OnSoundToggled"
-                IsVisible="{Binding CalendarSectionShown}" />
-
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
