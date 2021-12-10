@@ -28,7 +28,6 @@
             <Style x:Key="YearMonthStyle" TargetType="Label">
                 <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
-                <Setter Property="Margin" Value="0, 10, 0, 10"/>
             </Style>
             <Style x:Key="FloadButtonStyle" TargetType="Button">
                 <Setter Property="HeightRequest" Value="64"/>
@@ -66,11 +65,12 @@
                         <ColumnDefinition Width="5*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="20*"/>
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Row="0" FontSize="Medium" Style="{StaticResource YearMonthStyle}" Grid.Column="0" Grid.ColumnSpan="2" x:Name="year"  HorizontalOptions="Center" IsVisible="{Binding CalendarSectionShown}">
+                    <Label Grid.Row="1" FontSize="Medium" Style="{StaticResource YearMonthStyle}" Grid.Column="0" Grid.ColumnSpan="2" x:Name="year"  HorizontalOptions="Center" IsVisible="{Binding CalendarSectionShown}">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="{Binding MonthText}"/>
@@ -82,7 +82,7 @@
 
                     <controls:Calendar 
                         x:Name="Calendar1"
-                        Grid.Row="1"  
+                        Grid.Row="2"  
                         Grid.Column="0" 
                         Grid.ColumnSpan="2"
                         Events="{Binding Events}"
