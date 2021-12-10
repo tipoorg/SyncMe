@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel;
+using Xamarin.Essentials;
 
 namespace SyncMe;
 
@@ -19,6 +20,8 @@ public partial class App : Application, INotifyPropertyChanged
         InitializeComponent();
         _serviceProvider = serviceProvider;
         _logger = serviceProvider.GetRequiredService<ILogger<App>>();
+
+        VersionTracking.Track();
     }
 
     protected override void OnStart()

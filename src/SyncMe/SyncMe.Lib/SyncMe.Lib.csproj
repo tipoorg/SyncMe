@@ -12,6 +12,11 @@
 	  <None Remove="Resources\icon_identities.png" />
 	  <None Remove="Resources\icon_namespaces.png" />
 	  <None Remove="Resources\icon_open_calendar.png" />
+	  <None Remove="Resources\icon_trash.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\icon_settings.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -21,6 +26,7 @@
 	  <EmbeddedResource Include="Resources\icon_identities.png" />
 	  <EmbeddedResource Include="Resources\icon_namespaces.png" />
 	  <EmbeddedResource Include="Resources\icon_open_calendar.png" />
+	  <EmbeddedResource Include="Resources\icon_trash.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -55,6 +61,9 @@
 		<Compile Update="Views\NamespaceManagmentPage.xaml.cs">
 			<DependentUpon>NamespaceManagmentPage.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\SettingsPage.xaml.cs">
+		  <DependentUpon>SettingsPage.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -66,6 +75,9 @@
 	<ItemGroup>
 		<EmbeddedResource Update="Views\NamespaceManagmentPage.xaml">
 			<Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Views\SettingsPage.xaml">
+		  <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 		</EmbeddedResource>
 	</ItemGroup>
 

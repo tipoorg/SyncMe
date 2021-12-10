@@ -73,10 +73,6 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="{markup:ImageExtension SharedSource=icon_about.png}" Clicked="OnSettingsClicked" />
-    </ContentPage.ToolbarItems>
-
     <ContentPage.Content>
         <AbsoluteLayout>
             <StackLayout>
@@ -120,7 +116,7 @@
                                     <SwipeView BackgroundColor="White">
                                         <SwipeView.RightItems>
                                             <SwipeItem
-                                                IconImageSource="icon_trash.png"
+                                                IconImageSource="{markup:ImageExtension SharedSource=icon_trash.png}"
                                                 IsVisible="{Binding IsDeleteButtonVisible}"
                                                 Clicked="OnRemoveClicked" 
                                                 BackgroundColor="LightPink"

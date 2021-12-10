@@ -198,9 +198,6 @@
     <AndroidResource Include="Resources\drawable\background.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_trash.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\icon_arrow_major.png" />
   </ItemGroup>
   <ItemGroup>

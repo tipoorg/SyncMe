@@ -32,7 +32,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<CalendarPage>()
             .AddScoped<CalendarPageViewModel>()
             .AddScoped<NamespaceManagmentPage>()
-            .AddScoped<IdentityProvidersPage>();
+            .AddScoped<IdentityProvidersPage>()
+            .AddScoped<SettingsPage>();
 
         return services;
     }
