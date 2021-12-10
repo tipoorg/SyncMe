@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SyncMe.Configuration;
 using SyncMe.Droid.Alarm;
 using SyncMe.Droid.Utilites;
 
@@ -12,7 +13,8 @@ public static class ServiceCollectionExtensions
             .AddSingleton<INotificationManager, AndroidNotificationManager>()
             .AddSingleton<IAlarmService, AndroidAlarmService>()
             .AddSingleton<IAlarmPlayer, AndroidAlarmPlayer>()
-            .AddSingleton<IPathProvider, AndroidPathProvider>();
+            .AddSingleton<IPathProvider, AndroidPathProvider>()
+            .AddSingleton(new AuthorizationManagerOptions());
 
         return services;
     }
