@@ -21,7 +21,7 @@ public partial class CalendarPage : ContentPage
         _syncEventsService = syncEventsService;
         _namespaceService = namespaceService;
         AddEvent.Clicked += AddEvent_Clicked;
-        year.BindingContext = Calendar1;
+        year.BindingContext = Calendar;
     }
 
     protected override void OnAppearing()
