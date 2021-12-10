@@ -4,9 +4,6 @@ namespace SyncMe.Extensions;
 
 public static class SyncEventExtensions
 {
-    public static SyncEvent TrimNamespaceEnd(this SyncEvent syncEvent)
-    {
-        syncEvent.NamespaceKey = syncEvent.NamespaceKey.TrimEnd('.');
-        return syncEvent;
-    }
+    public static SyncEvent TrimNamespaceEnd(this SyncEvent syncEvent) =>
+        syncEvent with { NamespaceKey = syncEvent.NamespaceKey.TrimEnd('.') };
 }

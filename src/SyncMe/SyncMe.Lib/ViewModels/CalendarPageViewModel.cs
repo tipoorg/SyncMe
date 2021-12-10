@@ -22,7 +22,7 @@ public class CalendarPageViewModel : BaseViewModel
     private EventCollection LoadEvents(int month, int year)
     {
         var events = _syncEventsService.SearchSyncEventTimes(new() { Month = month, Year = year })
-            .ToEventCollection(k => k.Time.Date, e => new SyncEventViewModel(e.Event));
+            .ToEventCollection(k => k.Time.Date, e => SyncEventViewModel.FromSyncEvent(e.Event));
 
         return events;
     }

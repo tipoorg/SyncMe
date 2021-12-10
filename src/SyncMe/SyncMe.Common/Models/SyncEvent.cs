@@ -2,15 +2,15 @@
 
 public record SyncEvent
 {
-    public Guid Id { get; set; }
-    public string? ExternalId { get; set; }
-    public string? ExternalEmail { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public string NamespaceKey { get; set; } = string.Empty;
-    public SyncRepeat Repeat { get; set; }
-    public SyncReminder Reminder { get; set; }
-    public SyncStatus Status { get; set; }
-    public DateTime Start { get; set; }
-    public DateTime End { get; set; }
+    public Guid Id { get; init; }
+    public string? ExternalId { get; init; }
+    public string? ExternalEmail { get; init; }
+    public string Title { get; init; } = string.Empty;
+    public string Description { get; init; } = string.Empty;
+    public string NamespaceKey { get; init; } = string.Empty;
+    public SyncRepeat Repeat { get; init; }
+    public SyncReminder Reminder { get; init; }
+    public SyncStatus Status { get; init; }
+    public DateTime Start { get; init; }
+    public DateTime End { get; init; }
 }
