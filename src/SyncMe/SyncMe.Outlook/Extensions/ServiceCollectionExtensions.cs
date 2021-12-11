@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SyncMe.CalendarProviders.Authorization;
+using SyncMe.Outlook.Authorization;
 
-namespace SyncMe.Lib.Extensions;
+namespace SyncMe.Outlook.Extensions;
 
 public static class ServiceCollectionExtensions
 {

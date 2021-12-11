@@ -1,10 +1,10 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using LanguageExt;
-using SyncMe.CalendarProviders.Authorization;
-using SyncMe.CalendarProviders.Extensions;
 using SyncMe.CalendarProviders.Outlook;
 using SyncMe.Models;
+using SyncMe.Outlook.Authorization;
+using SyncMe.Outlook.Extensions;
 
 namespace SyncMe.Lib.Services;
 

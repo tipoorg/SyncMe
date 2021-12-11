@@ -157,10 +157,6 @@
     <Content Include="Entitlements.plist" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SyncMe.CalendarProviders\SyncMe.CalendarProviders.csproj">
-      <Project>{B3C9E0AB-B740-4421-ADA1-1A0ED54F389B}</Project>
-      <Name>SyncMe.CalendarProviders</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SyncMe.Common\SyncMe.Common.csproj">
       <Project>{73ebc701-ffe2-4947-9cc5-8da43989c673}</Project>
       <Name>SyncMe.Common</Name>
@@ -187,10 +183,10 @@
       <Output TaskParameter="Value" PropertyName="BuildNumber" />
     </CreateProperty>
     <XmlPeek XmlInputPath="..\SyncMe.props" Query="Project/SyncMeMajorVersion/text()">
-        <Output TaskParameter="Result" PropertyName="SyncMeMajorVersion" />
+      <Output TaskParameter="Result" PropertyName="SyncMeMajorVersion" />
     </XmlPeek>
     <XmlPeek XmlInputPath="..\SyncMe.props" Query="Project/SyncMeMinorVersion/text()">
-        <Output TaskParameter="Result" PropertyName="SyncMeMinorVersion" />
+      <Output TaskParameter="Result" PropertyName="SyncMeMinorVersion" />
     </XmlPeek>
     <XmlPoke XmlInputPath="Info.plist" Query="//dict/key[. = 'CFBundleVersion']/following-sibling::string[1]" Value="$(BuildNumber)" />
     <XmlPoke XmlInputPath="Info.plist" Query="//dict/key[. = 'CFBundleShortVersionString']/following-sibling::string[1]" Value="$(SyncMeMajorVersion).$(SyncMeMinorVersion).$(BuildNumber)" />

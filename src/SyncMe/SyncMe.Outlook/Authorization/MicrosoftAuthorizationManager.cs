@@ -6,7 +6,7 @@ using Microsoft.Identity.Client;
 using SyncMe.Configuration;
 using static LanguageExt.Prelude;
 
-namespace SyncMe.CalendarProviders.Authorization;
+namespace SyncMe.Outlook.Authorization;
 
 public class MicrosoftAuthorizationManager : IMicrosoftAuthorizationManager
 {

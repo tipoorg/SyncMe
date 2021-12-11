@@ -2,7 +2,7 @@
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
 
-namespace SyncMe.CalendarProviders.Authorization;
+namespace SyncMe.Outlook.Authorization;
 
 public interface IMicrosoftAuthorizationManager
 {

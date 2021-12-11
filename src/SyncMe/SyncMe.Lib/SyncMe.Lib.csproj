@@ -82,8 +82,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\SyncMe.CalendarProviders\SyncMe.CalendarProviders.csproj" />
+		<ProjectReference Include="..\SyncMe.CalendarProviders\SyncMe.Outlook.csproj" />
 		<ProjectReference Include="..\SyncMe.Common\SyncMe.Common.csproj" />
 		<ProjectReference Include="..\SyncMe.DataAccess\SyncMe.DataAccess.csproj" />
+		<ProjectReference Include="..\SyncMe.Outlook\SyncMe.Outlook.csproj" />
 	</ItemGroup>
 </Project>

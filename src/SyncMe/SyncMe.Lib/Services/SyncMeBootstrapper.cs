@@ -3,6 +3,7 @@ using Serilog;
 using Serilog.Configuration;
 using SyncMe.DataAccess;
 using SyncMe.Lib.Extensions;
+using SyncMe.Outlook.Extensions;
 
 namespace SyncMe.Lib.Services;
 

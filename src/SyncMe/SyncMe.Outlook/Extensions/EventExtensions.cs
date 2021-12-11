@@ -1,7 +1,7 @@
 ﻿using SyncMe.Models;
 using Microsoft.Graph;
 
-namespace SyncMe.CalendarProviders.Extensions;
+namespace SyncMe.Outlook.Extensions;
 
 public static class EventExtensions
 {
