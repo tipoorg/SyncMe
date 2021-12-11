@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="10226" android:versionName="1.1.10226" package="com.companyname.syncme" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="10225" android:versionName="1.1.10225" package="com.companyname.syncme" android:installLocation="auto">
   <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="31" />
   <application android:label="SyncMe" android:theme="@style/MainTheme" android:icon="@mipmap/SyncMeApp">
     <activity android:name="microsoft.identity.client.BrowserTabActivity" android:configChanges="orientation|screenSize" android:exported="true">

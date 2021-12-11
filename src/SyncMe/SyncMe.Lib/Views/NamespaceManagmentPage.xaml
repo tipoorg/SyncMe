@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:markup="clr-namespace:SyncMe.Lib.MarkupExtensions"
              x:Class="SyncMe.Views.NamespaceManagmentPage"
              Title="Namespaces"
              BackgroundImageSource="background_white.png">
@@ -68,7 +69,7 @@
                                         <Button ImageSource="icon_arrow.xml" Style="{StaticResource MinorButtonStyle}" Command="{Binding ExpandClick}" Rotation="{Binding ArrowRotation}" IsVisible="{Binding HasChildren}" Grid.Column="0"/>
                                         <Label Text="{Binding Name}" Style="{StaticResource NamespaceStyle}" Grid.Column="1"/>
                                         <Button ImageSource="icon_plus_minor.xml" Style="{StaticResource MinorButtonStyle}" Grid.Column="2" Command="{Binding NewItemClick}"/>
-                                        <Button ImageSource="icon_trash.png" Style="{StaticResource MinorButtonStyle}" Grid.Column="3" Command="{Binding RemoveClick}"/>
+                                        <Button ImageSource="{markup:ImageExtension SharedSource=icon_trash.png}" Style="{StaticResource MinorButtonStyle}" Grid.Column="3" Command="{Binding RemoveClick}"/>
                                     </Grid>
                                     <Label Text="Turn off until..." IsVisible="{Binding IsSuspendButtonsVisible}" HorizontalTextAlignment="Center"/>
                                     <Grid>
