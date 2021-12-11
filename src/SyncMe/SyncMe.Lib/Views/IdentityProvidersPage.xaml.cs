@@ -1,10 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using SyncMe.CalendarProviders.Authorization;
-using SyncMe.CalendarProviders.Extensions;
-using SyncMe.CalendarProviders.Outlook;
-using SyncMe.Functional;
-using SyncMe.Models;
 using Xamarin.Forms.Xaml;
 
 namespace SyncMe.Views;
