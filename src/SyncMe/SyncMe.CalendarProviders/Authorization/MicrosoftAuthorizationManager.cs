@@ -1,8 +1,9 @@
 ﻿using System.Net.Http.Headers;
+using LanguageExt;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using SyncMe.Configuration;
-using SyncMe.Functional;
+using static LanguageExt.Prelude;
 
 namespace SyncMe.CalendarProviders.Authorization;
 
@@ -15,8 +16,8 @@ public class MicrosoftAuthorizationManager
     public MicrosoftAuthorizationManager(AuthorizationManagerOptions options)
     {
         var builder = PublicClientApplicationBuilder
-        .Create(OAuthSettings.ApplicationId)
-        .WithRedirectUri(OAuthSettings.RedirectUri);
+            .Create(OAuthSettings.ApplicationId)
+            .WithRedirectUri(OAuthSettings.RedirectUri);
 
         if (!string.IsNullOrEmpty(options.IOSKeychainSecurityGroup))
         {
@@ -27,7 +28,7 @@ public class MicrosoftAuthorizationManager
         CurrentAccounts = PCA.GetAccountsAsync().Result;
     }
 
-    public async Task<Optional<string>> TrySignInAsync(object AuthUIParent)
+    public async Task<Option<string>> TrySignInAsync(object AuthUIParent)
     {
         // This exception is thrown when an interactive sign-in is required.
         // Prompt the user to sign-in
@@ -42,11 +43,11 @@ public class MicrosoftAuthorizationManager
         try
         {
             var result = await interactiveRequest.ExecuteAsync();
-            return new Optional<string>(result.Account.Username);
+            return result.Account.Username;
         }
         catch (MsalClientException ex) when (ex.Message.StartsWith("User canceled authentication."))
         {
-            return new Optional<string>(default);
+            return None;
         }
     }
 
