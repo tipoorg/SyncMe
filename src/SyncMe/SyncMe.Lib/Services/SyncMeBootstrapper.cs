@@ -3,6 +3,7 @@ using Serilog;
 using Serilog.Configuration;
 using SyncMe.DataAccess;
 using SyncMe.Lib.Extensions;
+using SyncMe.Outlook.Extensions;
 
 namespace SyncMe.Lib.Services;
 
@@ -24,6 +25,7 @@ public abstract class SyncMeBootstrapper
         var services = new ServiceCollection()
             .AddSingleton(_pathProvider)
             .AddSyncMeLib()
+            .AddSyncMeOutlook()
             .AddSyncMeDataAccess(_pathProvider.SyncMeDbPath)
             .AddPlatformSpecific(this)
             .AddSyncMeLogging(this, _pathProvider.SyncMeLogsFolder);

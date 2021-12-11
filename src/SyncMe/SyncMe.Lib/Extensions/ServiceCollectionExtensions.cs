@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using SyncMe.CalendarProviders.Authorization;
 using SyncMe.Lib.Services;
 using SyncMe.ViewModels;
 using SyncMe.Views;
@@ -22,8 +21,7 @@ public static class ServiceCollectionExtensions
         services
             .AddScoped<AppShell>()
             .AddViews()
-            .AddServices()
-            .AddSingleton<MicrosoftAuthorizationManager>();
+            .AddServices();
 
         return services;
     }
@@ -43,6 +41,7 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services
+            .AddSingleton<IIdentitiesService, IdentitiesService>()
             .AddSingleton<ISyncEventsService, SyncEventsService>()
             .AddSingleton<ISyncNamespaceService, SyncNamespaceService>()
             .AddSingleton<IAlarmProcessor, AlarmProcessor>();

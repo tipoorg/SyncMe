@@ -1,4 +1,4 @@
-﻿namespace SyncMe.CalendarProviders.Authorization;
+﻿namespace SyncMe.Outlook.Authorization;
 
 public static class OAuthSettings
 {

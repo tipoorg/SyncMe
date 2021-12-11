@@ -1,22 +1,23 @@
 ﻿using System.Net.Http.Headers;
+using System.Reactive.Linq;
+using LanguageExt;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using SyncMe.Configuration;
-using SyncMe.Functional;
+using static LanguageExt.Prelude;
 
-namespace SyncMe.CalendarProviders.Authorization;
+namespace SyncMe.Outlook.Authorization;
 
-public class MicrosoftAuthorizationManager
+public class MicrosoftAuthorizationManager : IMicrosoftAuthorizationManager
 {
     public string[] Scopes => new[] { "Calendars.Read" };
     public IPublicClientApplication PCA { get; private set; }
-    public static IEnumerable<IAccount> CurrentAccounts { get; private set; } = new List<IAccount>();
 
     public MicrosoftAuthorizationManager(AuthorizationManagerOptions options)
     {
         var builder = PublicClientApplicationBuilder
-        .Create(OAuthSettings.ApplicationId)
-        .WithRedirectUri(OAuthSettings.RedirectUri);
+            .Create(OAuthSettings.ApplicationId)
+            .WithRedirectUri(OAuthSettings.RedirectUri);
 
         if (!string.IsNullOrEmpty(options.IOSKeychainSecurityGroup))
         {
@@ -24,10 +25,9 @@ public class MicrosoftAuthorizationManager
         }
 
         PCA = builder.Build();
-        CurrentAccounts = PCA.GetAccountsAsync().Result;
     }
 
-    public async Task<Optional<string>> TrySignInAsync(object AuthUIParent)
+    public async Task<Option<string>> TrySignInAsync(object AuthUIParent)
     {
         // This exception is thrown when an interactive sign-in is required.
         // Prompt the user to sign-in
@@ -42,23 +42,23 @@ public class MicrosoftAuthorizationManager
         try
         {
             var result = await interactiveRequest.ExecuteAsync();
-            return new Optional<string>(result.Account.Username);
+            return result.Account.Username;
         }
         catch (MsalClientException ex) when (ex.Message.StartsWith("User canceled authentication."))
         {
-            return new Optional<string>(default);
+            return None;
         }
     }
 
     public async Task<GraphServiceClient> GetGraphClientAsync(string username)
     {
-        CurrentAccounts = await PCA.GetAccountsAsync();
+        var currentAccounts = await PCA.GetAccountsAsync();
 
         // Initialize Graph client
         return new GraphServiceClient(new DelegateAuthenticationProvider(
             async (requestMessage) =>
             {
-                var currentAccount = CurrentAccounts.FirstOrDefault(a => a.Username == username);
+                var currentAccount = currentAccounts.FirstOrDefault(a => a.Username == username);
                 var result = await PCA.AcquireTokenSilent(Scopes, currentAccount)
                     .ExecuteAsync();
 
