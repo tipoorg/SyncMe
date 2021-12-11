@@ -32,8 +32,8 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
             .Concat(Observable
                 .FromEventPattern(AddOutlook, nameof(Button.Clicked))
                 .Do(_ => SwitchLayouts())
-                .SelectMany(_ => _identitiesService.AddNewIdentity())
-                .Filter(x => !Identities.Any(i => i.Name == x)))
+                .SelectMany(_ => _identitiesService.AddNewIdentityAsync())
+                .Filter(username => !Identities.Any(i => i.Name == username)))
             .ObserveOn(SynchronizationContext.Current)
             .Subscribe(username => Identities.Add(new Identity(username)));
     }

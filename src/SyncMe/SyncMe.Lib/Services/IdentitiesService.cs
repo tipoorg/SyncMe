@@ -1,10 +1,10 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using LanguageExt;
-using SyncMe.CalendarProviders.Outlook;
 using SyncMe.Models;
 using SyncMe.Outlook.Authorization;
 using SyncMe.Outlook.Extensions;
+using SyncMe.Outlook.Outlook;
 
 namespace SyncMe.Lib.Services;
 
@@ -34,7 +34,7 @@ internal class IdentitiesService : IIdentitiesService
             .Select(x => x.Username);
     }
 
-    public async Task<Option<string>> AddNewIdentity()
+    public async Task<Option<string>> AddNewIdentityAsync()
     {
         var username = await _authorizationManager.TrySignInAsync(App.AuthUIParent);
         await username

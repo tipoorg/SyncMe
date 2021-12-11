@@ -1,6 +1,6 @@
 ﻿using Microsoft.Graph;
 
-namespace SyncMe.CalendarProviders.Outlook
+namespace SyncMe.Outlook.Outlook
 {
     public class OutlookProvider
     {

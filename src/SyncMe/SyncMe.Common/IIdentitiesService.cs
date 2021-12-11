@@ -5,6 +5,6 @@ namespace SyncMe;
 public interface IIdentitiesService
 {
     IObservable<string> GetIdentities();
-    Task<Option<string>> AddNewIdentity();
+    Task<Option<string>> AddNewIdentityAsync();
     Task LoadEventsAsync(string username);
 }
