@@ -34,7 +34,6 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
            .Where(x => x.Repeat == SyncRepeat.None || x.Repeat == SyncRepeat.EveryMinute)
            .Where(x => x.Start.Year == query.Year)
            .Where(x => x.Start.Month == query.Month)
-           .OrderBy(x => x.Start)
            .ToArray();
 
         return result;
@@ -45,7 +44,6 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
         var result = _events.Query()
             .Where(x => x.Repeat == SyncRepeat.Dayly || x.Repeat == SyncRepeat.WorkDays || x.Repeat == SyncRepeat.EveryWeek)
             .Where(x => x.Start.Year < query.Year || x.Start.Month <= query.Month)
-            .OrderBy(x => x.Start)
             .ToArray();
 
         return result;
@@ -56,7 +54,6 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
         var result = _events.Query()
             .Where(x => x.Repeat == SyncRepeat.EveryMonth)
             .Where(x => x.Start.Year < query.Year || x.Start.Month <= query.Month)
-            .OrderBy(x => x.Start)
             .ToArray();
 
         return result;
@@ -68,7 +65,6 @@ internal sealed class SyncEventsRepository : ISyncEventsRepository
             .Where(x => x.Repeat == SyncRepeat.EveryYear)
             .Where(x => x.Start.Year <= query.Year)
             .Where(x => x.Start.Month == query.Month)
-            .OrderBy(x => x.Start)
             .ToArray();
 
         return result;

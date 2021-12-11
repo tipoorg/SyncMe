@@ -32,6 +32,7 @@ internal sealed class SyncEventsService : ISyncEventsService
             .Concat(ExtractTimes(_syncEventsRepository.GetRepeatableLessMonthEvents(query)))
             .Concat(ExtractTimes(_syncEventsRepository.GetEveryMonthRepeatableEvents(query)))
             .Concat(ExtractTimes(_syncEventsRepository.GetEveryYearRepeatableEvents(query)))
+            .OrderBy(x => x.Time)
             .ToList();
 
         return times;
