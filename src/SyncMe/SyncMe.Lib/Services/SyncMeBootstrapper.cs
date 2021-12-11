@@ -24,6 +24,7 @@ public abstract class SyncMeBootstrapper
         var services = new ServiceCollection()
             .AddSingleton(_pathProvider)
             .AddSyncMeLib()
+            .AddSyncMeOutlook()
             .AddSyncMeDataAccess(_pathProvider.SyncMeDbPath)
             .AddPlatformSpecific(this)
             .AddSyncMeLogging(this, _pathProvider.SyncMeLogsFolder);

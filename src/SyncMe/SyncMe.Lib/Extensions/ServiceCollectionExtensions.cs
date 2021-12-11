@@ -22,8 +22,7 @@ public static class ServiceCollectionExtensions
         services
             .AddScoped<AppShell>()
             .AddViews()
-            .AddServices()
-            .AddSingleton<MicrosoftAuthorizationManager>();
+            .AddServices();
 
         return services;
     }

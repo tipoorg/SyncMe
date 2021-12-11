@@ -1,4 +1,6 @@
-﻿using LanguageExt;
+﻿using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
+using LanguageExt;
 using SyncMe.CalendarProviders.Authorization;
 using SyncMe.CalendarProviders.Extensions;
 using SyncMe.CalendarProviders.Outlook;
@@ -10,22 +12,34 @@ internal class IdentitiesService : IIdentitiesService
 {
     private readonly ISyncEventsService _syncEventsService;
     private readonly ISyncNamespaceRepository _syncNamespaceRepository;
-    private readonly MicrosoftAuthorizationManager _authorizationManager;
+    private readonly IMicrosoftAuthorizationManager _authorizationManager;
 
     public IdentitiesService(
         ISyncEventsService syncEventsService,
         ISyncNamespaceRepository syncNamespaceRepository,
-        MicrosoftAuthorizationManager authorizationManager)
+        IMicrosoftAuthorizationManager authorizationManager)
     {
         _syncEventsService = syncEventsService;
         _syncNamespaceRepository = syncNamespaceRepository;
         _authorizationManager = authorizationManager;
     }
 
+    private IObservable<string> _currentAccounts;
+    public IObservable<string> GetIdentities()
+    {
+        return _currentAccounts ??= _authorizationManager
+            .PCA.GetAccountsAsync()
+            .ToObservable()
+            .SelectMany(x => x)
+            .Select(x => x.Username);
+    }
+
     public async Task<Option<string>> AddNewIdentity()
     {
         var username = await _authorizationManager.TrySignInAsync(App.AuthUIParent);
-        await username.MapAsync(LoadEventsAsync).IsSome;
+        await username
+            .Do(x => _currentAccounts = null)
+            .MapAsync(LoadEventsAsync).IsSome;
 
         return username;
     }

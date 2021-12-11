@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using System.Reactive.Linq;
 using LanguageExt;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
@@ -7,11 +8,10 @@ using static LanguageExt.Prelude;
 
 namespace SyncMe.CalendarProviders.Authorization;
 
-public class MicrosoftAuthorizationManager
+public class MicrosoftAuthorizationManager : IMicrosoftAuthorizationManager
 {
     public string[] Scopes => new[] { "Calendars.Read" };
     public IPublicClientApplication PCA { get; private set; }
-    public static IEnumerable<IAccount> CurrentAccounts { get; private set; } = new List<IAccount>();
 
     public MicrosoftAuthorizationManager(AuthorizationManagerOptions options)
     {
@@ -25,7 +25,6 @@ public class MicrosoftAuthorizationManager
         }
 
         PCA = builder.Build();
-        CurrentAccounts = PCA.GetAccountsAsync().Result;
     }
 
     public async Task<Option<string>> TrySignInAsync(object AuthUIParent)
@@ -53,13 +52,13 @@ public class MicrosoftAuthorizationManager
 
     public async Task<GraphServiceClient> GetGraphClientAsync(string username)
     {
-        CurrentAccounts = await PCA.GetAccountsAsync();
+        var currentAccounts = await PCA.GetAccountsAsync();
 
         // Initialize Graph client
         return new GraphServiceClient(new DelegateAuthenticationProvider(
             async (requestMessage) =>
             {
-                var currentAccount = CurrentAccounts.FirstOrDefault(a => a.Username == username);
+                var currentAccount = currentAccounts.FirstOrDefault(a => a.Username == username);
                 var result = await PCA.AcquireTokenSilent(Scopes, currentAccount)
                     .ExecuteAsync();
 

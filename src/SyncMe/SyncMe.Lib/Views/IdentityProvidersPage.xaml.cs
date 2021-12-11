@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive.Linq;
-using SyncMe.CalendarProviders.Authorization;
+using SyncMe.Functional;
 using Xamarin.Forms.Xaml;
 
 namespace SyncMe.Views;
@@ -22,24 +22,20 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
     {
         InitializeComponent();
         BindingContext = this;
-        _identitiesService=identitiesService;
-
-        foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
-        {
-            Identities.Add(new Identity(account.Username));
-        }
+        _identitiesService = identitiesService;
 
         _addIdentitySubsciption = Observable
             .FromEventPattern(AddIdentity, nameof(Button.Clicked))
             .Subscribe(x => SwitchLayouts());
 
-        _addOutlookIdentitySubscription = Observable
-            .FromEventPattern(AddOutlook, nameof(Button.Clicked))
-            .Do(_ => SwitchLayouts())
-            .SelectMany(_ => _identitiesService.AddNewIdentity())
-            .Where(x => x.Filter(username => !Identities.Any(i => i.Name == username)).IsSome)
+        _addOutlookIdentitySubscription = _identitiesService.GetIdentities()
+            .Concat(Observable
+                .FromEventPattern(AddOutlook, nameof(Button.Clicked))
+                .Do(_ => SwitchLayouts())
+                .SelectMany(_ => _identitiesService.AddNewIdentity())
+                .Filter(x => !Identities.Any(i => i.Name == x)))
             .ObserveOn(SynchronizationContext.Current)
-            .Subscribe(x => x.Do(username => Identities.Add(new Identity(username))));
+            .Subscribe(username => Identities.Add(new Identity(username)));
     }
 
     private void SwitchLayouts()
@@ -57,8 +53,8 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
         }
         else
         {
-            foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
-                await _identitiesService.LoadEventsAsync(account.Username);
+            _identitiesService.GetIdentities()
+                .Subscribe(x => _identitiesService.LoadEventsAsync(x));
         }
     }
 
