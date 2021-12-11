@@ -183,7 +183,7 @@
     <Exec Command="git rev-list --count --first-parent $(GitBranchName).." ConsoleToMsBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="GitBranchCommitCount" />
     </Exec>
-    <CreateProperty Value="$([System.String]::Format('{0}{1:000}', $([MSBuild]::Subtract($(GitCommitCount), $(GitBranchCommitCount))), $([System.Int32]::Parse($(GitBranchCommitCount)))))">
+    <CreateProperty Value="$([System.String]::Format('{0}{1}', $([MSBuild]::Subtract($(GitCommitCount), $(GitBranchCommitCount))), $([System.Int32]::Parse($(GitBranchCommitCount)))))">
       <Output TaskParameter="Value" PropertyName="BuildNumber" />
     </CreateProperty>
     <XmlPeek XmlInputPath="..\SyncMe.props" Query="Project/SyncMeMajorVersion/text()">
