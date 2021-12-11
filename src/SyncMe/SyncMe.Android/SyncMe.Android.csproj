@@ -220,5 +220,27 @@
       <Name>SyncMe.Lib</Name>
     </ProjectReference>
   </ItemGroup>
+  <Target Name="SetAppVersion" BeforeTargets="BeforeBuild">
+    <Exec Command="git show-ref --quiet refs/heads/master &amp;&amp; echo master || echo origin/master" ConsoleToMsBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitBranchName" />
+    </Exec>
+    <Exec Command="git rev-list --count --first-parent HEAD" ConsoleToMsBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitCommitCount" />
+    </Exec>
+    <Exec Command="git rev-list --count --first-parent $(GitBranchName).." ConsoleToMsBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitBranchCommitCount" />
+    </Exec>
+    <CreateProperty Value="$([System.String]::Format('{0}{1:000}', $([MSBuild]::Subtract($(GitCommitCount), $(GitBranchCommitCount))), $([System.Int32]::Parse($(GitBranchCommitCount)))))">
+      <Output TaskParameter="Value" PropertyName="BuildNumber" />
+    </CreateProperty>
+    <XmlPeek XmlInputPath="..\SyncMe.props" Query="Project/SyncMeMajorVersion/text()">
+        <Output TaskParameter="Result" PropertyName="SyncMeMajorVersion" />
+    </XmlPeek>
+    <XmlPeek XmlInputPath="..\SyncMe.props" Query="Project/SyncMeMinorVersion/text()">
+        <Output TaskParameter="Result" PropertyName="SyncMeMinorVersion" />
+    </XmlPeek>
+    <XmlPoke XmlInputPath="Properties\AndroidManifest.xml" Namespaces="&lt;Namespace Prefix='android' Uri='http://schemas.android.com/apk/res/android' /&gt;" Query="manifest/@android:versionCode" Value="$(BuildNumber)" />
+    <XmlPoke XmlInputPath="Properties\AndroidManifest.xml" Namespaces="&lt;Namespace Prefix='android' Uri='http://schemas.android.com/apk/res/android' /&gt;" Query="manifest/@android:versionName" Value="$(SyncMeMajorVersion).$(SyncMeMinorVersion).$(BuildNumber)" />
+  </Target>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
