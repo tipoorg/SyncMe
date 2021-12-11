@@ -20,7 +20,6 @@ public partial class CalendarPage : ContentPage
         _viewModel = viewModel;
         _syncEventsService = syncEventsService;
         _namespaceService = namespaceService;
-        AddEvent.Clicked += AddEvent_Clicked;
         year.BindingContext = Calendar;
     }
 
