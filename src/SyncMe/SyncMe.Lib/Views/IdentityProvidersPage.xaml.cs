@@ -18,17 +18,19 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
     private readonly IDisposable _addOutlookIdentitySubscription;
     private readonly ISyncEventsService _syncEventsService;
     private readonly ISyncNamespaceRepository _syncNamespaceRepository;
+    private readonly MicrosoftAuthorizationManager _authorizationManager;
 
     public string Image { get => AddOutlook.IsVisible ? "icon_arrow_major.png" : "icon_plus_minor.xml"; }
 
     public ObservableCollection<Identity> Identities { get; } = new ObservableCollection<Identity>();
 
-    public IdentityProvidersPage(ISyncEventsService syncEventsService, ISyncNamespaceRepository syncNamespaceRepository)
+    public IdentityProvidersPage(ISyncEventsService syncEventsService, ISyncNamespaceRepository syncNamespaceRepository, MicrosoftAuthorizationManager authorizationManager)
     {
         InitializeComponent();
         BindingContext = this;
         _syncEventsService = syncEventsService;
         _syncNamespaceRepository = syncNamespaceRepository;
+        _authorizationManager = authorizationManager;
 
         foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
         {
@@ -69,7 +71,6 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
 
     private async Task LoadAllEventsAsync()
     {
-        var manager = new MicrosoftAuthorizationManager(App.iOSKeychainSecurityGroup);
         var accountsToResync = MicrosoftAuthorizationManager.CurrentAccounts.Select(a => a.Username).ToList();
         _syncEventsService.RemoveEvents(e => accountsToResync.Contains(e.ExternalEmail));
         foreach (var account in MicrosoftAuthorizationManager.CurrentAccounts)
@@ -89,11 +90,10 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
     private async Task<Optional<(string username, IEnumerable<SyncEvent> events)>> FetchEventsAsync(string username)
     {
         var outlookNamespace = new Namespace { Key = "Outlook", IsActive = true };
-        var manager = new MicrosoftAuthorizationManager(App.iOSKeychainSecurityGroup);
 
         if (username is null)
         {
-            var optional = await manager.TrySignInAsync(App.AuthUIParent);
+            var optional = await _authorizationManager.TrySignInAsync(App.AuthUIParent);
 
             if (!optional.HasValue)
                 return default;
@@ -101,7 +101,7 @@ public sealed partial class IdentityProvidersPage : ContentPage, IDisposable
             username = optional.Value;
         }
 
-        var client = await manager.GetGraphClientAsync(username);
+        var client = await _authorizationManager.GetGraphClientAsync(username);
         var events = await new OutlookProvider(client, username).GetEventsAsync();
 
         _syncNamespaceRepository.TryAddSyncNamespace(outlookNamespace.Key);

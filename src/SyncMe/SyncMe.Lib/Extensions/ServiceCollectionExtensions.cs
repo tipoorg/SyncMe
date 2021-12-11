@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using SyncMe.CalendarProviders.Authorization;
 using SyncMe.Lib.Services;
 using SyncMe.ViewModels;
 using SyncMe.Views;
@@ -21,7 +22,8 @@ public static class ServiceCollectionExtensions
         services
             .AddScoped<AppShell>()
             .AddViews()
-            .AddServices();
+            .AddServices()
+            .AddSingleton<MicrosoftAuthorizationManager>();
 
         return services;
     }
@@ -32,7 +34,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<CalendarPage>()
             .AddScoped<CalendarPageViewModel>()
             .AddScoped<NamespaceManagmentPage>()
-            .AddScoped<IdentityProvidersPage>();
+            .AddScoped<IdentityProvidersPage>()
+            .AddScoped<SettingsPage>();
 
         return services;
     }

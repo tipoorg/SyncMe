@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
+using SyncMe.Configuration;
 using SyncMe.Functional;
 
 namespace SyncMe.CalendarProviders.Authorization;
@@ -11,15 +12,15 @@ public class MicrosoftAuthorizationManager
     public IPublicClientApplication PCA { get; private set; }
     public static IEnumerable<IAccount> CurrentAccounts { get; private set; } = new List<IAccount>();
 
-    public MicrosoftAuthorizationManager(string iOSKeychainSecurityGroup)
+    public MicrosoftAuthorizationManager(AuthorizationManagerOptions options)
     {
         var builder = PublicClientApplicationBuilder
         .Create(OAuthSettings.ApplicationId)
         .WithRedirectUri(OAuthSettings.RedirectUri);
 
-        if (!string.IsNullOrEmpty(iOSKeychainSecurityGroup))
+        if (!string.IsNullOrEmpty(options.IOSKeychainSecurityGroup))
         {
-            builder = builder.WithIosKeychainSecurityGroup(iOSKeychainSecurityGroup);
+            builder = builder.WithIosKeychainSecurityGroup(options.IOSKeychainSecurityGroup);
         }
 
         PCA = builder.Build();

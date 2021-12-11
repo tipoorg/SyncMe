@@ -32,5 +32,10 @@
                       ContentTemplate="{local:DIDataTemplate Type={x:Type views:IdentityProvidersPage}}"
                       Route="identities"
                       Style="{StaticResource BaseStyle}"/>
+        <ShellContent Title="Settings"
+                      Icon="{markup:ImageExtension SharedSource=icon_settings.png}"
+                      ContentTemplate="{local:DIDataTemplate Type={x:Type views:SettingsPage}}"
+                      Route="settings"
+                      Style="{StaticResource BaseStyle}"/>
     </TabBar>
 </Shell>
