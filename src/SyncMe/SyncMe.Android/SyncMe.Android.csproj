@@ -98,113 +98,43 @@
     <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values\styles.xml" />
+  <ItemGroup Label="values">
     <AndroidResource Include="Resources\values\colors.xml" />
+    <AndroidResource Include="Resources\values\styles.xml" />
+  </ItemGroup>
+  <ItemGroup Label="mipmap-anydpi-v26">
     <AndroidResource Include="Resources\mipmap-anydpi-v26\icon.xml" />
     <AndroidResource Include="Resources\mipmap-anydpi-v26\icon_round.xml" />
-    <AndroidResource Include="Resources\mipmap-hdpi\icon.png" />
-    <AndroidResource Include="Resources\mipmap-hdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\icon.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\icon.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\icon.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\icon.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\drawable\xamarin_logo.png" />
-    <AndroidResource Include="Resources\drawable\icon_feed.png" />
-    <AndroidResource Include="Resources\drawable\splash_screen.xml" />
-    <AndroidResource Include="Resources\drawable\icon_create_event.png" />
-    <AndroidResource Include="Resources\drawable\icon_open_calendar.png" />
   </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_arrow.xml" />
+  <ItemGroup Label="mipmap">
+    <AndroidResource Include="Resources\mipmap-mdpi\icon_syncme.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\icon_syncme_adaptive_back.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\icon_syncme_adaptive_fore.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\icon_syncme.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\icon_syncme_adaptive_fore.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\icon_syncme_adaptive_back.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\icon_syncme.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\icon_syncme_adaptive_back.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\icon_syncme_adaptive_fore.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\icon_syncme.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\icon_syncme_adaptive_back.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\icon_syncme_adaptive_fore.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\icon_syncme.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\icon_syncme_adaptive_fore.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\icon_syncme_adaptive_back.png" />
   </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_outlook.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_plus.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_plus_minor.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_identities.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_namespaces.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_add_calendar.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_outlook_provider.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_all_profiles_sync.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-hdpi\SyncMeApp.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-hdpi\SyncMeApp_adaptive_back.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-hdpi\SyncMeApp_adaptive_fore.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-mdpi\SyncMeApp.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-mdpi\SyncMeApp_adaptive_back.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-mdpi\SyncMeApp_adaptive_fore.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xhdpi\SyncMeApp.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xhdpi\SyncMeApp_adaptive_back.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xhdpi\SyncMeApp_adaptive_fore.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xxhdpi\SyncMeApp.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xxhdpi\SyncMeApp_adaptive_back.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xxhdpi\SyncMeApp_adaptive_fore.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\SyncMeApp.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\SyncMeApp_adaptive_back.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\SyncMeApp_adaptive_fore.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_profile_sync.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\background.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_arrow_major.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_google.png" />
-  </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Label="drawable">
     <AndroidResource Include="Resources\drawable\background_white.png" />
+    <AndroidResource Include="Resources\drawable\background.png" />
+    <AndroidResource Include="Resources\drawable\icon_all_profiles_sync.png" />
+    <AndroidResource Include="Resources\drawable\icon_arrow_major.png" />
+    <AndroidResource Include="Resources\drawable\icon_arrow.xml" />
+    <AndroidResource Include="Resources\drawable\icon_google.png" />
+    <AndroidResource Include="Resources\drawable\icon_outlook_provider.png" />
+    <AndroidResource Include="Resources\drawable\icon_plus_minor.xml" />
+    <AndroidResource Include="Resources\drawable\icon_plus.xml" />
+    <AndroidResource Include="Resources\drawable\icon_profile_sync.png" />
+    <AndroidResource Include="Resources\drawable\splash_screen.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SyncMe.Common\SyncMe.Common.csproj">
@@ -234,10 +164,10 @@
       <Output TaskParameter="Value" PropertyName="BuildNumber" />
     </CreateProperty>
     <XmlPeek XmlInputPath="..\SyncMe.props" Query="Project/SyncMeMajorVersion/text()">
-        <Output TaskParameter="Result" PropertyName="SyncMeMajorVersion" />
+      <Output TaskParameter="Result" PropertyName="SyncMeMajorVersion" />
     </XmlPeek>
     <XmlPeek XmlInputPath="..\SyncMe.props" Query="Project/SyncMeMinorVersion/text()">
-        <Output TaskParameter="Result" PropertyName="SyncMeMinorVersion" />
+      <Output TaskParameter="Result" PropertyName="SyncMeMinorVersion" />
     </XmlPeek>
     <XmlPoke XmlInputPath="Properties\AndroidManifest.xml" Namespaces="&lt;Namespace Prefix='android' Uri='http://schemas.android.com/apk/res/android' /&gt;" Query="manifest/@android:versionCode" Value="$(BuildNumber)" />
     <XmlPoke XmlInputPath="Properties\AndroidManifest.xml" Namespaces="&lt;Namespace Prefix='android' Uri='http://schemas.android.com/apk/res/android' /&gt;" Query="manifest/@android:versionName" Value="$(SyncMeMajorVersion).$(SyncMeMinorVersion).$(BuildNumber)" />
