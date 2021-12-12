@@ -5,6 +5,7 @@ using Android.OS;
 using Android.Widget;
 using Microsoft.Extensions.Logging;
 using SyncMe.Droid.Extensions;
+using SyncMe.Lib.Extensions;
 using SyncMe.Models;
 using AndroidApp = Android.App.Application;
 
@@ -19,7 +20,15 @@ internal class AndroidAlarmService : IAlarmService
         _logger = logger;
     }
 
-    public void SetAlarm(SyncAlarm syncAlarm)
+    public void SetAlarmForEvent(SyncEvent syncEvent)
+    {
+        if (syncEvent.TryGetNearestAlarm(out var syncAlarm))
+        {
+            SetAlarm(syncAlarm);
+        }
+    }
+
+    private void SetAlarm(SyncAlarm syncAlarm)
     {
         var triggerAtMs = GetTriggerAtMs(syncAlarm.AlarmTime);
         var alarmIntent = GetAlarmIntent(syncAlarm, AndroidApp.Context);

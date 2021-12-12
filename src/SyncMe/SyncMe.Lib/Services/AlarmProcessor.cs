@@ -42,10 +42,7 @@ internal class AlarmProcessor : IAlarmProcessor
             _notificationManager.Show(pendingAlarm);
         }
 
-        if (_syncEventsService.TryGetNearestAlarm(syncEvent, out var syncAlarm))
-        {
-            _alarmService.SetAlarm(syncAlarm);
-        }
+        _alarmService.SetAlarmForEvent(syncEvent);
     }
 
     public void StopPlayingAlarm(int notificationId)
