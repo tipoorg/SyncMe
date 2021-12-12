@@ -11,6 +11,5 @@ namespace SyncMe
         bool TryGetSyncEvent(Guid id, out SyncEvent syncEvent);
         void TryRemoveInternalEvent(Guid eventId);
         IReadOnlyCollection<(SyncEvent Event, DateTime Time)> SearchSyncEventTimes(SyncEventQuery syncEventQuery);
-        bool TryGetNearestAlarm(SyncEvent syncEvent, out SyncAlarm syncAlarm);
     }
 }

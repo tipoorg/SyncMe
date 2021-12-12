@@ -5,7 +5,7 @@ namespace SyncMe.IOS;
 
 internal class IOSAlarmService : IAlarmService
 {
-    public void SetAlarm(SyncAlarm syncAlarm)
+    public void SetAlarmForEvent(SyncEvent syncEvent)
     {
     }
 }
