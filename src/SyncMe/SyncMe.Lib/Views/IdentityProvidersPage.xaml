@@ -39,9 +39,12 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="icon_all_profiles_sync.png" Clicked="OnSyncClicked" CommandParameter="{Binding .}" />
+        <ToolbarItem 
+            IconImageSource="icon_all_profiles_sync.png" 
+            Clicked="OnSyncAllClicked" 
+            CommandParameter="{Binding .}" />
     </ContentPage.ToolbarItems>
-    
+
     <ContentPage.Content>
         <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <StackLayout>
@@ -54,7 +57,10 @@
                                         <StackLayout>
                                             <FlexLayout JustifyContent="SpaceBetween">
                                                 <Label Text="{Binding Name}" Style="{StaticResource IdentityStyle}"/>
-                                                <Button Clicked="OnSyncClicked" CommandParameter="{Binding .}" Style="{StaticResource SyncButton}" />
+                                                <Button
+                                                    Clicked="OnSyncClicked" 
+                                                    CommandParameter="{Binding .}"
+                                                    Style="{StaticResource SyncButton}" />
                                             </FlexLayout>
                                         </StackLayout>
                                     </Frame>
@@ -64,29 +70,31 @@
                     </ListView>
                 </FlexLayout>
             </StackLayout>
-            <Button x:Name="AddIdentity"
-                        ImageSource="{Binding Image}"
-                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="0.93, 0.97, 65, 65"
-                        CornerRadius="200"
-                        Rotation="180"
-                        BackgroundColor="#7f39c2d7"/>
-            <Button x:Name="AddOutlook"
-                        ImageSource="icon_outlook_provider.png"
-                        IsVisible="False"
-                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="0.94, 0.82, 70, 70"
-                        BackgroundColor="Transparent"
-                        CornerRadius="200"/>
-            <Button x:Name="AddGoogle"
-                        ImageSource="icon_google.png"
-                        IsVisible="False"
-                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds="0.94, 0.67, 70, 70"
-                        IsEnabled="False"   
-                        CornerRadius="200"
-                        BackgroundColor="Transparent"
-                    />
+            <Button
+                x:Name="AddIdentity"
+                ImageSource="{Binding Image}"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                AbsoluteLayout.LayoutBounds="0.93, 0.97, 65, 65"
+                CornerRadius="200"
+                Rotation="180"
+                BackgroundColor="#7f39c2d7"/>
+            <Button 
+                x:Name="AddOutlook"
+                ImageSource="icon_outlook_provider.png"
+                IsVisible="{Binding ProvidersOpenned}"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                AbsoluteLayout.LayoutBounds="0.94, 0.82, 70, 70"
+                BackgroundColor="Transparent"
+                CornerRadius="200"/>
+            <Button 
+                x:Name="AddGoogle"
+                ImageSource="icon_google.png"
+                IsVisible="{Binding ProvidersOpenned}"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                AbsoluteLayout.LayoutBounds="0.94, 0.67, 70, 70"
+                IsEnabled="False"
+                CornerRadius="200"
+                BackgroundColor="Transparent"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
