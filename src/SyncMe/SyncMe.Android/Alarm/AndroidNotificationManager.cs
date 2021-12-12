@@ -36,8 +36,8 @@ internal class AndroidNotificationManager : INotificationManager
             .SetContentTitle(syncAlarm.Title)
             .SetContentText("OK")
             .SetContentIntent(stopNotificationIntent)
-            .SetLargeIcon(BitmapFactory.DecodeResource(AndroidApp.Context.Resources, Resource.Drawable.icon_open_calendar))
-            .SetSmallIcon(Resource.Drawable.icon_open_calendar)
+            .SetLargeIcon(BitmapFactory.DecodeResource(AndroidApp.Context.Resources, Resource.Mipmap.icon_syncme))
+            .SetSmallIcon(Resource.Mipmap.icon_syncme)
             .SetSilent(true)
             .SetAutoCancel(true)
             .Build();
