@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿using EventKit;
+using Foundation;
 using Microsoft.Extensions.DependencyInjection;
 using SyncMe.Configuration;
 
@@ -10,6 +11,7 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddSingleton<IAlarmService, IOSAlarmService>()
+            .AddSingleton(new EKEventStore())
             .AddSingleton(new AuthorizationManagerOptions
             {
                 IOSKeychainSecurityGroup = NSBundle.MainBundle.BundleIdentifier
