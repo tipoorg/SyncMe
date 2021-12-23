@@ -7,7 +7,7 @@ $GitCurrentBranchName = git rev-parse --abbrev-ref HEAD
 $GitBranchName = git show-ref --quiet refs/heads/master && echo master
 $GitCommitCount = git rev-list --count --first-parent HEAD
 echo "Commit count on current branch ($GitCurrentBranchName): $GitCommitCount"
-$GitBranchCommitCount = git rev-list --count --first-parent $GitBranchName..
+$GitBranchCommitCount = git rev-list --count --first-parent "$GitBranchName.."
 echo "Ahead of target branch ($GitBranchName) on $GitBranchCommitCount commits"
 $GitCommintCountExceptCurrentBranch = $GitCommitCount - $GitBranchCommitCount
 echo "Commit difference between current and target: $GitCommintCountExceptCurrentBranch"
@@ -16,8 +16,8 @@ $BuildNumber = "$GitCommintCountExceptCurrentBranch" + "$GitBranchCommitCount"
 $Version = "$SyncMeMajorVersion.$SyncMeMinorVersion.$BuildNumber"
 $CurrentFolderPath = Get-Location
 
-$androidManifestPath = Join-Path $CurrentFolderPath 'SyncMe.Android\Properties\AndroidManifest.xml'
-$infoPlistPath = Join-Path $CurrentFolderPath 'SyncMe.IOS\Info.plist'
+$androidManifestPath = Join-Path $CurrentFolderPath 'src\SyncMe\SyncMe.Android\Properties\AndroidManifest.xml'
+$infoPlistPath = Join-Path $CurrentFolderPath 'src\SyncMe\SyncMe.IOS\Info.plist'
 
 function XmlPoke {
     param(
