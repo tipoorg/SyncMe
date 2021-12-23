@@ -3,56 +3,69 @@ name: Build SyncMe app
 on: [push]
 
 jobs:
-  build:
-
-    runs-on: windows-2022
-
+  test_bump:
+    name: Test Bumping
+    runs-on: windows-2022   
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repo
+      uses: actions/checkout@v2
 
-    - name: Extract KEYSTORE secret to base64 file
-      run: 'echo "${{ secrets.KEYSTORE }}" > syncmekeystore.b64'
+    - name: Bump apps version
+      shell: pwsh
+      run: ./src/SyncMe/bump_version.ps1
 
-    - name: Encode KEYSTORE file
-      run: 'certutil -decode .\syncmekeystore.b64 syncmekeystore.keystore'
 
-    - name: Move KEYSTORE file to Android directory
-      run: 'move .\syncmekeystore.keystore ./src/SyncMe/SyncMe.Android/syncmekeystore.keystore'  
+  # build:
+  #   name: Pack SyncMe Android
+  #   runs-on: windows-2022    
 
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1
-      with:
-        vs-version: '17.0'
+  #   steps:
+  #   - name: Checkout repo
+  #     uses: actions/checkout@v2
 
-    - name: Setup .NET Core SDK 6.0.x
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: |
-          2.1.x
-          6.0.x
+  #   - name: Extract KEYSTORE secret to base64 file
+  #     run: 'echo "${{ secrets.KEYSTORE }}" > syncmekeystore.b64'
 
-    - name: Install dependencies
-      run: nuget restore src/SyncMe/SyncMe.sln
+  #   - name: Encode KEYSTORE file
+  #     run: 'certutil -decode .\syncmekeystore.b64 syncmekeystore.keystore'
 
-    # # # - name: Bump apps version
-    # # #   shell: pwsh
-    # # #   run: |
-    # # #       cd src/SyncMe
-    # # #       .\bump_version.ps1
+  #   - name: Move KEYSTORE file to Android directory
+  #     run: 'move .\syncmekeystore.keystore ./src/SyncMe/SyncMe.Android/syncmekeystore.keystore'  
 
-    - name: Build SyncMe.Android
-      run: |
-          MSBuild /t:SignAndroidPackage /p:Configuration=Release /p:AndroidPackageFormat=apk /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=syncmekeyname /p:AndroidSigningKeyPass='${{ secrets.KEYSTORE_PASSWORD }}' /p:AndroidSigningKeyStore=syncmekeystore.keystore /p:AndroidSigningStorePass='${{ secrets.KEYSTORE_PASSWORD }}' .\src\SyncMe\SyncMe.Android\SyncMe.Android.csproj
+  #   - name: Add msbuild to PATH
+  #     uses: microsoft/setup-msbuild@v1.1
+  #     with:
+  #       vs-version: '17.0'
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: SyncMe.apk
-        path: ./src/SyncMe/SyncMe.Android/bin/Release/com.companyname.syncme.apk
+  #   - name: Setup .NET Core SDK 6.0.x
+  #     uses: actions/setup-dotnet@v1
+  #     with:
+  #       dotnet-version: |
+  #         2.1.x
+  #         6.0.x
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: SyncMe-Signed.apk
-        path: ./src/SyncMe/SyncMe.Android/bin/Release/com.companyname.syncme-Signed.apk
+  #   - name: Install dependencies
+  #     run: nuget restore src/SyncMe/SyncMe.sln
+
+  # - name: Bump apps version
+  #   shell: pwsh
+  #   run: |
+  #       cd src/SyncMe
+  #       .\bump_version.ps1
+
+  #   - name: Build SyncMe.Android
+  #     run: |
+  #         MSBuild /t:SignAndroidPackage /p:Configuration=Release /p:AndroidPackageFormat=apk /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=syncmekeyname /p:AndroidSigningKeyPass='${{ secrets.KEYSTORE_PASSWORD }}' /p:AndroidSigningKeyStore=syncmekeystore.keystore /p:AndroidSigningStorePass='${{ secrets.KEYSTORE_PASSWORD }}' .\src\SyncMe\SyncMe.Android\SyncMe.Android.csproj
+
+  #   - uses: actions/upload-artifact@v2
+  #     with:
+  #       name: SyncMe.apk
+  #       path: ./src/SyncMe/SyncMe.Android/bin/Release/com.companyname.syncme.apk
+
+  #   - uses: actions/upload-artifact@v2
+  #     with:
+  #       name: SyncMe-Signed.apk
+  #       path: ./src/SyncMe/SyncMe.Android/bin/Release/com.companyname.syncme-Signed.apk
     
     # - name: Build SyncMe.iOS
     #   run: |
