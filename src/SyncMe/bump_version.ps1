@@ -4,7 +4,7 @@ $SyncMeMajorVersion = 1
 $SyncMeMinorVersion = 1
 
 $GitCurrentBranchName = git rev-parse --abbrev-ref HEAD
-$GitBranchName = git show-ref --quiet refs/heads/master && echo master || echo origin/master
+$GitBranchName = git show-ref --quiet refs/heads/master && echo master
 $GitCommitCount = git rev-list --count --first-parent HEAD
 echo "Commit count on current branch ($GitCurrentBranchName): $GitCommitCount"
 $GitBranchCommitCount = git rev-list --count --first-parent $GitBranchName..
