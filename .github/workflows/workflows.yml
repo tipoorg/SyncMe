@@ -3,19 +3,19 @@ name: Build SyncMe app
 on: [push]
 
 jobs:
-  test_bump:
-    name: Test Bumping
-    runs-on: windows-2022   
-    steps:
-    - name: Checkout repo
-      uses: actions/checkout@v2
+  # test_bump:
+  #   name: Test Bumping
+  #   runs-on: windows-2022   
+  #   steps:
+  #   - name: Checkout repo
+  #     uses: actions/checkout@v2
 
-    - name: Bump apps version
-      shell: pwsh
-      run: ./src/SyncMe/bump_version.ps1
+  #   - name: Bump apps version
+  #     shell: pwsh
+  #     run: ./src/SyncMe/bump_version.ps1
 
 
-  # build:
+  # build_android:
   #   name: Pack SyncMe Android
   #   runs-on: windows-2022    
 
@@ -70,3 +70,39 @@ jobs:
     # - name: Build SyncMe.iOS
     #   run: |
     #     msbuild src/SyncMe/SyncMe.IOS/SyncMe.IOS.csproj /verbosity:normal /t:Rebuild /p:Platform=iPhoneSimulator /p:Configuration=Release  
+
+
+  build_ios:
+      name: Pack SyncMe iOS
+      runs-on: macos-latest    
+
+      steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Setup iOS Certificates
+        uses: apple-actions/import-codesign-certs@v1
+        with: 
+          p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
+          p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+          keychain: github-actions-xamarin
+          keychain-password: '' 
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-version: '17.0'
+
+      - name: Setup .NET Core SDK 6.0.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: |
+            2.1.x
+            6.0.x
+
+      - name: Install dependencies
+        run: nuget restore src/SyncMe/SyncMe.sln
+      
+      - name: Build SyncMe.iOS
+        run: |
+          msbuild src/SyncMe/SyncMe.IOS/SyncMe.IOS.csproj /verbosity:normal /t:Rebuild /p:Platform=iPhone /p:Configuration=Release /p:BuildIpa=true
