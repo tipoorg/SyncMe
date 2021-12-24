@@ -88,11 +88,6 @@ jobs:
           keychain: github-actions-xamarin
           keychain-password: '' 
 
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
-        with:
-          vs-version: '17.0'
-
       - name: Setup .NET Core SDK 6.0.x
         uses: actions/setup-dotnet@v1
         with:
