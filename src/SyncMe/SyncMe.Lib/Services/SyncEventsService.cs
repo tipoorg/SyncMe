@@ -25,14 +25,16 @@ internal sealed class SyncEventsService : ISyncEventsService
 
     public IReadOnlyCollection<(SyncEvent Event, DateTime Time)> SearchSyncEventTimes(SyncEventQuery query)
     {
-        IEnumerable<(SyncEvent Event, DateTime Time)> ExtractTimes(IEnumerable<SyncEvent> syncEvents) => syncEvents
-           .SelectMany(e => e.EnumerateEventTimes(query.Month, query.Year).Select(x => (Event: e, Time: x)))
-           .TakeWhile(x => LastDay(x.Time.Year, x.Time.Month) <= LastDay(query.Year, query.Month));
+        IEnumerable<(SyncEvent Event, DateTime Time)> ExtractTimes(SyncEvent syncEvent) => syncEvent
+            .EnumerateEventTimes(query.Month, query.Year)
+            .Select(x => (Event: syncEvent, Time: x))
+            .TakeWhile(x => LastDay(x.Time.Year, x.Time.Month) <= LastDay(query.Year, query.Month));
 
-        var times = ExtractTimes(_syncEventsRepository.GetNotRepeatableEvents(query))
-            .Concat(ExtractTimes(_syncEventsRepository.GetRepeatableLessMonthEvents(query)))
-            .Concat(ExtractTimes(_syncEventsRepository.GetEveryMonthRepeatableEvents(query)))
-            .Concat(ExtractTimes(_syncEventsRepository.GetEveryYearRepeatableEvents(query)))
+        var times = _syncEventsRepository.GetNotRepeatableEvents(query)
+            .Concat(_syncEventsRepository.GetRepeatableLessMonthEvents(query))
+            .Concat(_syncEventsRepository.GetEveryMonthRepeatableEvents(query))
+            .Concat(_syncEventsRepository.GetEveryYearRepeatableEvents(query))
+            .SelectMany(ExtractTimes)
             .OrderBy(x => x.Time)
             .ToList();
 
