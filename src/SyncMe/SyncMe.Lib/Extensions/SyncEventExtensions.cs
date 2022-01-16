@@ -6,7 +6,7 @@ public static class SyncEventExtensions
 {
     public static bool TryGetNearestAlarm(this SyncEvent syncEvent, out SyncAlarm syncAlarm)
     {
-        if (TryGetNearestAlarmTime(syncEvent, out var alarmDelay))
+        if (syncEvent.TryGetNearestAlarmTime(out var alarmDelay))
         {
             syncAlarm = new SyncAlarm(syncEvent.Title, syncEvent.Id, syncEvent.NamespaceKey, alarmDelay);
             return true;
@@ -28,7 +28,7 @@ public static class SyncEventExtensions
         _ => throw new NotImplementedException(),
     };
 
-    private static bool TryGetNearestAlarmTime(SyncEvent syncEvent, out DateTime alarmTime)
+    public static bool TryGetNearestAlarmTime(this SyncEvent syncEvent, out DateTime alarmTime)
     {
         var now = DateTime.Now;
         var eventDateTime = syncEvent.Start - TimeSpan.FromMinutes((int)syncEvent.Reminder);
