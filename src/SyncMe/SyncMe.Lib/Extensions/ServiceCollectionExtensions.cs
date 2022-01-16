@@ -29,10 +29,10 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddViews(this IServiceCollection services)
     {
         services
-            .AddScoped<CalendarPage>()
-            .AddScoped<CalendarPageViewModel>()
+            .AddScoped<CalendarPage>().AddScoped<CalendarPageViewModel>()
             .AddScoped<NamespaceManagmentPage>()
-            .AddScoped<IdentityProvidersPage>();
+            .AddScoped<IdentityProvidersPage>().AddScoped<IdentityProvidersViewModel>()
+            .AddScoped<SettingsPage>();
 
         return services;
     }
@@ -40,6 +40,7 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services
+            .AddSingleton<IIdentitiesService, IdentitiesService>()
             .AddSingleton<ISyncEventsService, SyncEventsService>()
             .AddSingleton<ISyncNamespaceService, SyncNamespaceService>()
             .AddSingleton<IAlarmProcessor, AlarmProcessor>();

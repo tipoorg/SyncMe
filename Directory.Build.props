@@ -1,0 +1,5 @@
+<Project>
+    <PropertyGroup>
+        <!-- <WarningsNotAsErrors>CS1513,CS1514</WarningsNotAsErrors> -->
+    </PropertyGroup>
+</Project>  

@@ -5,27 +5,12 @@ namespace SyncMe.ViewModels;
 
 public class SyncEventViewModel : BaseViewModel
 {
-    public SyncEvent SyncEvent { get; init; }
-
-    public SyncEventViewModel(SyncEvent syncEvent)
-    {
-        SyncEvent = syncEvent;
-        Description = syncEvent.NamespaceKey;
-        Name = syncEvent.Title;
-        StartDate = syncEvent.Start;
-        EndDate = syncEvent.End;
-    }
-    
     public SyncEventViewModel()
     {
-        SyncEvent = new SyncEvent
-        {
-            Start = DateTime.Now,
-            End = DateTime.Now.AddHours(1),
-            Reminder = SyncReminder.AtEventTime
-        };
-
-        var currentHour = TimeSpan.FromHours(DateTime.Now.TimeOfDay.Hours);
+        var currentDay = DateTime.Now;
+        var currentHour = TimeSpan.FromHours(currentDay.TimeOfDay.Hours);
+        StartDate = currentDay;
+        EndDate = currentDay;
         StartTime = Trim(currentHour.Add(TimeSpan.FromHours(1)));
         EndTime = Trim(currentHour.Add(TimeSpan.FromHours(2)));
         ScheduleButtonText = SyncRepeat.None.GetDescription();
@@ -48,17 +33,20 @@ public class SyncEventViewModel : BaseViewModel
         set => ChangeProperty(ref _alertButtonText, value, nameof(AlertButtonText));
     }
 
+    public Guid Id { get; set; }
+    public string ExternalId { get; set; }
     public string Name { get; init; }
     public string Description { get; init; }
 
+    private DateTime _startDate;
     public DateTime StartDate
     {
-        get => SyncEvent.Start;
+        get => _startDate;
         set
         {
-            if (SyncEvent.Start != value)
+            if (_startDate != value)
             {
-                SyncEvent.Start = value;
+                _startDate = value;
                 OnPropertyChanged(nameof(StartDate));
             }
         }
@@ -73,20 +61,20 @@ public class SyncEventViewModel : BaseViewModel
             if (_startTime != value)
             {
                 _startTime = value;
-                SyncEvent.Start = SyncEvent.Start.Date.Add(value);
                 OnPropertyChanged(nameof(StartTime));
             }
         }
     }
 
+    private DateTime _endDate;
     public DateTime EndDate
     {
-        get => SyncEvent.End;
+        get => _endDate;
         set
         {
-            if (SyncEvent.End != value)
+            if (_endDate != value)
             {
-                SyncEvent.End = value;
+                _endDate = value;
                 OnPropertyChanged(nameof(EndDate));
             }
         }
@@ -101,59 +89,62 @@ public class SyncEventViewModel : BaseViewModel
             if (_endTime != value)
             {
                 _endTime = value;
-                SyncEvent.End = SyncEvent.End.Date.Add(value);
                 OnPropertyChanged(nameof(EndTime));
             }
         }
     }
 
+    private SyncReminder _notification;
     public SyncReminder Notification
     {
-        get => SyncEvent.Reminder;
+        get => _notification;
         set
         {
-            if (SyncEvent.Reminder != value)
+            if (_notification != value)
             {
-                SyncEvent.Reminder = value;
-                OnPropertyChanged(nameof(Title));
+                _notification = value;
+                OnPropertyChanged(nameof(Notification));
             }
         }
     }
 
+    private SyncRepeat _schedule;
     public SyncRepeat Schedule
     {
-        get => SyncEvent.Repeat;
+        get => _schedule;
         set
         {
-            if (SyncEvent.Repeat != value)
+            if (_schedule != value)
             {
-                SyncEvent.Repeat = value;
-                OnPropertyChanged(nameof(Title));
+                _schedule = value;
+                OnPropertyChanged(nameof(Schedule));
             }
         }
     }
 
+    private string _title;
     public string Title
     {
-        get => SyncEvent.Title;
+        get => _title;
         set
         {
-            if (SyncEvent.Title != value)
+            if (_title != value)
             {
-                SyncEvent.Title = value;
+                _title = value;
                 OnPropertyChanged(nameof(Title));
             }
         }
     }
 
+    private string _namespace;
     public string Namespace
     {
-        get => SyncEvent.NamespaceKey;
+        get => _namespace;
         set
         {
-            if (SyncEvent.NamespaceKey != value)
+            if (_namespace != value)
             {
-                SyncEvent.NamespaceKey = value;
+                _namespace = value;
                 OnPropertyChanged(nameof(Namespace));
             }
         }
@@ -161,11 +152,49 @@ public class SyncEventViewModel : BaseViewModel
 
     public bool IsDeleteButtonVisible
     {
-        get => SyncEvent.ExternalId is null;
+        get => ExternalId is null;
     }
-
     public string StartTimeString
     {
-        get => SyncEvent.Start.ToShortTimeString();
+        get => StartDate.Add(StartTime).ToShortTimeString();
+    }
+
+    public SyncEvent ToSyncEvent()
+    {
+        var start = StartDate.Date.Add(StartTime);
+        var end = EndDate.Date.Add(EndTime);
+
+        return new SyncEvent
+        {
+            NamespaceKey = Namespace,
+            Title = Title,
+            End = end,
+            Start = start,
+            Repeat = Schedule,
+            Reminder = Notification,
+            Status = SyncStatus.Active,
+            Description = Description,
+            ExternalId = ExternalId,
+            Id = Id,
+        };
+    }
+
+    public static SyncEventViewModel FromSyncEvent(SyncEvent syncEvent)
+    {
+        return new SyncEventViewModel
+        {
+            Title = syncEvent.Title,
+            Namespace = syncEvent.NamespaceKey,
+            StartDate = syncEvent.Start.Date,
+            StartTime = syncEvent.Start.TimeOfDay,
+            EndTime = syncEvent.End.TimeOfDay,
+            EndDate = syncEvent.End.Date,
+            Notification = syncEvent.Reminder,
+            Schedule = syncEvent.Repeat,
+            Description = syncEvent.NamespaceKey,
+            ExternalId = syncEvent.ExternalId,
+            Id = syncEvent.Id,
+            Name = syncEvent.Title
+        };
     }
 }

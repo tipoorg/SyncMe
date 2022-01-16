@@ -8,6 +8,28 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\icon_about.png" />
+	  <None Remove="Resources\icon_add_event.png" />
+	  <None Remove="Resources\icon_identities.png" />
+	  <None Remove="Resources\icon_namespaces.png" />
+	  <None Remove="Resources\icon_open_calendar.png" />
+	  <None Remove="Resources\icon_trash.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\icon_add_event.png" />
+	  <EmbeddedResource Include="Resources\icon_settings.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+    <EmbeddedResource Include="Resources\icon_about.png" />
+	  <EmbeddedResource Include="Resources\icon_identities.png" />
+	  <EmbeddedResource Include="Resources\icon_namespaces.png" />
+	  <EmbeddedResource Include="Resources\icon_open_calendar.png" />
+	  <EmbeddedResource Include="Resources\icon_trash.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="dotMorten.Xamarin.Forms.AutoSuggestBox" Version="1.1.1" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
@@ -39,6 +61,9 @@
 		<Compile Update="Views\NamespaceManagmentPage.xaml.cs">
 			<DependentUpon>NamespaceManagmentPage.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\SettingsPage.xaml.cs">
+		  <DependentUpon>SettingsPage.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -51,11 +76,14 @@
 		<EmbeddedResource Update="Views\NamespaceManagmentPage.xaml">
 			<Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 		</EmbeddedResource>
+		<EmbeddedResource Update="Views\SettingsPage.xaml">
+		  <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\SyncMe.CalendarProviders\SyncMe.CalendarProviders.csproj" />
 		<ProjectReference Include="..\SyncMe.Common\SyncMe.Common.csproj" />
 		<ProjectReference Include="..\SyncMe.DataAccess\SyncMe.DataAccess.csproj" />
+		<ProjectReference Include="..\SyncMe.Outlook\SyncMe.Outlook.csproj" />
 	</ItemGroup>
 </Project>
