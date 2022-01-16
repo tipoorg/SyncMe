@@ -4,7 +4,8 @@
              x:Class="SyncMe.Views.CalendarPage"
              xmlns:controls="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar"
              xmlns:markup="clr-namespace:SyncMe.Lib.MarkupExtensions"
-             Title="Calendar">
+             Title="Calendar"
+             BackgroundColor="{StaticResource syncBlack}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="TimeStyle" TargetType="Label">
@@ -65,7 +66,7 @@
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
-        <StackLayout BackgroundColor="{StaticResource syncBlack}">
+        <StackLayout>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5*" />

@@ -3,30 +3,43 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:markup="clr-namespace:SyncMe.Lib.MarkupExtensions"
              x:Class="SyncMe.Views.SettingsPage"
-             Title="Settings">
+             Title="Settings"
+             BackgroundColor="{StaticResource syncBlack}">
+
     <ContentPage.Content>
         <ScrollView>
             <TableView Intent="Settings">
                 <TableView.Root>
                     <TableRoot>
                         <TableSection Title="App info">
-                            <TextCell Text="Current build" Detail="{Binding CurrentBuild}"/>
-                            <TextCell Text="Current version" Detail="{Binding CurrentVersion}"/>
+                            <TextCell 
+                                Text="Current version"
+                                TextColor="{StaticResource syncWhite}"
+                                Detail="{Binding CurrentVersion}" 
+                                DetailColor="{StaticResource syncGrey}" />
                         </TableSection>
                         <TableSection Title="Notification">
-                            <SwitchCell x:Name="SoundToggle" Text="Sound" OnChanged="OnSoundTapped"></SwitchCell>
+                            <ViewCell>
+                                <FlexLayout JustifyContent="SpaceBetween" Padding="16,0">
+                                    <Label Text="Sound" TextColor="{StaticResource syncWhite}" VerticalTextAlignment="Center"/>
+                                    <Switch x:Name="SoundToggle" Toggled="OnSoundTapped"/>
+                                </FlexLayout>
+                            </ViewCell>
                         </TableSection>
                         <TableSection Title="Logs">
                             <ViewCell>
-                                <CollectionView ItemsSource="{Binding Logs}" SelectionMode="None">
+                                <CollectionView 
+                                    ItemsSource="{Binding Logs}"
+                                    SelectionMode="None">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
-                                            <SwipeView>
+                                            <SwipeView BackgroundColor="{StaticResource syncBlack}">
                                                 <SwipeView.RightItems>
-                                                    <SwipeItem IconImageSource="{markup:ImageExtension SharedSource=icon_trash.png}" 
-                                                           BackgroundColor="LightPink" 
-                                                           CommandParameter="{Binding .}" 
-                                                           Clicked="OnLogFileRemoved"/>
+                                                    <SwipeItem 
+                                                        IconImageSource="{markup:ImageExtension SharedSource=icon_trash.png}" 
+                                                        BackgroundColor="LightPink" 
+                                                        CommandParameter="{Binding .}" 
+                                                        Clicked="OnLogFileRemoved"/>
                                                 </SwipeView.RightItems>
                                                 <StackLayout>
                                                     <Label Text="{Binding Name}" TextColor="{StaticResource epamBlue}" HeightRequest="30" Margin="15, 10, 10, 10">

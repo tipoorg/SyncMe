@@ -24,7 +24,7 @@ public partial class SettingsPage : ContentPage
         InitializeComponent();
         _pathProvider = pathProvider;
         _configRepository = configRepository;
-        SoundToggle.On = !_configRepository.Get(ConfigKey.IsMute);
+        SoundToggle.IsToggled = !_configRepository.Get(ConfigKey.IsMute);
         BindingContext = this;
 
         if (Directory.Exists(_pathProvider.SyncMeLogsFolder))
@@ -55,9 +55,9 @@ public partial class SettingsPage : ContentPage
 
     private void OnSoundTapped(object sender, EventArgs e)
     {
-        if (sender is SwitchCell switchCell)
+        if (sender is Switch switchItem)
         {
-            _configRepository.Set(ConfigKey.IsMute, !switchCell.On);
+            _configRepository.Set(ConfigKey.IsMute, !switchItem.IsToggled);
         }
     }
 }
