@@ -3,18 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SyncMe.Views.IdentityProvidersPage"
              Title="Identities"
-             BackgroundImageSource="background_white.png">
+             BackgroundImageSource="background.png">
 
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="TitleStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="TextColor" Value="{StaticResource syncBlue}"/>
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
                 <Setter Property="FontSize" Value="Large"/>
                 <Setter Property="Margin" Value="20,5,0,0"/>
             </Style>
             <Style x:Key="IdentityStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="TextColor" Value="{StaticResource syncWhite}"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource syncBlack}"/>
                 <Setter Property="VerticalTextAlignment" Value="Center"/>
                 <Setter Property="VerticalOptions" Value="Center"/>
                 <Setter Property="Margin" Value="20,7,0,0"/>
@@ -25,7 +26,7 @@
                 <Setter Property="HeightRequest" Value="35"/>
                 <Setter Property="WidthRequest" Value="35"/>
                 <Setter Property="Margin" Value="0,12,20,0"/>
-                <Setter Property="BackgroundColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource epamBlue}"/>
                 <Setter Property="ImageSource" Value="icon_profile_sync.png"/>
             </Style>
             <Style x:Key="FrameStyle" TargetType="Frame">
@@ -33,7 +34,8 @@
                 <Setter Property="Padding" Value="10"/>
                 <Setter Property="WidthRequest" Value="200"/>
                 <Setter Property="Margin" Value="8,8,8,8"/>
-                <Setter Property="BorderColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="BorderColor" Value="{StaticResource syncBlue}"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource syncBlack}"/>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -54,15 +56,13 @@
                             <DataTemplate>
                                 <ViewCell>
                                     <Frame Style="{StaticResource FrameStyle}">
-                                        <StackLayout>
-                                            <FlexLayout JustifyContent="SpaceBetween">
-                                                <Label Text="{Binding Name}" Style="{StaticResource IdentityStyle}"/>
-                                                <Button
-                                                    Clicked="OnSyncClicked" 
-                                                    CommandParameter="{Binding .}"
-                                                    Style="{StaticResource SyncButton}" />
-                                            </FlexLayout>
-                                        </StackLayout>
+                                        <FlexLayout JustifyContent="SpaceBetween">
+                                            <Label Text="{Binding Name}" Style="{StaticResource IdentityStyle}"/>
+                                            <Button
+                                                Clicked="OnSyncClicked" 
+                                                CommandParameter="{Binding .}"
+                                                Style="{StaticResource SyncButton}" />
+                                        </FlexLayout>
                                     </Frame>
                                 </ViewCell>
                             </DataTemplate>
