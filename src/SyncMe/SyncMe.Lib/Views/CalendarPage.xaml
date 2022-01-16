@@ -41,11 +41,13 @@
                 <Setter Property="YearLabelColor" Value="{StaticResource syncBlue}"/>
                 <Setter Property="MonthLabelColor" Value="{StaticResource syncBlue}"/>
                 <Setter Property="OtherMonthDayColor" Value="{StaticResource syncGrey}"/>
+                <Setter Property="DaysTitleColor" Value="{StaticResource syncGrey}"/>
                 <Setter Property="SelectedDayBackgroundColor" Value="{StaticResource syncBlue}" />
                 <Setter Property="TodayOutlineColor" Value="{StaticResource syncBlue}" />
                 <Setter Property="EventIndicatorColor" Value="{StaticResource syncBlue}" />
                 <Setter Property="EventIndicatorSelectedColor" Value="{StaticResource syncBlack}" />
                 <Setter Property="SelectedDateColor" Value="{StaticResource syncBlue}" />
+                <Setter Property="ArrowsColor" Value="{StaticResource syncBlue}" />
             </Style>
             <Style x:Key="FrameStyle" TargetType="Frame">
                 <Setter Property="CornerRadius" Value="10"/>
