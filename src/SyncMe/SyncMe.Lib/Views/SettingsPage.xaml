@@ -42,7 +42,7 @@
                                                         Clicked="OnLogFileRemoved"/>
                                                 </SwipeView.RightItems>
                                                 <StackLayout>
-                                                    <Label Text="{Binding Name}" TextColor="{StaticResource epamBlue}" HeightRequest="30" Margin="15, 10, 10, 10">
+                                                    <Label Text="{Binding Name}" TextColor="{StaticResource syncBlue}" HeightRequest="30" Margin="15, 10, 10, 10">
                                                         <Label.GestureRecognizers>
                                                             <TapGestureRecognizer Tapped="OnLogFileTapped"></TapGestureRecognizer>
                                                         </Label.GestureRecognizers>
