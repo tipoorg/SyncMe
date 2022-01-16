@@ -4,17 +4,18 @@
              xmlns:markup="clr-namespace:SyncMe.Lib.MarkupExtensions"
              x:Class="SyncMe.Views.NamespaceManagmentPage"
              Title="Namespaces"
-             BackgroundImageSource="background_white.png">
+             BackgroundImageSource="background.png">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="TitleStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="TextColor" Value="{StaticResource syncBlue}"/>
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
                 <Setter Property="FontSize" Value="Large"/>
                 <Setter Property="Margin" Value="20,5,0,0"/>
             </Style>
             <Style x:Key="NamespaceStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="TextColor" Value="{StaticResource syncWhite}"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource syncBlack}"/>
                 <Setter Property="VerticalTextAlignment" Value="Center"/>
                 <Setter Property="VerticalOptions" Value="Center"/>
                 <Setter Property="Margin" Value="5,0,0,0" />
@@ -26,21 +27,24 @@
                 <Setter Property="FontSize" Value="Micro"/>
                 <Setter Property="WidthRequest" Value="90"/>
                 <Setter Property="HeightRequest" Value="30"/>
-                <Setter Property="BackgroundColor" Value="#7f39c2d7"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource syncBlue}"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource syncBlack}"/>
                 <Setter Property="Margin" Value="0,0,0,5"/>
             </Style>
             <Style x:Key="FrameStyle" TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="{StaticResource syncBlack}"/>
                 <Setter Property="CornerRadius" Value="10"/>
                 <Setter Property="Padding" Value="10"/>
                 <Setter Property="WidthRequest" Value="200"/>
             </Style>
             <Style x:Key="MinorButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource syncBlue}" />
                 <Setter Property="VerticalOptions" Value="Center"/>
                 <Setter Property="HorizontalOptions" Value="Center"/>
                 <Setter Property="WidthRequest" Value="20"/>
                 <Setter Property="HeightRequest" Value="20"/>
                 <Setter Property="CornerRadius" Value="100"/>
-                <Setter Property="BackgroundColor" Value="White"/>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -66,10 +70,27 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <Button ImageSource="icon_arrow.xml" Style="{StaticResource MinorButtonStyle}" Command="{Binding ExpandClick}" Rotation="{Binding ArrowRotation}" IsVisible="{Binding HasChildren}" Grid.Column="0"/>
-                                        <Label Text="{Binding Name}" Style="{StaticResource NamespaceStyle}" Grid.Column="1"/>
-                                        <Button ImageSource="icon_plus_minor.xml" Style="{StaticResource MinorButtonStyle}" Grid.Column="2" Command="{Binding NewItemClick}"/>
-                                        <Button ImageSource="{markup:ImageExtension SharedSource=icon_trash.png}" Style="{StaticResource MinorButtonStyle}" Grid.Column="3" Command="{Binding RemoveClick}"/>
+                                        <Button 
+                                            ImageSource="icon_arrow.xml" 
+                                            Style="{StaticResource MinorButtonStyle}" 
+                                            Command="{Binding ExpandClick}" 
+                                            Rotation="{Binding ArrowRotation}" 
+                                            IsVisible="{Binding HasChildren}" 
+                                            Grid.Column="0"/>
+                                        <Label 
+                                            Text="{Binding Name}" 
+                                            Style="{StaticResource NamespaceStyle}"
+                                            Grid.Column="1"/>
+                                        <Button 
+                                            ImageSource="icon_plus_minor.xml" 
+                                            Style="{StaticResource MinorButtonStyle}"
+                                            Command="{Binding NewItemClick}"
+                                            Grid.Column="2" />
+                                        <Button 
+                                            ImageSource="{markup:ImageExtension SharedSource=icon_trash.png}" 
+                                            Style="{StaticResource MinorButtonStyle}"
+                                            Command="{Binding RemoveClick}"
+                                            Grid.Column="3" />
                                     </Grid>
                                     <Label Text="Turn off until..." IsVisible="{Binding IsSuspendButtonsVisible}" HorizontalTextAlignment="Center"/>
                                     <Grid>
