@@ -5,19 +5,32 @@
              xmlns:x1="clr-namespace:SyncMe.Models;assembly=SyncMe.Common"
              x:Class="SyncMe.Views.EventAlertPage"
              Title="Event Alert">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="FontSize" Value="Micro"/>
+                <Setter Property="WidthRequest" Value="90"/>
+                <Setter Property="HeightRequest" Value="40"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource syncBlue}"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource syncBlack}"/>
+                <Setter Property="Margin" Value="0,10"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout>
-            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="At event time" Clicked="OnClicked" Tag="AtEventTime"/>
-            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="1 minute before" Clicked="OnClicked" Tag="Before1Min"/>
-            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="5 minutes before" Clicked="OnClicked" Tag="Before5Min"/>
-            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="10 minutes before" Clicked="OnClicked" Tag="Before10Min"/>
-            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="15 minutes before" Clicked="OnClicked" Tag="Before15Min"/>
-            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="30 minutes before" Clicked="OnClicked" Tag="Before30Min"/>
-            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="1 hour before" Clicked="OnClicked" Tag="Before1Hour"/>
-            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="2 hours before" Clicked="OnClicked" Tag="Before2Hour"/>
-            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="1 day before" Clicked="OnClicked" Tag="DayBefore"/>
-            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="2 days before" Clicked="OnClicked" Tag="TwoDaysBefore"/>
-            <local:TagButton x:TypeArguments="x1:SyncReminder" Text="1 week before" Clicked="OnClicked" Tag="OneWeekBefore"/>
+        <StackLayout BackgroundColor="{StaticResource syncBlack}">
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Style="{StaticResource ButtonStyle}" Text="At event time" Clicked="OnClicked" Tag="AtEventTime"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Style="{StaticResource ButtonStyle}" Text="1 minute before" Clicked="OnClicked" Tag="Before1Min"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Style="{StaticResource ButtonStyle}" Text="5 minutes before" Clicked="OnClicked" Tag="Before5Min"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Style="{StaticResource ButtonStyle}" Text="10 minutes before" Clicked="OnClicked" Tag="Before10Min"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Style="{StaticResource ButtonStyle}" Text="15 minutes before" Clicked="OnClicked" Tag="Before15Min"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Style="{StaticResource ButtonStyle}" Text="30 minutes before" Clicked="OnClicked" Tag="Before30Min"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Style="{StaticResource ButtonStyle}" Text="1 hour before" Clicked="OnClicked" Tag="Before1Hour"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Style="{StaticResource ButtonStyle}" Text="2 hours before" Clicked="OnClicked" Tag="Before2Hour"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Style="{StaticResource ButtonStyle}" Text="1 day before" Clicked="OnClicked" Tag="DayBefore"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Style="{StaticResource ButtonStyle}" Text="2 days before" Clicked="OnClicked" Tag="TwoDaysBefore"/>
+            <local:TagButton x:TypeArguments="x1:SyncReminder" Style="{StaticResource ButtonStyle}" Text="1 week before" Clicked="OnClicked" Tag="OneWeekBefore"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -4,29 +4,30 @@
              x:Class="SyncMe.Views.CalendarPage"
              xmlns:controls="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar"
              xmlns:markup="clr-namespace:SyncMe.Lib.MarkupExtensions"
-             Title="Calendar">
+             Title="Calendar"
+             BackgroundColor="{StaticResource syncBlack}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="TimeStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="TextColor" Value="{StaticResource syncGray}"/>
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
                 <Setter Property="FontSize" Value="Small"/>
                 <Setter Property="Margin" Value="5,0,0,0"/>
             </Style>
             <Style x:Key="TitleStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="TextColor" Value="{StaticResource syncBlue}"/>
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
                 <Setter Property="FontSize" Value="Medium"/>
                 <Setter Property="Margin" Value="5,0,0,0"/>
             </Style>
             <Style x:Key="DescriptionStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="TextColor" Value="{StaticResource syncGray}"/>
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
                 <Setter Property="FontSize" Value="Small"/>
                 <Setter Property="Margin" Value="5,0,0,0"/>
             </Style>
             <Style x:Key="YearMonthStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="TextColor" Value="{StaticResource syncBlue}"/>
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
             </Style>
             <Style x:Key="FloadButtonStyle" TargetType="Button">
@@ -36,21 +37,25 @@
                 <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
             </Style>
             <Style x:Key="CalendarStyle" TargetType="controls:Calendar">
-                <Setter Property="SelectedDateColor" Value="{StaticResource epamBlue}"/>
-                <Setter Property="SelectedDayBackgroundColor" Value="{StaticResource epamBlue}"/>
-                <Setter Property="DaysTitleColor" Value="{StaticResource epamBlue}"/>
-                <Setter Property="EventIndicatorColor" Value="{StaticResource epamBlue}"/>
-                <Setter Property="EventIndicatorSelectedColor" Value="{StaticResource epamBlue}"/>
-                <Setter Property="YearLabelColor" Value="{StaticResource epamBlue}"/>
-                <Setter Property="MonthLabelColor" Value="{StaticResource epamBlue}"/>
-                <Setter Property="TodayOutlineColor" Value="{StaticResource epamBlue}"/>
-                <Setter Property="ArrowsColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="DeselectedDayTextColor" Value="{StaticResource syncWhite}"/>
+                <Setter Property="EventIndicatorTextColor" Value="{StaticResource syncWhite}"/>
+                <Setter Property="YearLabelColor" Value="{StaticResource syncBlue}"/>
+                <Setter Property="MonthLabelColor" Value="{StaticResource syncBlue}"/>
+                <Setter Property="OtherMonthDayColor" Value="{StaticResource syncGray}"/>
+                <Setter Property="DaysTitleColor" Value="{StaticResource syncGray}"/>
+                <Setter Property="SelectedDayBackgroundColor" Value="{StaticResource syncBlue}" />
+                <Setter Property="TodayOutlineColor" Value="{StaticResource syncBlue}" />
+                <Setter Property="EventIndicatorColor" Value="{StaticResource syncBlue}" />
+                <Setter Property="EventIndicatorSelectedColor" Value="{StaticResource syncBlack}" />
+                <Setter Property="SelectedDateColor" Value="{StaticResource syncBlue}" />
+                <Setter Property="ArrowsColor" Value="{StaticResource syncBlue}" />
             </Style>
             <Style x:Key="FrameStyle" TargetType="Frame">
                 <Setter Property="CornerRadius" Value="10"/>
                 <Setter Property="Padding" Value="10"/>
                 <Setter Property="WidthRequest" Value="200"/>
-                <Setter Property="BorderColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="BorderColor" Value="{StaticResource syncBlue}"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource syncBlack}" />
                 <Setter Property="Margin" Value="8,8,8,8"/>
             </Style>
         </ResourceDictionary>
@@ -96,7 +101,7 @@
                     <controls:Calendar.EventTemplate>
                         <DataTemplate>
                             <Frame Style="{StaticResource FrameStyle}">
-                                <SwipeView BackgroundColor="White">
+                                <SwipeView BackgroundColor="{StaticResource syncBlack}">
                                     <SwipeView.RightItems>
                                         <SwipeItem
                                                 IconImageSource="{markup:ImageExtension SharedSource=icon_trash.png}"

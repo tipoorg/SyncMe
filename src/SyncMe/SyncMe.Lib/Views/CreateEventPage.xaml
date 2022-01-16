@@ -7,11 +7,21 @@
         <ResourceDictionary>
             <Style x:Key="LabelStyle" TargetType="Label">
                 <Setter Property="Margin" Value="5,5,0,0"/>
-                <Setter Property="TextColor" Value="{StaticResource epamGrey}"/>
+                <Setter Property="TextColor" Value="{StaticResource syncWhite}"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="FontSize" Value="Medium"/>
             </Style>
             <Style x:Key="ButtonStyle" TargetType="Button">
                 <Setter Property="Margin" Value="5,0,5,0"/>
-                <Setter Property="BackgroundColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource syncBlue}"/>
+            </Style>
+            <Style x:Key="FrameStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="Padding" Value="10"/>
+                <Setter Property="WidthRequest" Value="200"/>
+                <Setter Property="BorderColor" Value="{StaticResource syncBlue}"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource syncBlack}" />
+                <Setter Property="Margin" Value="8,8,8,8"/>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -19,11 +29,29 @@
         <ToolbarItem x:Name="AddEvent" Text="Add event"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <ScrollView>
+        <ScrollView BackgroundColor="{StaticResource syncBlack}">
             <StackLayout Spacing="20">
                 <StackLayout>
-                    <forms:AutoSuggestBox PlaceholderText="Namespace" TextChanged="OnTextChanged" SuggestionChosen="OnSuggestionChosen" Margin="5,0,5,0"/>
-                    <Entry Text="{Binding Title}" Placeholder="Title" Margin="5,0,5,0"/>
+                    <Frame Style="{StaticResource FrameStyle}">
+                        <forms:AutoSuggestBox PlaceholderText="Namespace" TextChanged="OnTextChanged" SuggestionChosen="OnSuggestionChosen" Margin="5,0,5,0" TextColor="{StaticResource syncBlue}">
+                            <forms:AutoSuggestBox.PlaceholderTextColor>
+                                <OnPlatform x:TypeArguments="Color">
+                                    <On Platform="iOS" Value="{StaticResource syncGray}"></On>
+                                    <On Platform="Android" Value="{StaticResource syncGray}"></On>
+                                </OnPlatform>
+                            </forms:AutoSuggestBox.PlaceholderTextColor>
+                        </forms:AutoSuggestBox>
+                    </Frame>
+                    <Frame Style="{StaticResource FrameStyle}">
+                        <Entry Text="{Binding Title}" Placeholder="Title" Margin="5,0,5,0" TextColor="{StaticResource syncBlue}">
+                            <Entry.PlaceholderColor>
+                                <OnPlatform x:TypeArguments="Color">
+                                    <On Platform="iOS" Value="{StaticResource syncGray}"></On>
+                                    <On Platform="Android" Value="{StaticResource syncGray}"></On>
+                                </OnPlatform>
+                            </Entry.PlaceholderColor>
+                        </Entry>
+                    </Frame>
                 </StackLayout>
                 <StackLayout>
                     <Button Text="{Binding ScheduleButtonText}" Clicked="OnConfigureScheduleClicked" Style="{StaticResource ButtonStyle}"/>
@@ -34,8 +62,8 @@
                                 <ColumnDefinition Width="1*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <DatePicker Date="{Binding StartDate}" MinimumDate="2000/12/1" MaximumDate="2100/12/31" Grid.Column="0" Margin="5,0,5,0"/>
-                            <TimePicker Time="{Binding StartTime}" Grid.Column="1" Margin="5,0,5,0"/>
+                            <DatePicker Date="{Binding StartDate}" MinimumDate="2000/12/1" MaximumDate="2100/12/31" Grid.Column="0" Margin="5,0,5,0" TextColor="{StaticResource syncBlue}"/>
+                            <TimePicker Time="{Binding StartTime}" Grid.Column="1" Margin="5,0,5,0" TextColor="{StaticResource syncBlue}"/>
                         </Grid>
                     </StackLayout>
                     <StackLayout>
@@ -45,8 +73,8 @@
                                 <ColumnDefinition Width="1*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <DatePicker Date="{Binding EndDate}" MinimumDate="2000/12/1" MaximumDate="2100/12/31" Grid.Column="0" Margin="5,0,5,0"/>
-                            <TimePicker Time="{Binding EndTime}" Grid.Column="1" Margin="5,0,5,0"/>
+                            <DatePicker Date="{Binding EndDate}" MinimumDate="2000/12/1" MaximumDate="2100/12/31" Grid.Column="0" Margin="5,0,5,0" TextColor="{StaticResource syncBlue}"/>
+                            <TimePicker Time="{Binding EndTime}" Grid.Column="1" Margin="5,0,5,0" TextColor="{StaticResource syncBlue}"/>
                         </Grid>
                     </StackLayout>
                 </StackLayout>

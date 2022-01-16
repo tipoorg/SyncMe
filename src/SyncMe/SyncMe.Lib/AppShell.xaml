@@ -8,11 +8,11 @@
     <!-- Display a bottom tab bar containing two tabs -->
     <Shell.Resources>
         <Style x:Key="BaseStyle" TargetType="Element">
-            <Setter Property="Shell.BackgroundColor" Value="{StaticResource epamBlue}" />
+            <Setter Property="Shell.BackgroundColor" Value="{StaticResource syncBlue}" />
             <Setter Property="Shell.ForegroundColor" Value="White" />
-            <Setter Property="Shell.TitleColor" Value="{StaticResource epamGrey}" />
-            <Setter Property="Shell.DisabledColor" Value="{StaticResource epamGrey}" />
-            <Setter Property="Shell.UnselectedColor" Value="{StaticResource epamGrey}" />
+            <Setter Property="Shell.TitleColor" Value="{StaticResource syncGray}" />
+            <Setter Property="Shell.DisabledColor" Value="{StaticResource syncGray}" />
+            <Setter Property="Shell.UnselectedColor" Value="{StaticResource syncGray}" />
             <Setter Property="Shell.TabBarUnselectedColor" Value="White" />
         </Style>
     </Shell.Resources>
