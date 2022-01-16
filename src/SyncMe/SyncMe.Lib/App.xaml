@@ -4,9 +4,6 @@
              x:Class="SyncMe.App">
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="epamBlue">#39c2d7</Color>
-            <Color x:Key="epamGrey">#424242</Color>
-
             <Color x:Key="syncBlue">#50d3f4</Color>
             <Color x:Key="syncWhite">#FFFFFF</Color>
             <Color x:Key="syncGray">#757575</Color>
