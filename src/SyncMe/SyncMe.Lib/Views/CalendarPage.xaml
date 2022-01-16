@@ -9,7 +9,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="TimeStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource syncGrey}"/>
+                <Setter Property="TextColor" Value="{StaticResource syncGray}"/>
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
                 <Setter Property="FontSize" Value="Small"/>
                 <Setter Property="Margin" Value="5,0,0,0"/>
@@ -21,7 +21,7 @@
                 <Setter Property="Margin" Value="5,0,0,0"/>
             </Style>
             <Style x:Key="DescriptionStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource syncGrey}"/>
+                <Setter Property="TextColor" Value="{StaticResource syncGray}"/>
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
                 <Setter Property="FontSize" Value="Small"/>
                 <Setter Property="Margin" Value="5,0,0,0"/>
@@ -41,8 +41,8 @@
                 <Setter Property="EventIndicatorTextColor" Value="{StaticResource syncWhite}"/>
                 <Setter Property="YearLabelColor" Value="{StaticResource syncBlue}"/>
                 <Setter Property="MonthLabelColor" Value="{StaticResource syncBlue}"/>
-                <Setter Property="OtherMonthDayColor" Value="{StaticResource syncGrey}"/>
-                <Setter Property="DaysTitleColor" Value="{StaticResource syncGrey}"/>
+                <Setter Property="OtherMonthDayColor" Value="{StaticResource syncGray}"/>
+                <Setter Property="DaysTitleColor" Value="{StaticResource syncGray}"/>
                 <Setter Property="SelectedDayBackgroundColor" Value="{StaticResource syncBlue}" />
                 <Setter Property="TodayOutlineColor" Value="{StaticResource syncBlue}" />
                 <Setter Property="EventIndicatorColor" Value="{StaticResource syncBlue}" />

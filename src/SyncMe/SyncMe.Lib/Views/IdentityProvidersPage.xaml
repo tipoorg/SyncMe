@@ -26,7 +26,7 @@
                 <Setter Property="HeightRequest" Value="35"/>
                 <Setter Property="WidthRequest" Value="35"/>
                 <Setter Property="Margin" Value="0,12,20,0"/>
-                <Setter Property="BackgroundColor" Value="{StaticResource epamBlue}"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource syncBlue}"/>
                 <Setter Property="ImageSource" Value="icon_profile_sync.png"/>
             </Style>
             <Style x:Key="FrameStyle" TargetType="Frame">

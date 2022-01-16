@@ -16,7 +16,7 @@
                                 Text="Current version"
                                 TextColor="{StaticResource syncWhite}"
                                 Detail="{Binding CurrentVersion}" 
-                                DetailColor="{StaticResource syncGrey}" />
+                                DetailColor="{StaticResource syncGray}" />
                         </TableSection>
                         <TableSection Title="Notification">
                             <ViewCell>
