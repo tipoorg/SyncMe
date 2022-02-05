@@ -1,5 +1,8 @@
-﻿using Foundation;
+﻿using System;
+using System.Threading.Tasks;
+using Foundation;
 using Microsoft.Identity.Client;
+using SyncMe.ExceptionHandling;
 using UIKit;
 
 namespace SyncMe.IOS;
@@ -19,6 +22,11 @@ public partial class AppDelegate : Xamarin.Forms.Platform.iOS.FormsApplicationDe
     //
     public override bool FinishedLaunching(UIApplication app, NSDictionary options)
     {
+        var exceptionHandler = IOSStarter.GetService<IExceptionHandler>();
+
+        TaskScheduler.UnobservedTaskException += exceptionHandler.TaskSchedulerOnUnobservedTaskException;
+        AppDomain.CurrentDomain.UnhandledException += exceptionHandler.CurrentDomainOnUnhandledException;
+
         Xamarin.Forms.Forms.Init();
         LoadApplication(IOSStarter.CreateApp());
 

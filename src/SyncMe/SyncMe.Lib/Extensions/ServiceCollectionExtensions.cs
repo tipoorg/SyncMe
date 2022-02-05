@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using SyncMe.ExceptionHandling;
+using SyncMe.Lib.ExceptionHandling;
 using SyncMe.Lib.Services;
 using SyncMe.ViewModels;
 using SyncMe.Views;
@@ -43,7 +45,8 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IIdentitiesService, IdentitiesService>()
             .AddSingleton<ISyncEventsService, SyncEventsService>()
             .AddSingleton<ISyncNamespaceService, SyncNamespaceService>()
-            .AddSingleton<IAlarmProcessor, AlarmProcessor>();
+            .AddSingleton<IAlarmProcessor, AlarmProcessor>()
+            .AddSingleton<IExceptionHandler, ExceptionHandler>();
 
         return services;
     }

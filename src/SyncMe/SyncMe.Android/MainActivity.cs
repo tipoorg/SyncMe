@@ -1,9 +1,11 @@
-﻿using Android.App;
+﻿using System.Threading.Tasks;
+using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using Microsoft.Identity.Client;
+using SyncMe.ExceptionHandling;
 using Xamarin.Forms.Platform.Android;
 
 namespace SyncMe.Droid;
@@ -11,11 +13,12 @@ namespace SyncMe.Droid;
 [Activity(Label = "SyncMe", Icon = "@mipmap/icon_syncme", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
 public class MainActivity : FormsAppCompatActivity
 {
-    public const string Tag = "__Sync__Me__";
-
     protected override void OnCreate(Bundle savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
+        var exceptionHandler = AndroidStarter.GetService<IExceptionHandler>();
+        TaskScheduler.UnobservedTaskException += exceptionHandler.TaskSchedulerOnUnobservedTaskException;
+        AppDomain.CurrentDomain.UnhandledException += exceptionHandler.CurrentDomainOnUnhandledException;
 
         Xamarin.Essentials.Platform.Init(this, savedInstanceState);
         Xamarin.Forms.Forms.Init(this, savedInstanceState);
